@@ -24,18 +24,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     var nowLoginType = LoginType.Login
-    private lateinit var auth: FirebaseAuth
+    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        auth = FirebaseAuth.getInstance()
         initialize()
     }
 
     private fun initialize() {
         initLayout()
-        var user = auth.currentUser
     }
 
     private fun initLayout() {
