@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">FireBaseTestApp</string>
+    <string name="title_text">FireBaseTestApp</string>
+    <string name="login_text">ログイン</string>
+    <string name="register_text">登録</string>
+    <string name="passchange_text">パスワード変更</string>
+    <string name="mailadress">メールアドレス</string>
+    <string name="password">パスワード</string>
+    <string name="hint_mail">メールアドレスを入力してください</string>
+    <string name="hint_pass">パスワードを入力してください(8文字以上16文字以下)</string>
+    <string name="excute_login">ログイン</string>
+    <string name="excute_register">登録</string>
+    <string name="excute_change">登録変更</string>
+    <string name="warn_mail">メールアドレスを正しく入力してください</string>
+    <string name="warn_password">パスワードを正しく入力してください</string>
+    <string name="success">成功</string>
+    <string name="error">失敗</string>
 </resources>
