@@ -4,14 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#9AD160"
+    tools:context=".ResisterandLogin">
+
+
+    <Button
+        android:id="@+id/myImageviewBtn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/circle_image_view"
+        android:text="@string/select_image"
+        android:textColor="@color/white_80"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuView" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/myImageview"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:civ_border_width="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/myImageviewBtn"
+        app:layout_constraintEnd_toEndOf="@id/myImageviewBtn"
+        app:layout_constraintStart_toStartOf="@id/myImageviewBtn"
+        app:layout_constraintTop_toTopOf="@id/myImageviewBtn" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerView"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="#A2CA78"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -20,183 +46,134 @@
             android:layout_height="wrap_content"
             android:text="@string/title_text"
             android:textSize="30dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/headerView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/headerView"
-            app:layout_constraintBottom_toBottomOf="@id/headerView"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/headerView" />
 
         <ImageView
             android:id="@+id/closeImageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:padding="16dp"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_delete" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:id="@+id/lineView"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerView" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/menuView"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/white_80"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerView"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerView">
 
         <TextView
             android:id="@+id/loginTextView"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:gravity="center"
             android:text="@string/login_text"
             android:textSize="12sp"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/registerTextView"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1"/>
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/registerTextView"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:gravity="center"
             android:text="@string/register_text"
             android:textSize="12sp"
-            android:gravity="center"
-            app:layout_constraintStart_toEndOf="@id/loginTextView"
             app:layout_constraintEnd_toStartOf="@id/passChangeTextView"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1"/>
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/loginTextView"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/passChangeTextView"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:gravity="center"
             android:text="@string/passchange_text"
             android:textSize="12sp"
-            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/registerTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-    <View
-        android:id="@+id/lineView"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menuView"
-        tools:ignore="DuplicateIds" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/editView"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        app:layout_constraintStart_toStartOf="@id/headerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerView"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/textMail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/mailadress"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editMail"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/textPass"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_constraintVertical_weight="1"/>
-
-        <EditText
-            android:id="@+id/editMail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_mail"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:inputType="textEmailAddress"
-            app:layout_constraintStart_toEndOf="@id/textMail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/editPass"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_constraintVertical_weight="1"/>
-
-        <TextView
-            android:id="@+id/textPass"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/password"
-            android:textSize="12sp"
-            android:textColor="@android:color/black"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editPass"
-            app:layout_constraintTop_toBottomOf="@id/textMail"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_constraintVertical_weight="1"/>
-
-        <EditText
-            android:id="@+id/editPass"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_pass"
-            android:textSize="11sp"
-            android:gravity="center"
-            android:inputType="textVisiblePassword"
-            app:layout_constraintStart_toEndOf="@id/textPass"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editMail"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_constraintVertical_weight="1"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+
     <Button
         android:id="@+id/excuteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:background="@drawable/rounded_excute"
         android:text="@string/excute_login"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white_80"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editView"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPass_View" />
+
+
+    <EditText
+        android:id="@+id/editName_View"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint="@string/hint_name"
+        android:padding="10dp"
+        android:textSize="13dp"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@id/myImageviewBtn"
+        app:layout_constraintStart_toStartOf="@id/editMail_View"
+        app:layout_constraintEnd_toEndOf="@id/editMail_View"
+        />
+
+    <EditText
+        android:id="@+id/editMail_View"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint="@string/hint_mail"
+        android:padding="10dp"
+        android:textSize="13dp"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/editPass_View"
+        app:layout_constraintTop_toBottomOf="@id/editName_View" />
+
+
+        <EditText
+            android:id="@+id/editPass_View"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:hint="@string/hint_pass"
+            android:inputType="textVisiblePassword"
+            android:textSize="13sp"
+            android:background="@drawable/rounded_edittext"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editMail_View" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
