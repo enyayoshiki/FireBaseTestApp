@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/newMessage_menu"
+        android:icon="@android:drawable/stat_notify_chat"
+        android:title="@string/newmessage_menu_text"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/signOut_menu"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="@string/signout_menu_text"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

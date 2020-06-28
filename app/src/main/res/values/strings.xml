@@ -4,10 +4,11 @@
     <string name="login_text">ログイン</string>
     <string name="register_text">登録</string>
     <string name="passchange_text">パスワード変更</string>
-    <string name="mailadress">メールアドレス</string>
+    <string name="mailadress">メールアドレス ； </string>
     <string name="password">パスワード</string>
+    <string name="hint_name">ユーザー名</string>
     <string name="hint_mail">メールアドレスを入力してください</string>
-    <string name="hint_pass">パスワードを入力してください(8文字以上16文字以下)</string>
+    <string name="hint_pass">パスワードを入力してください(6文字以上)</string>
     <string name="excute_login">ログイン</string>
     <string name="excute_register">登録</string>
     <string name="excute_change">登録変更</string>
@@ -15,4 +16,9 @@
     <string name="warn_password">パスワードを正しく入力してください</string>
     <string name="success">成功</string>
     <string name="error">失敗</string>
+    <string name="select_image">User画像選択</string>
+    <string name="signout_menu_text">SIGN OUT</string>
+    <string name="newmessage_menu_text">新規メッセージ作成</string>
+    <string name="create_chatroom_edit">新規ChatRoom名</string>
+    <string name="create_chatroom_btn">部屋作成</string>
 </resources>
