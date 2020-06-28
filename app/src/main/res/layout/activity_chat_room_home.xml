@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/editChatRoom"/>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/editChatRoom"
     android:layout_width="match_parent"
