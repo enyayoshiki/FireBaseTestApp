@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_resister_login.*
 import com.squareup.picasso.Picasso
 import java.util.*
 
@@ -27,7 +27,7 @@ class ResisterandLogin : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_resister_login)
         initialize()
         imageVisible(false)
         changeLayout(LoginType.Login)

@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_home_login.*
 import kotlinx.android.synthetic.main.one_result_homeview.view.*
 
 class HomeLogin : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_login)
@@ -39,14 +40,29 @@ class HomeLogin : AppCompatActivity() {
         ref.addListenerForSingleValueEvent(object : ValueEventListener{
 
             override fun onDataChange(snapshot: DataSnapshot) {
+                currentUser = snapshot.getValue(User::class.java)
                 val adapter = GroupAdapter<ViewHolder>()
-                Log.d("home","onDataChange")
+                Log.d("home", "onDataChange")
 
-                snapshot.children.forEach{
-                    Log.d("home","データ読み込み")
+                snapshot.children.forEach {
+                    Log.d("home", "データ読み込み")
                     val user = it.getValue(User::class.java)
                     if (user != null)
-                    adapter.add(UserItem(user))
+                        adapter.add(UserItem(user))
+                }
+
+                adapter.setOnItemClickListener { item, view ->
+                    val userItem = item as UserItem
+
+                    val intent = Intent(view.context, ChatLog::class.java)
+                    intent.apply {
+                        putExtra(USER_NAME, userItem.user.username)
+                        putExtra(USER_KEY, userItem.user.uid)
+                        putExtra(USER_IMAGE, userItem.user.userImage)
+                    }
+
+                    startActivity(intent)
+                    finish()
                 }
                 homeView.adapter = adapter
             }
@@ -73,6 +89,14 @@ class HomeLogin : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    companion object{
+        val USER_NAME = "USER_NAME"
+        val USER_KEY = "USER_KEY"
+        val USER_IMAGE = "USER_IMAGE"
+
+        var currentUser :User? = null
+    }
 }
 
 class UserItem(val  user: User) :Item<ViewHolder>() {
@@ -82,6 +106,5 @@ class UserItem(val  user: User) :Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.homeViewUserName.text = user.username
         Picasso.get().load(user.userImage).into(viewHolder.itemView.homeViewImage)
-
     }
 }

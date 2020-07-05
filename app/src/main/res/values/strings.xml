@@ -21,4 +21,7 @@
     <string name="newmessage_menu_text">新規メッセージ作成</string>
     <string name="create_chatroom_edit">新規ChatRoom名</string>
     <string name="create_chatroom_btn">部屋作成</string>
+    <string name="edit_chat_massage">メッセージ</string>
+    <string name="send_massage">送信</string>
+    <string name="empty_message" />
 </resources>

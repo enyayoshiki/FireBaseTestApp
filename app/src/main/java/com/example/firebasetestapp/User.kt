@@ -1,7 +1,9 @@
 package com.example.firebasetestapp
 
-import android.net.Uri
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-class User(val uid: String, val username: String, val userImage: String){
-
+@Parcelize
+class User (val uid: String, val username: String, val userImage: String) : Parcelable {
+    constructor(): this("", "", "")
 }
