@@ -22,17 +22,10 @@ class ChatLog : AppCompatActivity() {
 
     val adapter = GroupAdapter<ViewHolder>()
 
-    var fromId : String? = ""
-    var toId : String? = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat_room)
 
-        fromId = FirebaseAuth.getInstance().uid
-        toId = intent.getStringExtra(HomeLogin.USER_KEY)
-
-        if (fromId == null || toId == null)return
 
         val username = intent.getStringExtra(HomeLogin.USER_NAME)
         supportActionBar?.title = username
@@ -45,51 +38,46 @@ class ChatLog : AppCompatActivity() {
         }
     }
     private fun listemMessage(){
+        val fromId = FirebaseAuth.getInstance().uid
+        val toId = intent.getStringExtra(HomeLogin.USER_KEY)
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(ChatMessage::class.java)
                 if (chatMessage !== null) {
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid){
-//                        val currentUser = HomeLogin.currentUser ?: return
-                        Log.d("chat", "Listen_MyChat")
-//                        val myImage = currentUser.userImage
-//                        if (myImage.isEmpty()) return
                         adapter.add(ChatMyItem(chatMessage.text))
                         Log.d("chat", "Listen_MyChat_Add_RecyclerView")}
                     else{
-                        Log.d("chat", "Listen_YourChat")
-                        val yourImage = intent.getStringExtra(HomeLogin.USER_IMAGE)
-                        adapter.add(ChatFromItem(chatMessage.text))}
+                        adapter.add(ChatFromItem(chatMessage.text))
+                    }
                 }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-            }
+            override fun onCancelled(error: DatabaseError) {}
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
         })
     }
 
 
     private fun sendMessage(){
         val text = edit_chat_massage.text.toString() ?: return
+        val fromId = FirebaseAuth.getInstance().uid
+        val toId = intent.getStringExtra(HomeLogin.USER_KEY)
+
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
+        val toRef = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
         val chatMessage = ChatMessage(ref.key!!, text, fromId!!, toId!!)
+
         ref.setValue(chatMessage).addOnSuccessListener {
             Log.d("chat", "Send_MyChat")
         }
+        toRef.setValue(chatMessage).addOnCanceledListener {
+            Log.d("chat", "To_Send_MyChat")
+        }
     }
-    
 
 
     class ChatMyItem(val text:String) : Item<ViewHolder>(){
