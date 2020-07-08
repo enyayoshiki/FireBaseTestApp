@@ -14,6 +14,8 @@ import androidx.constraintlayout.solver.widgets.ConstraintWidget.VISIBLE
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_resister_login.*
 import com.squareup.picasso.Picasso
@@ -164,9 +166,22 @@ class ResisterandLogin : AppCompatActivity() {
         ref.putFile(selectImageUri!!).addOnSuccessListener {
             Log.d("resister", "$it")
             saveUserDatatoFirebase(it.toString())
+            saveUserDatatoFireStore(it.toString())
         }
     }
 
+    private fun saveUserDatatoFireStore(saveImageUrl: String){
+        val db = FirebaseFirestore.getInstance()
+        val uid = FirebaseAuth.getInstance().uid ?: ""
+        val user = User(uid, editName_View.text.toString(), saveImageUrl)
+        db.collection("User").add(user)
+            .addOnSuccessListener {
+            Log.d("resister", "saveUserDatatoFireStore") }
+            .addOnFailureListener{
+                Log.d("resister", "$it")
+            }
+
+    }
     private fun saveUserDatatoFirebase(saveImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
