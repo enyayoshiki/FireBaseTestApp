@@ -165,14 +165,14 @@ class ResisterandLogin : AppCompatActivity() {
         val ref = FirebaseStorage.getInstance().getReference("image/$fileName")
         ref.putFile(selectImageUri!!).addOnSuccessListener {
             Log.d("resister", "$it")
-            saveUserDatatoFirebase(it.toString())
+//            saveUserDatatoFirebase(it.toString())
             saveUserDatatoFireStore(it.toString())
         }
     }
 
     private fun saveUserDatatoFireStore(saveImageUrl: String){
-        val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().uid ?: ""
+        val db = FirebaseFirestore.getInstance()
         val user = User(uid, editName_View.text.toString(), saveImageUrl)
         db.collection("User").add(user)
             .addOnSuccessListener {
@@ -182,23 +182,23 @@ class ResisterandLogin : AppCompatActivity() {
             }
 
     }
-    private fun saveUserDatatoFirebase(saveImageUrl: String) {
-        val uid = FirebaseAuth.getInstance().uid ?: ""
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-
-        Log.d("resister", "Not yet")
-        val user = User(uid, editName_View.text.toString(), saveImageUrl)
-        ref.setValue(user).addOnSuccessListener {
-            Log.d("resister", "success")
-
-            val intent = Intent(this,HomeLogin::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-
-        }.addOnFailureListener{
-            Log.d("error","$it")
-        }
-    }
+//    private fun saveUserDatatoFirebase(saveImageUrl: String) {
+//        val uid = FirebaseAuth.getInstance().uid ?: ""
+//        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+//
+//        Log.d("resister", "Not yet")
+//        val user = User(uid, editName_View.text.toString(), saveImageUrl)
+//        ref.setValue(user).addOnSuccessListener {
+//            Log.d("resister", "success")
+//
+//            val intent = Intent(this,HomeLogin::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(intent)
+//
+//        }.addOnFailureListener{
+//            Log.d("error","$it")
+//        }
+//    }
 
 
     private fun excuteBtnString(loginType: LoginType): Int {

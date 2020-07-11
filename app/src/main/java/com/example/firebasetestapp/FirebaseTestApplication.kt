@@ -2,6 +2,7 @@ package com.example.firebasetestapp
 
 import android.app.Application
 import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
 class FirebaseTestApplication: Application() {

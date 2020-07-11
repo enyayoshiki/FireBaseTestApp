@@ -4,27 +4,20 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
-import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_home_login.*
-import kotlinx.android.synthetic.main.one_result_homeview.view.*
 
 class HomeLogin : AppCompatActivity() {
 
-    private val customAdapter by lazy { UserItemAdapter(this) }
+    private val customAdapter by lazy { HomeUserCustomAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +44,6 @@ class HomeLogin : AppCompatActivity() {
                 adapter = customAdapter
                 setHasFixedSize(true)
             }
-
             val user = it.toObjects(User::class.java)
             customAdapter.refresh(user)
 
@@ -156,48 +148,3 @@ class HomeLogin : AppCompatActivity() {
 //    }
 //}
 
-class UserItemAdapter(private val context: Context?)  : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private val items = mutableListOf<User>()
-
-    fun refresh(list: List<User>) {
-        items.apply {
-            clear()
-            addAll(list)
-        }
-        notifyDataSetChanged()
-    }
-    override fun getItemCount(): Int = items.size
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        ItemViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.one_result_homeview,
-                parent,
-                false
-            )
-        )
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemViewHolder)
-            onBindViewHolder(holder, position)
-    }
-    private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val data = items[position]
-        holder.UserName.text = data.username
-        Picasso.get().load(data.userImage).into(holder.UserImage)
-        holder.rootView.setOnClickListener {
-            val intent = Intent(it.context, ChatLog::class.java)
-            intent.apply {
-                putExtra(HomeLogin.USER_NAME, data.username)
-                putExtra(HomeLogin.USER_KEY, data.uid)
-                putExtra(HomeLogin.USER_IMAGE, data.userImage)
-            }
-            it.context.startActivity(intent)
-        }
-    }
-}
-
-class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val rootView: ConstraintLayout = view.findViewById(R.id.rootView_Home)
-    val UserName: TextView = view.findViewById(R.id.homeViewUserName)
-    var UserImage: ImageView = view.findViewById(R.id.homeViewImage)
-}
