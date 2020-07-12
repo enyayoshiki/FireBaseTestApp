@@ -1,6 +1,7 @@
 package com.example.firebasetestapp
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -21,15 +22,18 @@ class HomeLogin : AppCompatActivity() {
     private val customAdapter by lazy { HomeUserCustomAdapter(this) }
     private var myUser = mutableListOf<User>()
 
+    private var uid = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_login)
         Log.d("home","home画面")
         supportActionBar?.title = "HOME"
 
-        val uid = FirebaseAuth.getInstance().uid
-        if (uid == null){
-            val intent = Intent(this,ResisterandLogin::class.java)
+        uid = FirebaseAuth.getInstance().uid ?: ""
+        if (uid.isEmpty()){
+            startActivity(Intent(this,ResisterandLogin::class.java))
+            return
         }
         fetchData()
     }
@@ -40,6 +44,22 @@ class HomeLogin : AppCompatActivity() {
         Log.d("home","fetchData開始")
         val db = FirebaseFirestore.getInstance()
         db.collection("User").get().addOnSuccessListener {
+
+            val users = it.toObjects(User::class.java)
+
+            val others = users.filterNot { it.uid == uid }
+
+            val newUsers = mutableListOf<User>()
+
+            users.forEach {
+                if (it.uid != uid)
+                    newUsers.add(it)
+            }
+
+
+
+
+
             Log.d("home","fetchData実行")
 //            Log.d("home","original : $it}")
 //            Log.d("home","metadata : ${it.metadata}")
@@ -134,6 +154,12 @@ class HomeLogin : AppCompatActivity() {
         val USER_NAME = "USER_NAME"
         val USER_KEY = "USER_KEY"
         val USER_IMAGE = "USER_IMAGE"
+
+        fun start(activity: Activity) {
+            activity.finishAffinity()
+            val intent = Intent(activity, HomeLogin::class.java)
+            activity.startActivity(intent)
+        }
 
     }
 }

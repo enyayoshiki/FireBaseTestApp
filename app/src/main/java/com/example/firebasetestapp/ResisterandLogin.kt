@@ -36,7 +36,15 @@ class ResisterandLogin : AppCompatActivity() {
     }
 
     private fun initialize() {
-        initLayout()
+        if (auth.currentUser == null)
+            initLayout()
+        else {
+            // TODO:ChatRoom画面へ遷移
+            HomeLogin.start(this)
+//            val intent = Intent(this, HomeLogin::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(intent)
+        }
     }
 
     private fun initLayout() {
@@ -103,9 +111,10 @@ class ResisterandLogin : AppCompatActivity() {
                 if (it.isSuccessful) {
                     Toast.makeText(this, R.string.success, Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this,HomeLogin::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+//                    val intent = Intent(this,HomeLogin::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                    startActivity(intent)
+                    HomeLogin.start(this)
 
                 } else Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
@@ -176,7 +185,9 @@ class ResisterandLogin : AppCompatActivity() {
         val user = User(uid, editName_View.text.toString(), saveImageUrl)
         db.collection("User").add(user)
             .addOnSuccessListener {
-            Log.d("resister", "saveUserDatatoFireStore") }
+            Log.d("resister", "saveUserDatatoFireStore")
+
+            }
             .addOnFailureListener{
                 Log.d("resister", "$it")
             }

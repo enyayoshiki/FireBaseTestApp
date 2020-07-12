@@ -17,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
+import timber.log.Timber
 import java.util.*
 
 class MessageAdapter(private val context: Context?) :
@@ -32,19 +33,71 @@ class MessageAdapter(private val context: Context?) :
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = items.size
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        ItemViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.chat_message,
-                parent,
-                false
+    override fun getItemViewType(position: Int): Int {
+        if (items.isEmpty())
+            return VIEW_TYPE_EMPTY
+        return if (FirebaseAuth.getInstance().uid == items[position].fromId)
+            VIEW_TYPE_MINE
+        else
+            VIEW_TYPE_OTHERS
+    }
+
+    override fun getItemCount(): Int = if (items.isEmpty()) 1 else items.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            VIEW_TYPE_MINE -> MyMessageViewHolder(
+                LayoutInflater.from(context).inflate(
+                    R.layout.chat_message,
+                    parent,
+                    false
+                )
             )
-        )
+            VIEW_TYPE_OTHERS -> OthersMessageViewHolder(
+                LayoutInflater.from(context).inflate(
+                    R.layout.chat_message,
+                    parent,
+                    false
+                )
+            )
+            else -> EmptyViewHolder(
+                LayoutInflater.from(context).inflate(
+                    R.layout.chat_message,
+                    parent,
+                    false
+                )
+            )
+        }
+//        if (viewType == VIEW_TYPE_MINE)
+//            return MyMessageViewHolder(
+//                LayoutInflater.from(context).inflate(
+//                    R.layout.chat_message,
+//                    parent,
+//                    false
+//                )
+//            )
+//        else
+//            return OthersMessageViewHolder(
+//                LayoutInflater.from(context).inflate(
+//                    R.layout.chat_message,
+//                    parent,
+//                    false
+//                )
+//            )
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemViewHolder)
+        if (holder is MyMessageViewHolder)
             onBindViewHolder(holder, position)
+        else if (holder is OthersMessageViewHolder)
+            onBindViewHolder(holder, position)
+    }
+
+    private fun onBindViewHolder(holder: MyMessageViewHolder, position: Int) {
+
+    }
+
+    private fun onBindViewHolder(holder: OthersMessageViewHolder, position: Int) {
+
     }
 
     private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -67,6 +120,15 @@ class MessageAdapter(private val context: Context?) :
                 Log.d("recyclerView", "yourMessage")
             }
         }
+    }
+
+    class MyMessageViewHolder(view: View): RecyclerView.ViewHolder(view)
+    class OthersMessageViewHolder(view: View): RecyclerView.ViewHolder(view)
+
+    companion object {
+        private const val VIEW_TYPE_EMPTY = 0
+        private const val VIEW_TYPE_MINE = 1
+        private const val VIEW_TYPE_OTHERS = 2
     }
 }
 
