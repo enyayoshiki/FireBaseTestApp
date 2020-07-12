@@ -1,5 +1,6 @@
 package com.example.firebasetestapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_home_login.*
 class HomeLogin : AppCompatActivity() {
 
     private val customAdapter by lazy { HomeUserCustomAdapter(this) }
+    private var myUser = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,17 +35,26 @@ class HomeLogin : AppCompatActivity() {
     }
 
 
+    @SuppressLint("LogNotTimber")
     private fun fetchData(){
         Log.d("home","fetchData開始")
-
-
         val db = FirebaseFirestore.getInstance()
         db.collection("User").get().addOnSuccessListener {
             Log.d("home","fetchData実行")
-            homeView_recyclerView.apply {
+//            Log.d("home","original : $it}")
+//            Log.d("home","metadata : ${it.metadata}")
+//            Log.d("home","document : ${it.documents}")
+//            Log.d("home","query : ${it.query}")
+//            Log.d("home","myQuery : ${myRef.result}")
+            db.collection("User").whereEqualTo("uid", "${FirebaseAuth.getInstance().uid}").get().addOnSuccessListener {
+                myUser = it.toObjects(User::class.java)
+            }
+
+                homeView_recyclerView.apply {
                 adapter = customAdapter
                 setHasFixedSize(true)
             }
+
             val user = it.toObjects(User::class.java)
             customAdapter.refresh(user)
 

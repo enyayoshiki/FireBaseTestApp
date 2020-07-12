@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.solver.widgets.ConstraintWidget.GONE
 import androidx.constraintlayout.solver.widgets.ConstraintWidget.VISIBLE
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.scaleMatrix
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -144,7 +146,16 @@ class HomeUserCustomAdapter(private val context: Context?) :
     }
 
     private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val data = items[position]
+        var data = items[position]
+//        if (FirebaseAuth.getInstance().uid == data.uid) {
+//            items.removeAt(position)
+//            data = items[position]
+//        }
+        if (data.uid == FirebaseAuth.getInstance().uid){
+            Log.d("recyclerView","$items")
+            holder.rootView.maxHeight = 0
+        }
+
         holder.UserName.text = data.username
         Picasso.get().load(data.userImage).into(holder.UserImage)
         holder.rootView.setOnClickListener {

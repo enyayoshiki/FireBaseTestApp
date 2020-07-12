@@ -82,21 +82,39 @@ class ChatLog : AppCompatActivity() {
 //        })
 
         db.collection("ChatLogMessage").document("$fromId").collection("$toId")
-//            .whereEqualTo("fromId", "$fromId").whereEqualTo("toId", "$toId")
             .orderBy("time", Query.Direction.ASCENDING)
-            .get().addOnSuccessListener {
-                Log.d("chat", "ListenMessage")
-
+            .addSnapshotListener { snapshot, e ->
+                if (e != null || snapshot ==null) {
+                    Log.d("chat", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
                 chat_log_recyclerview.apply {
                     adapter = customAdapter
                     setHasFixedSize(true)
                 }
-                val chatMessage = it.toObjects(ChatMessageToFireStore::class.java)
+                val chatMessage = snapshot.toObjects(ChatMessageToFireStore::class.java)
                 Log.d("chat", "chatId(from/to) : ${fromId}/${toId}")
                 Log.d("chat", "chatId(to/from) : ${toId}/${fromId}")
 
-
                 customAdapter.refresh(chatMessage)
+            }
+
+
+//            .whereEqualTo("fromId", "$fromId").whereEqualTo("toId", "$toId")
+//            .get()
+//            .addOnSuccessListener {
+//                Log.d("chat", "ListenMessage")
+//
+//                chat_log_recyclerview.apply {
+//                    adapter = customAdapter
+//                    setHasFixedSize(true)
+//                }
+//                val chatMessage = it.toObjects(ChatMessageToFireStore::class.java)
+//                Log.d("chat", "chatId(from/to) : ${fromId}/${toId}")
+//                Log.d("chat", "chatId(to/from) : ${toId}/${fromId}")
+//
+//
+//                customAdapter.refresh(chatMessage)
 //                }else{
 //                    if (checkIdList.contains("${toId}/${fromId}")){
 //                        Log.d("chat", "Listen_YOUR_Message")
@@ -127,7 +145,6 @@ class ChatLog : AppCompatActivity() {
 //                Log.d("chat", "$it")
 //                return@addOnFailureListener
 //            }
-            }
 //    private fun sendMessage(){
 //        val text = edit_chat_massage.text.toString() ?: return
 //        val fromId = FirebaseAuth.getInstance().uid
@@ -149,10 +166,14 @@ class ChatLog : AppCompatActivity() {
         val text = edit_chat_massage.text.toString()
         val time: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
         val chatMessage = ChatMessageToFireStore(text, fromId!!, toId!!, time)
+
+        if (text.isEmpty()) return
         db.collection("ChatLogMessage").document("$fromId").collection("$toId").add(chatMessage)
             .addOnSuccessListener {
                 Log.d("chat", "saveUserDatatoFireStore")
                 db.collection("ChatLogMessage").document("$toId").collection("$fromId").add(chatMessage)
+                edit_chat_massage.text.clear()
+                chat_log_recyclerview.scrollToPosition(customAdapter.itemCount -1)
             }
             .addOnFailureListener {
                 Log.d("chat", "$it")
