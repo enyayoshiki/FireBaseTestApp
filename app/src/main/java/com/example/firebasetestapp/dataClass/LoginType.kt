@@ -1,4 +1,4 @@
-package com.example.firebasetestapp
+package com.example.firebasetestapp.dataClass
 
 
 

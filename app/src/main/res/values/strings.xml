@@ -23,5 +23,6 @@
     <string name="create_chatroom_btn">部屋作成</string>
     <string name="edit_chat_massage">メッセージ</string>
     <string name="send_massage">送信</string>
-    <string name="empty_message" />
+    <string name="homelogin_title">メッセージ</string>
+
 </resources>

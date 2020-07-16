@@ -1,6 +1,5 @@
-package com.example.firebasetestapp
+package com.example.firebasetestapp.Activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -9,20 +8,19 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.solver.widgets.ConstraintWidget.INVISIBLE
-import androidx.constraintlayout.solver.widgets.ConstraintWidget.VISIBLE
+import android.view.View
 import androidx.core.content.ContextCompat
+import com.example.firebasetestapp.R
+import com.example.firebasetestapp.dataClass.LoginType
+import com.example.firebasetestapp.dataClass.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_resister_login.*
 import com.squareup.picasso.Picasso
 import java.util.*
 
-
-class ResisterandLogin : AppCompatActivity() {
+class ResisterandLogin_Activity : AppCompatActivity() {
 
     var nowLoginType = LoginType.Login
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
@@ -31,15 +29,20 @@ class ResisterandLogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resister_login)
         initialize()
-        imageVisible(false)
-        changeLayout(LoginType.Login)
     }
 
     private fun initialize() {
+        if (auth.currentUser !== null) {
+            LatestMessage_Activity.start(this)
+        }
         initLayout()
     }
 
     private fun initLayout() {
+        sumpleImage.setImageResource(R.drawable.ic_settings)
+        imageVisible(false)
+        changeLayout(LoginType.Login)
+
         loginTextView.setOnClickListener {
             imageVisible(false)
             changeLayout(LoginType.Login)
@@ -88,7 +91,7 @@ class ResisterandLogin : AppCompatActivity() {
         textView.apply {
             setTextColor(
                 ContextCompat.getColor(
-                    this@ResisterandLogin,
+                    this@ResisterandLogin_Activity,
                     if (isSelected) android.R.color.white else android.R.color.black
                 )
             )
@@ -103,11 +106,12 @@ class ResisterandLogin : AppCompatActivity() {
                 if (it.isSuccessful) {
                     Toast.makeText(this, R.string.success, Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this,HomeLogin::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+                    LatestMessage_Activity.start(this)
 
-                } else Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(
+                    this,
+                    R.string.error, Toast.LENGTH_SHORT
+                ).show()
             }.addOnFailureListener {
                 Log.d("error", "$it")
                 Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
@@ -151,8 +155,9 @@ class ResisterandLogin : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
             selectImageUri = data.data
-            Log.d("error", "$selectImageUri")
-            Picasso.get().load(selectImageUri).into(myImageview)
+            Log.d("resister", "selectImageUri : $selectImageUri")
+            Log.d("resister", "selectImageUri.toString : ${selectImageUri.toString()}")
+            Picasso.get().load(selectImageUri.toString()).into(myImageview)
             myImageviewBtn.alpha = 0f
         }
     }
@@ -164,42 +169,26 @@ class ResisterandLogin : AppCompatActivity() {
         Log.d("resister", "$fileName")
         val ref = FirebaseStorage.getInstance().getReference("image/$fileName")
         ref.putFile(selectImageUri!!).addOnSuccessListener {
-            Log.d("resister", "$it")
-//            saveUserDatatoFirebase(it.toString())
-            saveUserDatatoFireStore(it.toString())
+            Log.d("resister", "UploadTask : $it")
+            Log.d("selectImage", "selectImageUri : $selectImageUri")
+            Log.d("selectImage", "selectImage_to_String : ${selectImageUri.toString()}")
+            saveUserDatatoFireStore(selectImageUri.toString())
         }
     }
 
-    private fun saveUserDatatoFireStore(saveImageUrl: String){
+    private fun saveUserDatatoFireStore(saveImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
         val user = User(uid, editName_View.text.toString(), saveImageUrl)
-        db.collection("User").add(user)
+        db.collection("User").document("$uid").set(user)
             .addOnSuccessListener {
-            Log.d("resister", "saveUserDatatoFireStore") }
-            .addOnFailureListener{
+                Log.d("resister", "saveUserDatatoFireStore")
+                LatestMessage_Activity.start(this)
+            }
+            .addOnFailureListener {
                 Log.d("resister", "$it")
             }
-
     }
-//    private fun saveUserDatatoFirebase(saveImageUrl: String) {
-//        val uid = FirebaseAuth.getInstance().uid ?: ""
-//        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-//
-//        Log.d("resister", "Not yet")
-//        val user = User(uid, editName_View.text.toString(), saveImageUrl)
-//        ref.setValue(user).addOnSuccessListener {
-//            Log.d("resister", "success")
-//
-//            val intent = Intent(this,HomeLogin::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            startActivity(intent)
-//
-//        }.addOnFailureListener{
-//            Log.d("error","$it")
-//        }
-//    }
-
 
     private fun excuteBtnString(loginType: LoginType): Int {
         return when (loginType) {
@@ -209,14 +198,21 @@ class ResisterandLogin : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("WrongConstant")
     private fun imageVisible(isVisible: Boolean) {
-        if (isVisible) myImageviewBtn.visibility = VISIBLE else myImageviewBtn.visibility =
-            INVISIBLE
+        if (isVisible) myImageviewBtn.visibility = View.VISIBLE
+        else myImageviewBtn.visibility = View.INVISIBLE
     }
 
     private fun showToast(textId: Int) {
         Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        fun start(activity: Activity) {
+            activity.finishAffinity()
+            FirebaseAuth.getInstance().signOut()
+            activity.startActivity(Intent(activity, ResisterandLogin_Activity::class.java))
+        }
     }
 }
 
