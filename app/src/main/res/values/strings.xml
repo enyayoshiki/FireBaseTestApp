@@ -24,5 +24,12 @@
     <string name="edit_chat_massage">メッセージ</string>
     <string name="send_massage">送信</string>
     <string name="homelogin_title">メッセージ</string>
-
+    <string name="profile_setting_text">プロフィール変更</string>
+    <string name="account_setting_text">アカウント変更</string>
+    <string name="password_setting_text">パスワード変更</string>
+    <string name="neme_now_setting_text">名前（現在）</string>
+    <string name="name_change_setting_text">名前（変更後）</string>
+    <string name="save_profilechange_button">プロフィール変更</string>
+    <string name="userimage_profile_setting_text">User画像</string>
+    <string name="setting_text">各種設定</string>
 </resources>

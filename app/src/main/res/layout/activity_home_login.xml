@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activity.LatestMessage_Activity">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/latestMessage_recyclerView"
         android:layout_width="0dp"

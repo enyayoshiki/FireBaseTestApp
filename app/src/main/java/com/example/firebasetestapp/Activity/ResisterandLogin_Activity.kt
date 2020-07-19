@@ -39,7 +39,6 @@ class ResisterandLogin_Activity : AppCompatActivity() {
     }
 
     private fun initLayout() {
-        sumpleImage.setImageResource(R.drawable.ic_settings)
         imageVisible(false)
         changeLayout(LoginType.Login)
 
@@ -98,7 +97,6 @@ class ResisterandLogin_Activity : AppCompatActivity() {
             setBackgroundResource(if (isSelected) R.drawable.selector_button_black_to_black_80 else R.drawable.selector_button_white_to_white_80)
         }
     }
-
 
     private fun login(email: String, pass: String) {
         auth.signInWithEmailAndPassword(email, pass)
@@ -162,24 +160,31 @@ class ResisterandLogin_Activity : AppCompatActivity() {
         }
     }
 
+    var userName = ""
+
     private fun resisterImage() {
-        if (selectImageUri == null) return
+        userName = editName_View.text.toString()
+        if (selectImageUri == null || userName.isEmpty()) return
 
         val fileName = UUID.randomUUID().toString()
         Log.d("resister", "$fileName")
         val ref = FirebaseStorage.getInstance().getReference("image/$fileName")
         ref.putFile(selectImageUri!!).addOnSuccessListener {
-            Log.d("resister", "UploadTask : $it")
+            Log.d("selectImage", "UploadTask : $it")
+            Log.d("selectImage", "filename : $fileName")
             Log.d("selectImage", "selectImageUri : $selectImageUri")
             Log.d("selectImage", "selectImage_to_String : ${selectImageUri.toString()}")
-            saveUserDatatoFireStore(selectImageUri.toString())
+
+            ref.downloadUrl.addOnSuccessListener {
+                saveUserDatatoFireStore(it.toString())
+            }
         }
     }
 
     private fun saveUserDatatoFireStore(saveImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
-        val user = User(uid, editName_View.text.toString(), saveImageUrl)
+        val user = User(uid, userName, saveImageUrl)
         db.collection("User").document("$uid").set(user)
             .addOnSuccessListener {
                 Log.d("resister", "saveUserDatatoFireStore")
@@ -208,6 +213,7 @@ class ResisterandLogin_Activity : AppCompatActivity() {
     }
 
     companion object {
+
         fun start(activity: Activity) {
             activity.finishAffinity()
             FirebaseAuth.getInstance().signOut()

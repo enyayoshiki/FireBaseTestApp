@@ -16,19 +16,11 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/circle_image_view"
         android:text="@string/select_image"
+        android:textStyle="bold"
         android:textColor="@color/white_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/menuView" />
-
-    <ImageView
-        android:id="@+id/sumpleImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menuView"/>
-
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/myImageview"

@@ -54,11 +54,9 @@ class SelectUserAdapter(private val context: Context?) :
             Log.d("SelectUser_recyclerView", "$items")
             holder.rootView.maxHeight = 0
         }
-
         holder.UserName.text = data.username
-        Picasso.get().load(R.drawable.ic_settings).into(holder.UserImage as ImageView)
+        Picasso.get().load(data.userImage).into(holder.UserImage as ImageView)
         Log.d("SelectUser_recyclerView", "myImage : ${data.userImage}")
-//        holder.UserImage?.setImageResource(R.drawable.ic_settings)
 
         holder.rootView.setOnClickListener {
             val intent = Intent(it.context, ChatLog_Activity::class.java)

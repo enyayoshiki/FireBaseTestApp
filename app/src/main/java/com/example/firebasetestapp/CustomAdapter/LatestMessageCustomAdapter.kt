@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,8 @@ import com.example.firebasetestapp.Activity.ChatLog_Activity
 import com.example.firebasetestapp.Activity.LatestMessage_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.LatestMessage
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 class LatestMessageCustomAdapter(private val context: Context?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -46,13 +49,13 @@ class LatestMessageCustomAdapter(private val context: Context?) :
         var data = items[position]
         holder.latestMessageText.text = data.text
         holder.toUserName.text = data.yourName
-//        Picasso.get().load(data.userImage).into(holder.UserImage)
+        Picasso.get().load(data.yourImage).into(holder.latestUserImageView as ImageView)
         holder.rootView.setOnClickListener {
             val intent = Intent(it.context, ChatLog_Activity::class.java)
             intent.apply {
                 putExtra(LatestMessage_Activity.USER_NAME, data.yourName)
                 putExtra(LatestMessage_Activity.USER_KEY, data.yourId)
-//                putExtra(LatestMessage_Activity.USER_IMAGE, data.userImage)
+                putExtra(LatestMessage_Activity.USER_IMAGE, data.yourImage)
             }
             it.context.startActivity(intent)
         }
@@ -67,6 +70,9 @@ class LatestMessageCustomAdapter(private val context: Context?) :
         )
         var latestMessageText: TextView = view.findViewById(
             R.id.latest_message_chatLog_textView
+        )
+        var latestUserImageView: CircleImageView? = view.findViewById(
+            R.id.latest_message_userImage_ImageView
         )
     }
 }

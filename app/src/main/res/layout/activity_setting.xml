@@ -4,6 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.setting_Activity">
+    tools:context=".Activity.setting.setting_Activity">
+
+    <TextView
+        android:id="@+id/profile_setting_textView"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="@string/profile_setting_text"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/white_80"
+        android:background="@drawable/rounded_edittext_black"
+        android:layout_margin="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/account_setting_textView"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/account_setting_textView"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:text="@string/account_setting_text"
+        android:textStyle="bold"
+        android:textColor="@color/white_80"
+        android:background="@drawable/rounded_edittext_black"
+        android:layout_margin="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profile_setting_textView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/password_setting_textView"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_edittext_black"
+        android:gravity="center"
+        android:text="@string/password_setting_text"
+        android:textColor="@color/white_80"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/profile_setting_textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_setting_textView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

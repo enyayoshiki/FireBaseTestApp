@@ -55,7 +55,7 @@ class MessageAdapter(private val context: Context?) :
                 Log.d("recyclerView", "fromId : ${data.fromId}")
                 Log.d("recyclerView", "toId : ${data.toId}")
             }
-            Picasso.get().load(R.drawable.ic_settings).into(holder.MyImage)
+            Picasso.get().load(data.myImage).into(holder.MyImage as ImageView)
             Log.d("recyclerView", "myImage : ${data.myImage}")
         } else {
             holder.apply {
@@ -66,7 +66,7 @@ class MessageAdapter(private val context: Context?) :
             }
 
 //            holder.YourImage?.setImageResource(R.drawable.ic_settings)
-            Picasso.get().load(R.drawable.ic_settings).into(holder.YourImage)
+            Picasso.get().load(data.myImage).into(holder.YourImage as ImageView)
             Log.d("recyclerView", "myImage(your) : ${data.myImage}")
         }
     }

@@ -36,7 +36,7 @@ class ChatLog_Activity : AppCompatActivity() {
         if (toId.isEmpty()) username = intent.getStringExtra(LatestMessage_Activity.USER_KEY)
 
         yourImage = intent.getStringExtra(SelectUser_Activity.USER_IMAGE)
-        if (toId.isEmpty()) yourImage = intent.getStringExtra(LatestMessage_Activity.USER_IMAGE)
+        if (yourImage.isEmpty()) yourImage = intent.getStringExtra(LatestMessage_Activity.USER_IMAGE)
 
         supportActionBar?.title = username
 

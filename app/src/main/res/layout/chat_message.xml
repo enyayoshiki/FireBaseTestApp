@@ -30,12 +30,11 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/chat_my_Image"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="20dp"
-        android:background="@color/black_80"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -56,7 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/rounded_edittext"
-            android:textColor="@color/black_80"
             android:textSize="13dp"
             android:autoSizeMaxTextSize="240dp"
             android:padding="10dp"
@@ -65,12 +63,11 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/chat_your_Image"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="20dp"
-            android:background="@color/black_80"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
