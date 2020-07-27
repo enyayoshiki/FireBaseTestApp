@@ -1,8 +1,10 @@
 package com.example.firebasetestapp.Activity
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.constraintlayout.widget.ConstraintSet.GONE
 import com.example.firebasetestapp.dataClass.ChatMessageToFireStore
 import com.example.firebasetestapp.CustomAdapter.MessageAdapter
 import com.example.firebasetestapp.R
@@ -57,6 +59,7 @@ class ChatLog_Activity : AppCompatActivity() {
 
     }
 
+
     private fun listemMessage() {
 
         db.collection("ChatLogMessage").document("$fromId").collection("$toId")
@@ -73,10 +76,8 @@ class ChatLog_Activity : AppCompatActivity() {
                 val chatMessage = snapshot.toObjects(ChatMessageToFireStore::class.java)
                 Log.d("chat", "chatId(from/to) : ${fromId}/${toId}")
                 Log.d("chat", "chatId(to/from) : ${toId}/${fromId}")
-
                 customAdapter.refresh(chatMessage)
                 chat_log_recyclerview.scrollToPosition(customAdapter.itemCount - 1)
-
             }
     }
 
