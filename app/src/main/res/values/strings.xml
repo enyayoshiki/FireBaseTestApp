@@ -1,14 +1,21 @@
 <resources>
     <string name="app_name">FireBaseTestApp</string>
+    <string name="password_check_text">新しいパスワードを両方に正しく入力してください</string>
     <string name="title_text">FireBaseTestApp</string>
     <string name="login_text">ログイン</string>
-    <string name="register_text">登録</string>
+    <string name="register_text">登録情報入力</string>
+    <string name="register_excute_text">登録実行</string>
+    <string name="to_resister_text">※まだ登録が済んでいない場合はこちら</string>
+    <string name="to_changepassword_text">※パスワードを忘れた場合はこちら</string>
     <string name="passchange_text">パスワード変更</string>
     <string name="mailadress">メールアドレス ； </string>
     <string name="password">パスワード</string>
     <string name="hint_name">ユーザー名</string>
     <string name="hint_mail">メールアドレスを入力してください</string>
     <string name="hint_pass">パスワードを入力してください(6文字以上)</string>
+    <string name="hint_change_pass">新しいパスワードを入力してください(6文字以上)</string>
+    <string name="once_edit_text">※確認のため、もう一度入力してください</string>
+    <string name="announce_text">メールアドレス宛に、パスワード変更メールが届きます。\nメール内URLから、指定したパスワードを入力してください。\nサイト内で正しく入力したらパスワード変更が完了します。</string>
     <string name="excute_login">ログイン</string>
     <string name="excute_register">登録</string>
     <string name="excute_change">登録変更</string>
@@ -33,4 +40,6 @@
     <string name="userimage_profile_setting_text">User画像</string>
     <string name="setting_text">各種設定</string>
     <string name="empty_message">メッセージを送信してください</string>
+    <string name="changepassword_text">パスワード変更</string>
+    <string name="excute_changepassword_text">変更実行</string>
 </resources>
