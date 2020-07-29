@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity
+package com.example.firebasetestapp.Activity.Login_Resister_PassChange
 
 import android.app.Activity
 import android.content.Intent
@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.firebasetestapp.Activity.LatestMessage_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.User
 import com.google.firebase.auth.FirebaseAuth
@@ -14,8 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_resister_.*
-import kotlinx.android.synthetic.main.activity_resister_login.editMail_View
-import kotlinx.android.synthetic.main.activity_resister_login.editPass_View
 import java.util.*
 
 class Resister_Activity : AppCompatActivity() {
@@ -96,7 +95,9 @@ class Resister_Activity : AppCompatActivity() {
         db.collection("User").document("$uid").set(user)
             .addOnSuccessListener {
                 Log.d("resister", "saveUserDatatoFireStore")
-                LatestMessage_Activity.start(this)
+                LatestMessage_Activity.start(
+                    this
+                )
             }
             .addOnFailureListener {
                 Log.d("resister", "$it")

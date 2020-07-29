@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity
+package com.example.firebasetestapp.Activity.Login_Resister_PassChange
 
 import android.app.Activity
 import android.content.Intent
@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.firebasetestapp.Activity.LatestMessage_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_resister_login.*
 
-class ResisterandLogin_Activity : AppCompatActivity() {
+class Login_Activity : AppCompatActivity() {
 
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
@@ -46,7 +47,9 @@ class ResisterandLogin_Activity : AppCompatActivity() {
         }
 
         to_ChangePassword.setOnClickListener{
-            ChangePassword_Activity.start(this)
+            ChangePassword_Activity.start(
+                this
+            )
         }
         closeImageView.setOnClickListener {
             finish()
@@ -59,7 +62,9 @@ class ResisterandLogin_Activity : AppCompatActivity() {
                 if (it.isSuccessful) {
                     Toast.makeText(this, R.string.success, Toast.LENGTH_SHORT).show()
 
-                    LatestMessage_Activity.start(this)
+                    LatestMessage_Activity.start(
+                        this
+                    )
 
                 } else Toast.makeText(
                     this,
@@ -79,7 +84,7 @@ class ResisterandLogin_Activity : AppCompatActivity() {
         fun start(activity: Activity) {
             activity.finishAffinity()
             FirebaseAuth.getInstance().signOut()
-            activity.startActivity(Intent(activity, ResisterandLogin_Activity::class.java))
+            activity.startActivity(Intent(activity, Login_Activity::class.java))
         }
     }
 }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/one_result_homechatroom"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="100dp"
+    android:background="#CCE8F8D8">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/latest_message_userImage_ImageView"

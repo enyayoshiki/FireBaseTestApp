@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Resister_Activity">
+    tools:context=".Activity.Login_Resister_PassChange.Resister_Activity">
 
 
 

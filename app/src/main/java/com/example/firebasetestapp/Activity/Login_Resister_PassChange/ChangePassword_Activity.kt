@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity
+package com.example.firebasetestapp.Activity.Login_Resister_PassChange
 
 import android.app.Activity
 import android.content.Intent
@@ -9,7 +9,6 @@ import android.widget.Toast
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_change_password_.*
-import kotlinx.android.synthetic.main.activity_resister_login.*
 
 class ChangePassword_Activity : AppCompatActivity() {
 
@@ -39,7 +38,7 @@ class ChangePassword_Activity : AppCompatActivity() {
                 if (it.isSuccessful) {
                     showToast(R.string.success)
 
-                  ResisterandLogin_Activity.start(this)
+                  Login_Activity.start(this)
                 } else if (it.isCanceled) showToast(R.string.error)
 
             }.addOnFailureListener {

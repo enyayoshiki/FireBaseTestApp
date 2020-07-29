@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.firebasetestapp.Activity.Login_Resister_PassChange.Login_Activity
 import com.example.firebasetestapp.Activity.setting.setting_Activity
 import com.example.firebasetestapp.CustomAdapter.LatestMessageCustomAdapter
 import com.example.firebasetestapp.R
@@ -13,9 +14,7 @@ import com.example.firebasetestapp.dataClass.LatestMessage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home_login.*
-import kotlinx.android.synthetic.main.chat_room.*
 
 class LatestMessage_Activity:  AppCompatActivity() {
 
@@ -31,7 +30,7 @@ class LatestMessage_Activity:  AppCompatActivity() {
 
         val fromId = FirebaseAuth.getInstance().uid
         if (fromId == null) {
-            ResisterandLogin_Activity.start(this)
+            Login_Activity.start(this)
         }
         latestMessage_recyclerView.apply {
             adapter = customAdapter
@@ -75,7 +74,7 @@ class LatestMessage_Activity:  AppCompatActivity() {
                     setting_Activity.start(this)
                 }
                 R.id.signOut_menu -> {
-                  ResisterandLogin_Activity.start(this)
+                  Login_Activity.start(this)
                 }
             }
             return super.onOptionsItemSelected(item)

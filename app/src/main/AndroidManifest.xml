@@ -12,14 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.ChangePassword_Activity"></activity>
-        <activity android:name=".Activity.Resister_Activity" />
+        <activity android:name=".Activity.Fragment.HomeFragment_Activity"></activity>
+        <activity android:name=".Activity.Login_Resister_PassChange.ChangePassword_Activity" />
+        <activity android:name=".Activity.Login_Resister_PassChange.Resister_Activity" />
         <activity android:name=".Activity.setting.setting_Activity" />
         <activity android:name=".Activity.setting.profileChange_Activity" />
         <activity android:name=".Activity.ChatLog_Activity" />
         <activity android:name=".Activity.LatestMessage_Activity" />
         <activity android:name=".Activity.SelectUser_Activity" />
-        <activity android:name=".Activity.ResisterandLogin_Activity"></activity>
+        <activity android:name=".Activity.Login_Resister_PassChange.Login_Activity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
