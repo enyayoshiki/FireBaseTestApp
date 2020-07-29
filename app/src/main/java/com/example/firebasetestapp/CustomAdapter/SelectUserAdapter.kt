@@ -33,13 +33,10 @@ class SelectUserAdapter(private val context: Context?) :
     }
 
     override fun getItemCount(): Int = items.size
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         ItemViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.one_result_chooseuser,
-                parent,
-                false
-            )
+            LayoutInflater.from(context).inflate(R.layout.one_result_chooseuser, parent, false)
         )
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

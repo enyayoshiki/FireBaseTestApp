@@ -42,4 +42,6 @@
     <string name="empty_message">メッセージを送信してください</string>
     <string name="changepassword_text">パスワード変更</string>
     <string name="excute_changepassword_text">変更実行</string>
+    <string name="reserch_hint">検索したい掲示板名を入力してください(50字以内)</string>
+    <string name="create_thread_hint">作りたい掲示板名を入力してください(50字以内)</string>
 </resources>

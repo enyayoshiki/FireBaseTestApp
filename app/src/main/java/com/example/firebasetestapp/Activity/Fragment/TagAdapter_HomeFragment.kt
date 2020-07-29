@@ -13,10 +13,16 @@ import com.google.android.material.tabs.TabLayout
 
 class TagAdapter_HomeFragment (fm: FragmentManager, private val context: Context) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)  {
-    private val pageTitle = arrayOf("スレッド一覧", "チャットルーム", "マイページ")
+    private val pageTitle = arrayOf("掲示板一覧", "チャットルーム", "マイページ")
     private val pageImage = arrayOf(R.drawable.ic_settings,R.drawable.ic_chatroom,R.drawable.ic_mypage)
     //
     override fun getItem(position: Int): Fragment {
+
+        return when(position){
+            0 -> Thread_Fragment.newInstance(position)
+            1 -> ChatRoom_Fragment.newInstance(position)
+            else -> MyPage_Fragment.newInstance(position)
+        }
         // 要求時 新しい Fragment を生成して返す
         return PageFragment.newInstance(position + 1)
     }

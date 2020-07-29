@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.Fragment.HomeFragment_Activity"></activity>
+        <activity android:name=".Activity.Fragment.MyPage_Fragment"></activity>
+        <activity android:name=".Activity.Fragment.ChatRoom_Fragment" />
+        <activity android:name=".Activity.Fragment.HomeFragment_Activity" />
         <activity android:name=".Activity.Login_Resister_PassChange.ChangePassword_Activity" />
         <activity android:name=".Activity.Login_Resister_PassChange.Resister_Activity" />
         <activity android:name=".Activity.setting.setting_Activity" />
