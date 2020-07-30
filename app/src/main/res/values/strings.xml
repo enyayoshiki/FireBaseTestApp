@@ -44,4 +44,11 @@
     <string name="excute_changepassword_text">変更実行</string>
     <string name="reserch_hint">検索したい掲示板名を入力してください(50字以内)</string>
     <string name="create_thread_hint">作りたい掲示板名を入力してください(50字以内)</string>
+    <string name="success_createthread_text">掲示板を作成しました</string>
+    <string name="please_input_text">文字を入力してください</string>
+    <string name="allthread_text">掲示板一覧を新着で表示します</string>
+    <string name="thead_tab_text">掲示板</string>
+    <string name="chatroom_tab_text">チャットルーム</string>
+    <string name="mypage_tab_text">マイページ</string>
+    <string name="chat_tothread_hint">書き込む内容を入力してください</string>
 </resources>

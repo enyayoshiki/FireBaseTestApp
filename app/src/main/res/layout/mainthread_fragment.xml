@@ -18,10 +18,10 @@
 
 
         <ImageView
-            android:id="@+id/settingResearch_ImageView"
+            android:id="@+id/all_threadData_ImageView"
             android:layout_width="40dp"
             android:layout_height="35dp"
-            android:src="@drawable/ic_settings"
+            android:src="@drawable/ic_all_thread_data"
             android:background="@drawable/outline_white_drawable"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +42,7 @@
             android:maxLength="50"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/settingResearch_ImageView"
+            app:layout_constraintStart_toEndOf="@id/all_threadData_ImageView"
             app:layout_constraintEnd_toStartOf="@id/excute_research_ImageView"
             />
 

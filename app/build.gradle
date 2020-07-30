@@ -58,6 +58,9 @@ dependencies {
 
     //noinspection GradleCompatible Tablayout用
     implementation 'com.android.support:design:27.1.1'
+//  materialdialog
+    implementation "com.afollestad.material-dialogs:core:$material_dialog_version"
+    implementation "com.afollestad.material-dialogs:input:$material_dialog_version"
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -13,7 +13,7 @@ import com.google.android.material.tabs.TabLayout
 
 class TagAdapter_HomeFragment (fm: FragmentManager, private val context: Context) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)  {
-    private val pageTitle = arrayOf("掲示板一覧", "チャットルーム", "マイページ")
+    private val pageTitle = arrayOf("掲示板", "チャットルーム", "マイページ")
     private val pageImage = arrayOf(R.drawable.ic_settings,R.drawable.ic_chatroom,R.drawable.ic_mypage)
     //
     override fun getItem(position: Int): Fragment {

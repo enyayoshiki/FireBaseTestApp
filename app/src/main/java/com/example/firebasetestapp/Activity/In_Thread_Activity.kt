@@ -1,29 +1,24 @@
-
-package com.example.firebasetestapp.Activity.Fragment
+package com.example.firebasetestapp.Activity
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.firebasetestapp.Activity.Fragment.HomeFragment_Activity
+import com.example.firebasetestapp.Activity.Fragment.TagAdapter_HomeFragment
+import com.example.firebasetestapp.Activity.Fragment.Thread_Fragment
 import com.example.firebasetestapp.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main_thread_.*
 
-class HomeFragment_Activity : AppCompatActivity() {
-
-//    private val fragmentList = arrayListOf(
-//        Thread_Fragment(),
-//        ChatRoom_Fragment(),
-//        MyPage_Fragment()
-//    )
+class In_Thread_Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_thread_)
-//        mainThead_ViewPager.addOnPageChangeListener()
+        setContentView(R.layout.activity_in__thread_)
+
         setTabLayout()
     }
-    // Fragmentの設定と、タブの設定
     private fun setTabLayout() {
 //        fragmentを設置
         val adapter = TagAdapter_HomeFragment(supportFragmentManager, this)
@@ -38,7 +33,7 @@ class HomeFragment_Activity : AppCompatActivity() {
 
     companion object {
         fun start(activity: Activity) {
-            val intent = Intent(activity, HomeFragment_Activity::class.java)
+            val intent = Intent(activity, In_Thread_Activity::class.java)
             activity.startActivity(intent)
         }
     }
