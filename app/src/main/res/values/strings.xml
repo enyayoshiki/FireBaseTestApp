@@ -50,5 +50,6 @@
     <string name="thead_tab_text">掲示板</string>
     <string name="chatroom_tab_text">チャットルーム</string>
     <string name="mypage_tab_text">マイページ</string>
-    <string name="chat_tothread_hint">書き込む内容を入力してください</string>
+    <string name="create_message_to_thread_hint">書き込む内容を入力してください</string>
+    <string name="research_others_hint">検索したいUser名を入力してください</string>
 </resources>

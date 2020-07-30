@@ -1,8 +1,7 @@
-package com.example.firebasetestapp.Activity.setting
+package com.example.firebasetestapp.Activity.Fragment.MyPage
 
 import android.app.Activity
 import android.content.Intent
-import com.example.firebasetestapp.Activity.SelectUser_Activity
 
 class accountChange_Activity {
 

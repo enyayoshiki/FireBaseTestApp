@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity.Fragment
+package com.example.firebasetestapp.Activity.Fragment.Thread
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +21,7 @@ class Thread_Fragment: Fragment() {
     private var progressDialog: MaterialDialog? = null
     private val db = FirebaseFirestore.getInstance()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
@@ -39,18 +40,18 @@ class Thread_Fragment: Fragment() {
     }
 
     private fun initLayout() {
-        excute_research_ImageView.setOnClickListener {
+        excute_research_thread_imageView.setOnClickListener {
             researchThread()
         }
 
-        excute_creat_thread_ImageView.setOnClickListener {
+        excute_creat_thread_imageView.setOnClickListener {
             creatThread()
         }
 
         all_threadData_ImageView.setOnClickListener{
             showToast(R.string.allthread_text)
-            edit_Research_TextView.text.clear()
-            edit_create_thread_TextView.text.clear()
+            research_thread_editView.text.clear()
+            create_thread_editView.text.clear()
             initData()
         }
 
@@ -77,7 +78,7 @@ class Thread_Fragment: Fragment() {
             activity?.also {
                 customAdapter = MainThreadRecyclerViewAdapter(it)
             }
-            mainThead_RecyclerView_Fragment.apply {
+            mainThead_recyclerView_fragment.apply {
                 adapter = customAdapter
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
@@ -86,7 +87,7 @@ class Thread_Fragment: Fragment() {
         }
 
     private fun researchThread() {
-        val researchWord = edit_Research_TextView.text.toString()
+        val researchWord = research_thread_editView.text.toString()
 
         if (researchWord.isNotEmpty()) {
             FirebaseFirestore.getInstance()
@@ -100,7 +101,7 @@ class Thread_Fragment: Fragment() {
                     val allThreadData = it.result?.toObjects(ThreadData::class.java)
                     val fetchData =
                         allThreadData?.filter { it.name.contains(researchWord) }?.toMutableList()
-                    edit_Research_TextView.text.clear()
+                    research_thread_editView.text.clear()
 //                    allThreadData?.forEach {
 //                        it.name.contains(researchWord)
 //                        val threadData =mutableListOf<ThreadData>()
@@ -113,11 +114,11 @@ class Thread_Fragment: Fragment() {
     }
 
         private fun creatThread() {
-            val threadName = edit_create_thread_TextView.text.toString()
+            val threadName = create_thread_editView.text.toString()
             if (threadName.isNotEmpty()) {
                 db.collection("rooms").add(ThreadData().apply {
                     name = threadName
-                    edit_create_thread_TextView.text.clear()
+                    create_thread_editView.text.clear()
                     showToast(R.string.success_createthread_text)
                 })
                     .addOnCompleteListener {
@@ -149,6 +150,7 @@ class Thread_Fragment: Fragment() {
 
 
     companion object {
+        val ROOM_ID = "ROOM_ID"
             fun newInstance(position: Int): Thread_Fragment {
                 return Thread_Fragment()
             }

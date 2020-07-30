@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity.setting
+package com.example.firebasetestapp.Activity.Fragment.MyPage
 
 import android.app.Activity
 import android.content.Intent
@@ -14,10 +14,8 @@ import com.example.firebasetestapp.Activity.LatestMessage_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.profile_setting.*
 import java.util.*
 

@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetestapp.Activity.Login_Resister_PassChange.Login_Activity
-import com.example.firebasetestapp.Activity.setting.setting_Activity
+import com.example.firebasetestapp.Activity.Fragment.MyPage.setting_Activity
 import com.example.firebasetestapp.CustomAdapter.LatestMessageCustomAdapter
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.LatestMessage

@@ -7,7 +7,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.example.firebasetestapp.Activity.Fragment.PageFragment
+import com.example.firebasetestapp.Activity.Fragment.MyPage.MyPage_Fragment
+import com.example.firebasetestapp.Activity.Fragment.Thread.Thread_Fragment
 import com.example.firebasetestapp.R
 import com.google.android.material.tabs.TabLayout
 
@@ -20,7 +21,7 @@ class TagAdapter_HomeFragment (fm: FragmentManager, private val context: Context
 
         return when(position){
             0 -> Thread_Fragment.newInstance(position)
-            1 -> ChatRoom_Fragment.newInstance(position)
+            1 -> ChatRooms_Fragment.newInstance(position)
             else -> MyPage_Fragment.newInstance(position)
         }
         // 要求時 新しい Fragment を生成して返す

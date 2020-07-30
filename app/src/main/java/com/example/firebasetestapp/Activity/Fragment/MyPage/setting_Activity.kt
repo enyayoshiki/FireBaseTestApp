@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity.setting
+package com.example.firebasetestapp.Activity.Fragment.MyPage
 
 import android.app.Activity
 import android.content.Intent

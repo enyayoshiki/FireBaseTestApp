@@ -61,6 +61,8 @@ dependencies {
 //  materialdialog
     implementation "com.afollestad.material-dialogs:core:$material_dialog_version"
     implementation "com.afollestad.material-dialogs:input:$material_dialog_version"
+    // EventBus
+    implementation "org.greenrobot:eventbus:3.2.0"
 }
 
 apply plugin: 'com.google.gms.google-services'

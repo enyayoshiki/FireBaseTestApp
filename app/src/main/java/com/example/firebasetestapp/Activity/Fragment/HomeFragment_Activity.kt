@@ -21,6 +21,7 @@ class HomeFragment_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_thread_)
 //        mainThead_ViewPager.addOnPageChangeListener()
+        supportActionBar?.hide()
         setTabLayout()
     }
     // Fragmentの設定と、タブの設定

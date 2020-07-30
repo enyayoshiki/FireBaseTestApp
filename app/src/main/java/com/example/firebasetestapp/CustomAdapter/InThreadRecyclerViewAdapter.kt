@@ -7,15 +7,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.firebasetestapp.Activity.Fragment.HomeFragment_Activity
 import com.example.firebasetestapp.Activity.Fragment.Thread.In_Thread_Activity
 import com.example.firebasetestapp.Activity.Fragment.Thread.Thread_Fragment
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ThreadData
 
-class MainThreadRecyclerViewAdapter (private val context: Context) :
+class InThreadRecyclerViewAdapter (private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<ThreadData>()
@@ -34,18 +33,18 @@ class MainThreadRecyclerViewAdapter (private val context: Context) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        MainThreadItemViewHolder(
+        InThreadItemViewHolder(
             LayoutInflater.from(context)
                 .inflate(R.layout.one_result_mainthread, parent, false) as ViewGroup
         )
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is MainThreadItemViewHolder)
+        if (holder is InThreadItemViewHolder)
             onBindViewHolder(holder, position)
     }
 
-    private fun onBindViewHolder(holder: MainThreadItemViewHolder, position: Int) {
+    private fun onBindViewHolder(holder: InThreadItemViewHolder, position: Int) {
         val data = items[position]
         holder.apply {
             threadName?.text = data.name
@@ -53,7 +52,7 @@ class MainThreadRecyclerViewAdapter (private val context: Context) :
             rootView?.setOnClickListener {
                 val intent = Intent(context, In_Thread_Activity::class.java)
                 intent.putExtra(Thread_Fragment.ROOM_ID, data.roomId)
-                startActivity(context, intent, null)
+                ContextCompat.startActivity(context, intent, null)
             }
 //                checkSendMessageDialog()
         }
@@ -73,7 +72,7 @@ class MainThreadRecyclerViewAdapter (private val context: Context) :
 //    }
 
 
-    class MainThreadItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
+    class InThreadItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
         val rootView: ConstraintLayout? = view.findViewById(R.id.one_result_rootView)
         val threadName: TextView? = view.findViewById(R.id.one_result_threadName_mainThread)
         val createdAtThread: TextView? =
