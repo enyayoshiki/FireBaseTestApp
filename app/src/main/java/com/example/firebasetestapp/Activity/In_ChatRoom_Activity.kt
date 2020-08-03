@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_in__chat_room_.*
+import kotlinx.android.synthetic.main.chat_room.*
 
 class In_ChatRoom_Activity : AppCompatActivity() {
 
@@ -21,7 +22,6 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     private var progressDialog: MaterialDialog? = null
     private val db = FirebaseFirestore.getInstance()
     private var otherId: String = ""
-    private var otherName : String = ""
     private var chatRoomId : String = ""
     private var fromId : String = ""
     private var myName : String = ""
@@ -33,7 +33,6 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         setContentView(R.layout.activity_in__chat_room_)
         supportActionBar?.hide()
 
-
         initialize()
         //        setTabLayout()
     }
@@ -44,37 +43,21 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     }
 
     private fun initLayout() {
-        chatRoomName_inChatRoom_textView.text = otherName
+        chatRoomName_inChatRoom_textView.text = intent.getStringExtra(In_Thread_Activity.OTHER_NAME) ?: ""
 
         if (edit_message_inChatRoom_editView.text.isNotEmpty())
         else excute_chat_inChatRoom_imageView.setOnClickListener {
             sendMessageInChatRoom()
         }
-
         initRecyclerView()
     }
 
     private fun initData() {
         otherId = intent.getStringExtra(In_Thread_Activity.OTHER_ID) ?: ""
-        otherName = intent.getStringExtra(In_Thread_Activity.OTHER_NAME) ?: ""
-        fromId = FirebaseAuth.getInstance().uid ?: ""
-        db.collection("Users").document(fromId).get()
-            .addOnSuccessListener {
-                myName = it["userName"].toString()
-                myImage = it["userImage"].toString()
-            }
-        db.collection("ChatRooms").whereArrayContains("userList", mutableListOf(otherId, fromId)).get()
-            .addOnSuccessListener {
-                if (it.isEmpty()) return@addOnSuccessListener
-                chatRoomId = it.toObjects(InChatRoom::class.java)[1].toString()
-                Log.d("inChatRoom", chatRoomId)
-            }.addOnFailureListener{
-                return@addOnFailureListener
-            }
-        getMessage()
-            }
 
-
+        myDataSet()
+        getRoomId()
+    }
 
 private fun initRecyclerView() {
         in_chatRoom_recyclerView.apply {
@@ -87,30 +70,30 @@ private fun initRecyclerView() {
     private fun getMessage(){
         db.collection("InChatRoom").whereEqualTo("inChatRoomId", chatRoomId).orderBy("createdAt", Query.Direction.ASCENDING).get()
             .addOnSuccessListener {
-                if (it.isEmpty) return@addOnSuccessListener
-                Log.d("inChatRoom", "getMessage成功")
+
                 val messageInChatRoom = it.toObjects(InChatRoom::class.java)
-                Log.d("inChatRoom", "$messageInChatRoom")
+                Log.d("inChatRoom", "getMessage : $messageInChatRoom")
                 customAdapter.refresh(messageInChatRoom)
+                in_chatRoom_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
             }
             .addOnFailureListener {
-                Log.d("inChatRoom", "initData失敗")
+                Log.d("inChatRoom", "getMessage失敗")
             }
     }
 
     private fun sendMessageInChatRoom() {
         val sendMessageinChat = edit_message_inChatRoom_editView.text.toString()
+
         if (sendMessageinChat.isEmpty()) {
             return showToast(R.string.please_input_text)
-        } else {
+        }
+        else {
             creatChatRooms(sendMessageinChat)
             db.collection("InChatRoom").add(InChatRoom().apply {
-                userList = mutableListOf(otherId, fromId)
                 sendMessage = sendMessageinChat
                 sendUserId = fromId
                 sendUserName = myName
                 sendUserImage = myImage
-                sendtoOtherName = otherName
                 inChatRoomId = chatRoomId
             })
                 .addOnCompleteListener {
@@ -121,15 +104,57 @@ private fun initRecyclerView() {
         }
     }
 
-    private fun creatChatRooms(latestMessageInChat : String) {
-        db.collection("ChatRooms").document(System.currentTimeMillis().toString()).set(ChatRooms().apply {
-            if (chatRoomId.isEmpty()) {
-                chatRoomId = System.currentTimeMillis().toString()
-                roomId = chatRoomId
-                userList = mutableListOf(otherId, fromId)
+
+
+    private fun myDataSet(){
+        fromId = FirebaseAuth.getInstance().uid ?: ""
+        db.collection("Users").document(fromId).get()
+            .addOnSuccessListener {
+                myName = it["userName"].toString()
+                myImage = it["userImage"].toString()
             }
+    }
+
+    private fun getRoomId(){
+        Log.d("inChatRoom", " getRoomId")
+        Log.d("inChatRoom", "fromId : $fromId")
+        db.collection("ChatRooms").whereArrayContains("userList", fromId).get()
+            .addOnCompleteListener { it ->
+                val result = it.result
+                val chatRoomsResult = result?.toObjects(ChatRooms::class.java)
+                Log.d("inChatRoom", "chatRoomId取得 : $chatRoomsResult")
+                chatRoomsResult!!.forEach {
+                    Log.d("inChatRoom", "chatRoomId取得 : $it")
+                        if (it.userList.contains(otherId)) {
+                            Log.d("inChatRoom", "chatRoomId取得　true : ${it.roomId}")
+                            chatRoomId = it.roomId
+
+                            getMessage()
+                        }
+                    else Log.d("inChatRoom", "chatRoomId取得　false : ${it.roomId}")
+                    }
+                }
+            .addOnFailureListener {
+                Log.d("inChatRoom", "chatRoomId失敗 : $it")
+                return@addOnFailureListener
+            }
+        if (chatRoomId.isEmpty())
+            chatRoomId =  System.currentTimeMillis().toString()
+
+    }
+
+    private fun creatChatRooms(latestMessageInChat : String) {
+        db.collection("ChatRooms").document(chatRoomId).set(ChatRooms().apply {
             latestMessage = latestMessageInChat
-        })
+            roomId = chatRoomId
+            userList = mutableListOf(otherId, fromId)
+            })
+            .addOnSuccessListener {
+                showToast(R.string.success)
+            }
+            .addOnFailureListener{
+                showToast(R.string.error)
+            }
     }
 
     private fun showToast(textId: Int) {

@@ -14,7 +14,12 @@ import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ThreadData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.activity_chatrooms_fragment.*
+import kotlinx.android.synthetic.main.activity_in_thread_.*
+import kotlinx.android.synthetic.main.activity_in_thread_.in_thread_recyclerView
+import kotlinx.android.synthetic.main.activity_main_thread_.*
 import kotlinx.android.synthetic.main.mainthread_fragment.*
+import kotlinx.android.synthetic.main.mainthread_fragment.mainThead_recyclerView_fragment
 
 class Thread_Fragment: Fragment() {
 
@@ -73,6 +78,8 @@ class Thread_Fragment: Fragment() {
                     return@addOnCompleteListener
                 it.result?.toObjects(ThreadData::class.java)?.also { thread ->
                     customAdapter.refresh(thread)
+                    mainThead_recyclerView_fragment.scrollToPosition(customAdapter.itemCount - 1)
+                    in_thread_recyclerView
                 }
                 hideProgress()
             }

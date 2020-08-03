@@ -13,6 +13,7 @@ import com.example.firebasetestapp.dataClass.MessageToThread
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.activity_in__chat_room_.*
 import kotlinx.android.synthetic.main.activity_in_thread_.*
 
 class In_Thread_Activity : AppCompatActivity() {
@@ -56,6 +57,7 @@ class In_Thread_Activity : AppCompatActivity() {
                 val message = it.toObjects(MessageToThread::class.java)
                 Log.d("inThread", "$message")
                 customAdapter.refresh(message)
+                in_thread_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
             }
             .addOnFailureListener {
                 Log.d("inThread", "initData失敗")
