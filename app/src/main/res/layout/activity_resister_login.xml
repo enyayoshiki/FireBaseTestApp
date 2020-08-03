@@ -119,7 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:background="@drawable/rounded_edittext"
-        android:hint="@string/hint_mail"
+        android:hint="@string/hint_mailadress_resistered"
         android:padding="10dp"
         android:textSize="13dp"
         android:inputType="textEmailAddress"

@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.firebasetestapp.Activity.ChatLog_Activity
-import com.example.firebasetestapp.Activity.LatestMessage_Activity
 import com.example.firebasetestapp.Activity.SelectUser_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.User
@@ -51,14 +50,14 @@ class SelectUserAdapter(private val context: Context?) :
             Log.d("SelectUser_recyclerView", "$items")
             holder.rootView.maxHeight = 0
         }
-        holder.UserName.text = data.username
+        holder.UserName.text = data.userName
         Picasso.get().load(data.userImage).into(holder.UserImage as ImageView)
         Log.d("SelectUser_recyclerView", "myImage : ${data.userImage}")
 
         holder.rootView.setOnClickListener {
             val intent = Intent(it.context, ChatLog_Activity::class.java)
             intent.apply {
-                putExtra(SelectUser_Activity.USER_NAME, data.username)
+                putExtra(SelectUser_Activity.USER_NAME, data.userName)
                 putExtra(SelectUser_Activity.USER_KEY, data.uid)
                 putExtra(SelectUser_Activity.USER_IMAGE, data.userImage)
             }

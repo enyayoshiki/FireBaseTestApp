@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.firebasetestapp.Activity.LatestMessage_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.User
 import com.google.firebase.auth.FirebaseAuth
@@ -92,15 +92,15 @@ class Resister_Activity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
         val user = User(uid, userName, saveImageUrl)
-        db.collection("User").document("$uid").set(user)
+        db.collection("Users").document("$uid").set(user)
             .addOnSuccessListener {
                 Log.d("resister", "saveUserDatatoFireStore")
-                LatestMessage_Activity.start(
-                    this
-                )
+                showToast(R.string.success)
+               HomeFragment_Activity.start(this)
             }
             .addOnFailureListener {
                 Log.d("resister", "$it")
+                Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
             }
     }
     private fun showToast(textId: Int) {

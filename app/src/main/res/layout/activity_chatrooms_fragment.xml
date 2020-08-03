@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Fragment.ChatRooms_Fragment">
+    tools:context=".Activity.Thread_ChatRooms_MyPage.ChatRooms_Fragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/research_others_constraint"

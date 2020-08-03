@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity.Fragment
+package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -4,54 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity">
+    tools:context=".Activity.In_ChatRoom_Activity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/in_thread_recyclerView"
+        android:id="@+id/in_chatRoom_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#F4DB6A"
+        android:background="#D5A17B"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/threadName_inThread_textView"
+        app:layout_constraintTop_toBottomOf="@id/chatRoomName_inChatRoom_textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/edit_chat_toThread_constraint">
+        app:layout_constraintBottom_toTopOf="@id/edit_chat_inChatRoom_constraint">
     </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/edit_chat_toThread_constraint"
+        android:id="@+id/edit_chat_inChatRoom_constraint"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#7B8BEA"
+        android:background="#282829"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/in_thread_recyclerView"
+        app:layout_constraintTop_toBottomOf="@id/in_chatRoom_recyclerView"
         app:layout_constraintBottom_toBottomOf="parent"
         >
 
 
 
-    <EditText
-        android:id="@+id/edit_message_toThread_editView"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_edittext"
-        android:hint="@string/create_message_to_thread_hint"
-        android:textSize="10dp"
-        android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/excute_chat_toThread_imageView"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"
-        />
+        <EditText
+            android:id="@+id/edit_message_inChatRoom_editView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/create_message_to_thread_hint"
+            android:textSize="10dp"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/excute_chat_inChatRoom_imageView"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="parent"
+            />
 
         <ImageView
-            android:id="@+id/excute_chat_toThread_imageView"
+            android:id="@+id/excute_chat_inChatRoom_imageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/outline_white_drawable"
             android:src="@drawable/ic_chatroom"
-            app:layout_constraintStart_toEndOf="@id/edit_message_toThread_editView"
+            app:layout_constraintStart_toEndOf="@id/edit_message_inChatRoom_editView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -63,19 +63,18 @@
 
 
     <TextView
-        android:id="@+id/threadName_inThread_textView"
+        android:id="@+id/chatRoomName_inChatRoom_textView"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="#383938"
+        android:background="#3B397A"
         android:text="@string/create_message_to_thread_hint"
-        android:textColor="@color/white_80"
+        android:textColor="#F4F1F1"
         android:gravity="start"
         android:padding="8dp"
         android:paddingStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/in_thread_recyclerView"
-        />
+        app:layout_constraintBottom_toTopOf="@id/in_chatRoom_recyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

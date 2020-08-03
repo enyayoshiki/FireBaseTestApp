@@ -1,6 +1,7 @@
-package com.example.firebasetestapp.Activity.Fragment.Thread
+package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,17 +36,22 @@ class Thread_Fragment: Fragment() {
     }
 
     private fun initialize() {
+        initRecyclerView()
         initLayout()
         initData()
     }
 
     private fun initLayout() {
         excute_research_thread_imageView.setOnClickListener {
+            Log.d("thread", "research Thread")
             researchThread()
         }
 
+
         excute_creat_thread_imageView.setOnClickListener {
+            Log.d("thread", "create Thread")
             creatThread()
+
         }
 
         all_threadData_ImageView.setOnClickListener{
@@ -54,8 +60,6 @@ class Thread_Fragment: Fragment() {
             create_thread_editView.text.clear()
             initData()
         }
-
-        initRecyclerView()
     }
 
     private fun initData() {
@@ -67,8 +71,8 @@ class Thread_Fragment: Fragment() {
             .addOnCompleteListener {
                 if (!it.isSuccessful)
                     return@addOnCompleteListener
-                it.result?.toObjects(ThreadData::class.java)?.also { chatRooms ->
-                    customAdapter.refresh(chatRooms)
+                it.result?.toObjects(ThreadData::class.java)?.also { thread ->
+                    customAdapter.refresh(thread)
                 }
                 hideProgress()
             }
@@ -118,10 +122,10 @@ class Thread_Fragment: Fragment() {
             if (threadName.isNotEmpty()) {
                 db.collection("rooms").add(ThreadData().apply {
                     name = threadName
-                    create_thread_editView.text.clear()
-                    showToast(R.string.success_createthread_text)
                 })
                     .addOnCompleteListener {
+                        create_thread_editView.text.clear()
+                        showToast(R.string.success_createthread_text)
                         initData()
                     }
             }else showToast(R.string.please_input_text)
@@ -150,7 +154,8 @@ class Thread_Fragment: Fragment() {
 
 
     companion object {
-        val ROOM_ID = "ROOM_ID"
+        const val THREAD_ID = "THREAD_ID"
+        const val THREAD_NAME = "THREAD_NAME"
             fun newInstance(position: Int): Thread_Fragment {
                 return Thread_Fragment()
             }

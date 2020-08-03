@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.firebasetestapp.Activity.LatestMessage_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_resister_login.*
@@ -51,6 +51,7 @@ class Login_Activity : AppCompatActivity() {
                 this
             )
         }
+
         closeImageView.setOnClickListener {
             finish()
         }
@@ -60,11 +61,9 @@ class Login_Activity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Toast.makeText(this, R.string.success, Toast.LENGTH_SHORT).show()
+                    showToast(R.string.success)
 
-                    LatestMessage_Activity.start(
-                        this
-                    )
+                   HomeFragment_Activity.start(this)
 
                 } else Toast.makeText(
                     this,

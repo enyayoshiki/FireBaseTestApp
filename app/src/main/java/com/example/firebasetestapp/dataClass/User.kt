@@ -4,6 +4,6 @@ import android.net.Uri
 import com.google.firebase.storage.UploadTask
 
 
-class User(val uid: String, val username: String, val userImage: String?) {
+class User(val uid: String, val userName: String, val userImage: String?) {
     constructor(): this("", "", "")
 }

@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity.Fragment.MyPage
+package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.MyPage
 
 import android.app.Activity
 import android.content.Intent

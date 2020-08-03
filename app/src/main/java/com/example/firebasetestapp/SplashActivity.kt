@@ -3,7 +3,8 @@ package com.example.firebasetestapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.example.firebasetestapp.Activity.Fragment.HomeFragment_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
+import com.example.firebasetestapp.Activity.Login_Resister_PassChange.Login_Activity
 import com.google.firebase.auth.FirebaseAuth
 
 class SplashActivity : AppCompatActivity() {
@@ -12,15 +13,11 @@ class SplashActivity : AppCompatActivity() {
     private val runnable = Runnable {
 
 
-        HomeFragment_Activity.start(this)
-//        if (auth.currentUser !== null) {
-//            LatestMessage_Activity.start(
-//                this
-//            )
-//        }
 
-//        val intent = Intent(this, ResisterandLogin_Activity::class.java)
-//        startActivity(intent)
+        if (auth.currentUser == null) {
+            Login_Activity.start(this)
+        }
+        HomeFragment_Activity.start(this)
 
         finish()
     }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/oneResult_mineImage_inChatRoom_imageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/oneResult_mineName_inChatRoom_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="#000407"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@id/oneResult_mineImage_inChatRoom_imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/oneResult_mineCreatedAt_inChatRoom_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="8sp"
+        android:textColor="#FDFDFD"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintEnd_toStartOf="@id/oneResult_mineName_inChatRoom_textView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/oneResult_mineMessage_inChatRoom_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="30"
+        android:padding="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="2dp"
+        android:textSize="11sp"
+        android:gravity="start"
+        android:background="@drawable/round_message_mine"
+        android:textColor="#F8F7F7"
+        app:layout_constraintEnd_toStartOf="@id/oneResult_mineImage_inChatRoom_imageView"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

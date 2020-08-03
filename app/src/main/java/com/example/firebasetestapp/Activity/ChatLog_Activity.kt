@@ -86,7 +86,7 @@ class ChatLog_Activity : AppCompatActivity() {
         val text = edit_chat_massage.text.toString()
         val time: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
         val chatMessage = ChatMessageToFireStore(text, fromId!!, toId!!, time, userImage)
-        var latestMessage = LatestMessage(text, fromId!!, toId!!, username, yourImage )
+//        var latestMessage = LatestMessage(text, fromId!!, toId!!, username, yourImage )
 
         if (text.isEmpty()) return
         db.collection("ChatLogMessage").document("$fromId").collection("$toId").add(chatMessage)
@@ -97,17 +97,17 @@ class ChatLog_Activity : AppCompatActivity() {
 
                 db.collection("ChatLogMessage").document("$toId").collection("$fromId").add(chatMessage)
 
-                db.collection("LatestMessage:$fromId").document("${fromId}and${toId}").set(latestMessage)
-                    .addOnSuccessListener {
-                        db.collection("User").document("$fromId").get()
-                            .addOnSuccessListener {
-                               latestMessage = LatestMessage(text, toId!!, fromId!!, it["username"] as String, userImage)
-                    db.collection("LatestMessage:$toId").document("${toId}and${fromId}").set(latestMessage)
+//                db.collection("LatestMessage:$fromId").document("${fromId}and${toId}").set(latestMessage)
+//                    .addOnSuccessListener {
+//                        db.collection("User").document("$fromId").get()
+//                            .addOnSuccessListener {
+////                               latestMessage = LatestMessage(text, toId!!, fromId!!, it["username"] as String, userImage)
+//                    db.collection("LatestMessage:$toId").document("${toId}and${fromId}").set(latestMessage)
                     }
                 }
-            }
-            .addOnFailureListener {
-                Log.d("chat", "$it")
-            }
-    }
+//            }
+//            .addOnFailureListener {
+//                Log.d("chat", "$it")
+//            }
+//    }
 }

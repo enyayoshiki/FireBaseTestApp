@@ -1,5 +1,9 @@
 package com.example.firebasetestapp.dataClass
 
-class LatestMessage (val text: String,val myId: String, val yourId: String, val yourName: String, val yourImage: String){
-    constructor(): this("", "", "", "", "")
+import java.util.*
+
+class LatestMessage {
+    var otherName: String = ""
+    var latestMessage: String = ""
+    var otherImage: String = ""
 }

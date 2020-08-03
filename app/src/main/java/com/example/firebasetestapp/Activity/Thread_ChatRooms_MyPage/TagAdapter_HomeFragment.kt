@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity.Fragment
+package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.example.firebasetestapp.Activity.Fragment.MyPage.MyPage_Fragment
-import com.example.firebasetestapp.Activity.Fragment.Thread.Thread_Fragment
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.MyPage.MyPage_Fragment
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.Thread_Fragment
 import com.example.firebasetestapp.R
 import com.google.android.material.tabs.TabLayout
 

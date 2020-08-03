@@ -47,18 +47,18 @@ class LatestMessageCustomAdapter(private val context: Context?) :
 
     private fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         var data = items[position]
-        holder.latestMessageText.text = data.text
-        holder.toUserName.text = data.yourName
-        Picasso.get().load(data.yourImage).into(holder.latestUserImageView as ImageView)
-        holder.rootView.setOnClickListener {
-            val intent = Intent(it.context, ChatLog_Activity::class.java)
-            intent.apply {
-                putExtra(LatestMessage_Activity.USER_NAME, data.yourName)
-                putExtra(LatestMessage_Activity.USER_KEY, data.yourId)
-                putExtra(LatestMessage_Activity.USER_IMAGE, data.yourImage)
-            }
-            it.context.startActivity(intent)
-        }
+//        holder.latestMessageText.text = data.text
+//        holder.toUserName.text = data.yourName
+//        Picasso.get().load(data.yourImage).into(holder.latestUserImageView as ImageView)
+//        holder.rootView.setOnClickListener {
+//            val intent = Intent(it.context, ChatLog_Activity::class.java)
+//            intent.apply {
+//                putExtra(LatestMessage_Activity.USER_NAME, data.yourName)
+//                putExtra(LatestMessage_Activity.USER_KEY, data.yourId)
+//                putExtra(LatestMessage_Activity.USER_IMAGE, data.yourImage)
+//            }
+//            it.context.startActivity(intent)
+//        }
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {

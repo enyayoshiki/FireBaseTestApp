@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.firebasetestapp.Activity.Fragment.HomeFragment_Activity
-import com.example.firebasetestapp.Activity.Fragment.Thread.In_Thread_Activity
-import com.example.firebasetestapp.Activity.Fragment.Thread.Thread_Fragment
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.Thread_Fragment
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ThreadData
 
@@ -52,8 +50,9 @@ class MainThreadRecyclerViewAdapter (private val context: Context) :
             createdAtThread?.text = DateFormat.format("yyyy/MM/dd hh:mm:ss", data.createdAt)
             rootView?.setOnClickListener {
                 val intent = Intent(context, In_Thread_Activity::class.java)
-                intent.putExtra(Thread_Fragment.ROOM_ID, data.roomId)
-                startActivity(context, intent, null)
+                intent.putExtra(Thread_Fragment.THREAD_ID, data.roomId)
+                intent.putExtra(Thread_Fragment.THREAD_NAME, data.name)
+                context.startActivity(intent)
             }
 //                checkSendMessageDialog()
         }

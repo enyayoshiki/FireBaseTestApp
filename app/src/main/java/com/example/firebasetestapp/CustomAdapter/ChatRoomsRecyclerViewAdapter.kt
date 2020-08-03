@@ -44,9 +44,9 @@ class ChatRoomsRecyclerViewAdapter (private val context: Context) :
     private fun onBindViewHolder(holder: ChatRoomsItemViewHolder, position: Int) {
         val data = items[position]
         holder.apply {
-            otherName?.text = data.otherName
-            latestMessage?.text =data.latestMessage
-            Picasso.get().load(data.otherImage).into(holder.otherImage as ImageView)
+//            otherName?.text = data.otherName
+//            latestMessage?.text =data.latestMessage
+//            Picasso.get().load(data.otherImage).into(holder.otherImage as ImageView)
 //            holder.rootView?.setOnClickListener {
 //            rootView?.setOnClickListener{  //ToDo チャットルームの中へ移動
 //                val intent = Intent(context, In_Thread_Activity::class.java)

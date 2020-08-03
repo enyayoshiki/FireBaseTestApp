@@ -12,6 +12,7 @@
     <string name="password">パスワード</string>
     <string name="hint_name">ユーザー名</string>
     <string name="hint_mail">メールアドレスを入力してください</string>
+    <string name="hint_mailadress_resistered">登録済みのメールアドレスを入力してください</string>
     <string name="hint_pass">パスワードを入力してください(6文字以上)</string>
     <string name="hint_change_pass">新しいパスワードを入力してください(6文字以上)</string>
     <string name="once_edit_text">※確認のため、もう一度入力してください</string>
@@ -52,4 +53,9 @@
     <string name="mypage_tab_text">マイページ</string>
     <string name="create_message_to_thread_hint">書き込む内容を入力してください</string>
     <string name="research_others_hint">検索したいUser名を入力してください</string>
+    <string name="success_sendmessage_to_thread_text">メッセージを送りました</string>
+    <string name="sendmessage_materialdialog">この人にメッセージを送りますか？</string>
+    <string name="positivebtn_materialdialog">はい</string>
+    <string name="negativebtn_materialdialog">いいえ</string>
+    <string name="logout_text">ログアウト</string>
 </resources>
