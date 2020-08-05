@@ -58,4 +58,5 @@
     <string name="positivebtn_materialdialog">はい</string>
     <string name="negativebtn_materialdialog">いいえ</string>
     <string name="logout_text">ログアウト</string>
+    <string name="get_message_text"> メッセージ取得</string>
 </resources>

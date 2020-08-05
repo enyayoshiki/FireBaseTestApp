@@ -65,14 +65,14 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
             Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
             rootView?.setOnClickListener {
                 if (data.sendUserId != FirebaseAuth.getInstance().uid)
-                showSendUserInfo(data.sendUserName, data.sendUserId)
+                showSendUserInfo(data.sendUserName, data.sendUserId, data.sendUserImage)
                 else return@setOnClickListener
             }
 //                checkSendMessageDialog()
         }
     }
 
-    private fun showSendUserInfo(userName: String, userId: String) {
+    private fun showSendUserInfo(userName: String, userId: String, userImage : String) {
 //        context?.also {
 //            MaterialAlertDialogBuilder(context)
 //                .setTitle("User名 : $userName")
@@ -92,6 +92,7 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
                     intent.apply {
                         putExtra(In_Thread_Activity.OTHER_ID, userId)
                         putExtra(In_Thread_Activity.OTHER_NAME, userName)
+                        putExtra(In_Thread_Activity.OTHER_IMAGE, userImage)
                     }
                     it.context.startActivity(intent)
                 }

@@ -5,7 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_resister_login.*
 class Login_Activity : AppCompatActivity() {
 
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private var progressDialog: MaterialDialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,21 +61,42 @@ class Login_Activity : AppCompatActivity() {
     }
 
     private fun login(email: String, pass: String) {
+        showProgress()
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener {
+
                 if (it.isSuccessful) {
                     showToast(R.string.success)
 
                    HomeFragment_Activity.start(this)
-
+                    hideProgress()
                 } else Toast.makeText(
                     this,
                     R.string.error, Toast.LENGTH_SHORT
                 ).show()
+                hideProgress()
             }.addOnFailureListener {
                 Log.d("error", "$it")
                 Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
+                hideProgress()
             }
+    }
+
+    private fun showProgress() {
+        hideProgress()
+        progressDialog = this.let {
+            MaterialDialog(it).apply {
+                cancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                show()
+            }
+        }
+
+    }
+
+    private fun hideProgress() {
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
     private fun showToast(textId: Int) {

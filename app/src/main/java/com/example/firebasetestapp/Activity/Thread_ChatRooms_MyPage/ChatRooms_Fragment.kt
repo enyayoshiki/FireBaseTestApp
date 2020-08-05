@@ -6,22 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.CustomAdapter.ChatRoomsRecyclerViewAdapter
+import com.example.firebasetestapp.CustomAdapter.InChatRoomRecyclerViewAdapter
+import com.example.firebasetestapp.CustomAdapter.MainThreadRecyclerViewAdapter
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chatrooms_fragment.*
+import kotlinx.android.synthetic.main.activity_in__chat_room_.*
+import kotlinx.android.synthetic.main.mainthread_fragment.*
 
 class ChatRooms_Fragment : Fragment() {
 
     private lateinit var customAdapter: ChatRoomsRecyclerViewAdapter
     private val db = FirebaseFirestore.getInstance()
+    private var progressDialog: MaterialDialog? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initialize()
     }
 
@@ -34,6 +40,7 @@ class ChatRooms_Fragment : Fragment() {
     }
 
     private fun initialize(){
+        initRecyclerView()
         initLayout()
         initData()
     }
@@ -52,29 +59,66 @@ class ChatRooms_Fragment : Fragment() {
         chatRoomsShow(FirebaseAuth.getInstance().uid)
     }
 
+    private fun initRecyclerView() {
+        activity?.also {
+            customAdapter = ChatRoomsRecyclerViewAdapter(it)
+        }
+        chatRooms_recyclerView.apply {
+            adapter = customAdapter
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+        }
+//            addOnScrollListener(scrollListener)
+    }
+
+
     private fun reserchOthers(){
         val researchName = edit_research_others_editView.text.toString()
         //dbによる名前検索をいれる
     }
+
     private fun chatRoomsShow(fromId : String?) {
-        Log.d("latestmessage", "latestChatLogShow")
-        db.collection("LatestMessage:$fromId")
-            .addSnapshotListener { snapshot, e ->
-                if (e != null || snapshot == null) {
-                    Log.d("latestmessage", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-                val chatRooms = snapshot.toObjects(ChatRooms::class.java)
-                for (dc in snapshot!!.documentChanges){
-                    when (dc.type) {
-                        DocumentChange.Type.ADDED -> customAdapter.refresh(chatRooms)
-                        DocumentChange.Type.MODIFIED -> customAdapter.refresh(chatRooms)
+        showProgress()
+            db.collection("ChatRooms").whereArrayContains("userList", fromId!!)
+                .addSnapshotListener { snapshot, e ->
+                    if (e != null || snapshot == null) {
+                        Log.d("chatRoomsShow", "chatRoomsShow失敗")
+
+                        return@addSnapshotListener
                     }
+                    val chatRooms = snapshot.toObjects(ChatRooms::class.java)
+                    for (dc in snapshot!!.documentChanges){
+                        when (dc.type) {
+                            DocumentChange.Type.ADDED -> customAdapter.refresh(chatRooms)
+                            DocumentChange.Type.MODIFIED -> customAdapter.refresh(chatRooms)
+                        }
+                    }
+                    hideProgress()
                 }
+        }
+
+    private fun showProgress() {
+        hideProgress()
+        progressDialog = context?.let {
+            MaterialDialog(it).apply {
+                cancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                show()
             }
+        }
+
+    }
+
+    private fun hideProgress() {
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
     companion object {
+        val OTHER_ID = "OTHER_ID"
+        val OTHER_NAME = "OTHER_NAME"
+        val OTHER_IMAGE = "OTHER_IMAGE"
+
         fun newInstance(position: Int): ChatRooms_Fragment {
             return ChatRooms_Fragment()
         }

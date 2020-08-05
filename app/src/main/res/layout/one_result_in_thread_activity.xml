@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="8sp"
-        android:textColor="#FDFDFD"
+        android:textColor="#6E6E6E"
         android:layout_marginStart="20dp"
         android:layout_marginTop="2dp"
         app:layout_constraintStart_toEndOf="@id/oneResult_userName_inThread_textView"
@@ -48,7 +48,7 @@
         android:textSize="11sp"
         android:gravity="start"
         android:background="@drawable/rounded_message"
-        android:textColor="#F8F7F7"
+        android:textColor="#121111"
         app:layout_constraintStart_toStartOf="@id/oneResult_userName_inThread_textView"
         app:layout_constraintTop_toBottomOf="@id/oneResult_userName_inThread_textView" />
 

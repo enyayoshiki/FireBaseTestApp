@@ -1,10 +1,13 @@
 package com.example.firebasetestapp.Activity
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRooms_Fragment
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
 import com.example.firebasetestapp.CustomAdapter.InChatRoomRecyclerViewAdapter
 import com.example.firebasetestapp.R
@@ -22,6 +25,8 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     private var progressDialog: MaterialDialog? = null
     private val db = FirebaseFirestore.getInstance()
     private var otherId: String = ""
+    private var otherName : String = ""
+    private var otherImage : String = ""
     private var chatRoomId : String = ""
     private var fromId : String = ""
     private var myName : String = ""
@@ -43,7 +48,6 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     }
 
     private fun initLayout() {
-        chatRoomName_inChatRoom_textView.text = intent.getStringExtra(In_Thread_Activity.OTHER_NAME) ?: ""
 
         if (edit_message_inChatRoom_editView.text.isNotEmpty())
         else excute_chat_inChatRoom_imageView.setOnClickListener {
@@ -53,13 +57,13 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     }
 
     private fun initData() {
+        initOtherData()
         otherId = intent.getStringExtra(In_Thread_Activity.OTHER_ID) ?: ""
-
         myDataSet()
         getRoomId()
     }
 
-private fun initRecyclerView() {
+    private fun initRecyclerView() {
         in_chatRoom_recyclerView.apply {
             adapter = customAdapter
             setHasFixedSize(true)
@@ -67,7 +71,24 @@ private fun initRecyclerView() {
         }
     }
 
+    private fun initOtherData(){
+            otherId = intent.getStringExtra(In_Thread_Activity.OTHER_ID) ?: ""
+        if (otherId.isEmpty())
+            otherId = intent.getStringExtra(ChatRooms_Fragment.OTHER_ID)!!
+
+            otherName = intent.getStringExtra(In_Thread_Activity.OTHER_NAME) ?: ""
+        if (otherName.isEmpty())
+            otherName = intent.getStringExtra(ChatRooms_Fragment.OTHER_NAME)!!
+
+            otherImage = intent.getStringExtra(In_Thread_Activity.OTHER_IMAGE) ?: ""
+        if (otherImage.isEmpty())
+            otherImage = intent.getStringExtra(ChatRooms_Fragment.OTHER_IMAGE)!!
+
+        chatRoomName_inChatRoom_textView.text = otherName
+    }
+
     private fun getMessage(){
+        showProgress()
         db.collection("InChatRoom").whereEqualTo("inChatRoomId", chatRoomId).orderBy("createdAt", Query.Direction.ASCENDING).get()
             .addOnSuccessListener {
 
@@ -79,9 +100,12 @@ private fun initRecyclerView() {
             .addOnFailureListener {
                 Log.d("inChatRoom", "getMessage失敗")
             }
+        hideProgress()
+        showToast(R.string.get_message_text)
     }
 
     private fun sendMessageInChatRoom() {
+        showProgress()
         val sendMessageinChat = edit_message_inChatRoom_editView.text.toString()
 
         if (sendMessageinChat.isEmpty()) {
@@ -102,6 +126,7 @@ private fun initRecyclerView() {
                     getMessage()
                 }
         }
+        hideProgress()
     }
 
 
@@ -115,27 +140,21 @@ private fun initRecyclerView() {
             }
     }
 
+    @SuppressLint("LogNotTimber")
     private fun getRoomId(){
-        Log.d("inChatRoom", " getRoomId")
-        Log.d("inChatRoom", "fromId : $fromId")
         db.collection("ChatRooms").whereArrayContains("userList", fromId).get()
             .addOnCompleteListener { it ->
                 val result = it.result
                 val chatRoomsResult = result?.toObjects(ChatRooms::class.java)
-                Log.d("inChatRoom", "chatRoomId取得 : $chatRoomsResult")
                 chatRoomsResult!!.forEach {
-                    Log.d("inChatRoom", "chatRoomId取得 : $it")
                         if (it.userList.contains(otherId)) {
-                            Log.d("inChatRoom", "chatRoomId取得　true : ${it.roomId}")
                             chatRoomId = it.roomId
 
                             getMessage()
                         }
-                    else Log.d("inChatRoom", "chatRoomId取得　false : ${it.roomId}")
                     }
                 }
             .addOnFailureListener {
-                Log.d("inChatRoom", "chatRoomId失敗 : $it")
                 return@addOnFailureListener
             }
         if (chatRoomId.isEmpty())
@@ -148,6 +167,8 @@ private fun initRecyclerView() {
             latestMessage = latestMessageInChat
             roomId = chatRoomId
             userList = mutableListOf(otherId, fromId)
+            userNameMap = mutableMapOf(otherId to otherName, fromId to myName)
+            userImageMap = mutableMapOf(otherId to otherImage, fromId to myImage)
             })
             .addOnSuccessListener {
                 showToast(R.string.success)
@@ -155,6 +176,23 @@ private fun initRecyclerView() {
             .addOnFailureListener{
                 showToast(R.string.error)
             }
+    }
+
+    private fun showProgress() {
+        hideProgress()
+        progressDialog = this.let {
+            MaterialDialog(it).apply {
+                cancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                show()
+            }
+        }
+
+    }
+
+    private fun hideProgress() {
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
     private fun showToast(textId: Int) {

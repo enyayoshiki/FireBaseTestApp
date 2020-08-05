@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.CustomAdapter.InThreadRecyclerViewAdapter
@@ -73,11 +74,13 @@ class In_Thread_Activity : AppCompatActivity() {
     }
 
     private fun sendMessagetoThread() {
+        showProgress()
         val fromId = FirebaseAuth.getInstance().uid
         val sendMessage = edit_message_toThread_editView.text.toString()
         if (sendMessage.isNotEmpty()) {
             db.collection("Users").document("$fromId").get()
                 .addOnSuccessListener {
+
                     db.collection("MessageToThread").add(MessageToThread().apply {
                         message = sendMessage
                         threadId = roomId
@@ -89,6 +92,7 @@ class In_Thread_Activity : AppCompatActivity() {
                             edit_message_toThread_editView.text.clear()
                             showToast(R.string.success_sendmessage_to_thread_text)
                             initData()
+                            hideProgress()
                         }
                 }
         }else showToast(R.string.please_input_text)
@@ -111,9 +115,27 @@ class In_Thread_Activity : AppCompatActivity() {
 //        }
 //    }
 
+    private fun showProgress() {
+        hideProgress()
+        progressDialog = this.let {
+            MaterialDialog(it).apply {
+                cancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                show()
+            }
+        }
+
+    }
+
+    private fun hideProgress() {
+        progressDialog?.dismiss()
+        progressDialog = null
+    }
+
     companion object {
         val OTHER_ID = "OTHER_ID"
         val OTHER_NAME = "OTHER_NAME"
+        val OTHER_IMAGE = "OTHER_IMAGE"
 
         fun start(activity: Activity, roomId: String) {
             val intent = Intent(activity, In_Thread_Activity::class.java)

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="80dp"
     android:id="@+id/oneResult_chatRooms_rootView">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -23,6 +23,8 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="5dp"
         android:textStyle="bold"
+        android:text="@string/success"
+        android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@id/user_image_oneResult_chatRooms_imageView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
+        android:text="@string/hint_mailadress_resistered"
         app:layout_constraintStart_toEndOf="@id/user_image_oneResult_chatRooms_imageView"
         app:layout_constraintTop_toBottomOf="@id/user_name_oneResult_chatRooms_textView" />
 
