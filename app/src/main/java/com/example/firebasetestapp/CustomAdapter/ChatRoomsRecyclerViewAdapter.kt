@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.firebasetestapp.Activity.In_ChatRoom_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
+import com.example.firebasetestapp.dataClass.WhereFrom
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 
@@ -65,6 +65,7 @@ class ChatRoomsRecyclerViewAdapter (private val context: Context) :
                 Log.d("chatrooms", "id : $otherId")
                 Log.d("chatrooms", "fromid : ${data.userList.filter { it == otherId }}}")
                 rootView?.setOnClickListener {  //ToDo チャットルームの中へ移動
+                    WhereFrom().whereFrom = "1"
                     val intent = Intent(context, In_ChatRoom_Activity::class.java)
                     intent.apply {
                         putExtra(In_Thread_Activity.OTHER_ID, otherId)

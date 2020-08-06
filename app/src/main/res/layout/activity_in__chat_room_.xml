@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.In_ChatRoom_Activity">
+    tools:context=".Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/in_chatRoom_recyclerView"

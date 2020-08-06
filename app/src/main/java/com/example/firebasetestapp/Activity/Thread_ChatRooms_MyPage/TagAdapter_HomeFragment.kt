@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.ChatRooms_Fragment
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.MyPage.MyPage_Fragment
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.Thread_Fragment
 import com.example.firebasetestapp.R
@@ -25,7 +26,7 @@ class TagAdapter_HomeFragment (fm: FragmentManager, private val context: Context
             else -> MyPage_Fragment.newInstance(position)
         }
         // 要求時 新しい Fragment を生成して返す
-        return PageFragment.newInstance(position + 1)
+        return Thread_Fragment.newInstance(position + 1)
     }
     // タブの名前
     override fun getPageTitle(position: Int): CharSequence? {

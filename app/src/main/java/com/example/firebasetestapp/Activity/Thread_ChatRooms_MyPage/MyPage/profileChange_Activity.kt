@@ -7,13 +7,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.LatestMessage_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.profile_setting.*
@@ -22,12 +26,10 @@ import java.util.*
 class profileChange_Activity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
-    private var uid : String? = ""
+    private var fromId : String? = ""
     private var profileName = ""
     private var profileImage = ""
-    private var profileImageUri: Uri? = null
-    private var imageChange: Boolean = false
-
+    private var imageUri : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,22 +39,21 @@ class profileChange_Activity : AppCompatActivity() {
         initialinze()
     }
     private fun initialinze(){
-        Log.d("profile_change", "initialize()")
+        showProgress()
 
-        uid = FirebaseAuth.getInstance().uid
+        fromId = FirebaseAuth.getInstance().uid
         initlayout()
+
     }
     private fun initlayout() {
-        Log.d("profile_change", "initlayout()")
         val cameraBtn = findViewById<ImageView>(R.id.profile_image_setting_imageCamera_button)
         cameraBtn.setImageResource(R.drawable.ic_camera_image)
         val folderBtn = findViewById<ImageView>(R.id.profile_image_setting_imageFolder_button)
         folderBtn.setImageResource(R.drawable.ic_folder_image)
 
-        db.collection("User").document("${FirebaseAuth.getInstance().uid}").get()
+        db.collection("Users").document("${FirebaseAuth.getInstance().uid}").get()
             .addOnSuccessListener {
-                Log.d("profile_change", "Succeses")
-                profileName = it["username"].toString()
+                profileName = it["userName"].toString()
                 profileImage = it["userImage"].toString()
 
                 Picasso.get().load(profileImage).into(profile_Image_setting_ImageView)
@@ -66,8 +67,9 @@ class profileChange_Activity : AppCompatActivity() {
             uploadImageFromCamera()
         }
         save_profile_change_Btn.setOnClickListener {
-            saveProfileChange()
+            excuteProfileChange()
         }
+        hideProgress()
     }
 
     private fun uploadImageFromFolder(){
@@ -86,55 +88,84 @@ class profileChange_Activity : AppCompatActivity() {
         if (resultCode != Activity.RESULT_OK || data == null) return
 
         if (requestCode == REQUEST_CODE_CHOOSE_IMAGE) {
-            profileImageUri = data.data
-            Picasso.get().load(profileImageUri).into(profile_Image_setting_ImageView)
-            imageChange = true
+            imageUri = data.data
+            Picasso.get().load(imageUri).into(profile_Image_setting_ImageView)
+
         } else if (requestCode == REQUEST_CODE_START_CAMERA) {
-//            Picasso.get().load(data.data).into(profile_Image_setting_ImageView)
             (data.extras?.get("data") as? Bitmap)?.also {
                 profile_Image_setting_ImageView.setImageBitmap(it)
             }
-                profileImageUri = data.data
-            imageChange = true
-
+            imageUri = data.data
         }
     }
 
-    private fun saveProfileChange(){
-        if (!edit_profile_change_username_textView.text.isEmpty()) {
-            profileName = edit_profile_change_username_textView.text.toString()
-        }
-        if (imageChange) {
-            val fileName = UUID.randomUUID().toString()
+    private fun excuteProfileChange() {
+        imageChangeCheck()
+    }
+
+    private fun imageChangeCheck() {
+        showProgress()
+        val fileName = UUID.randomUUID().toString()
+        Log.d("imageChange", "スタート$fileName")
+        if (imageUri !== null) {
             val ref = FirebaseStorage.getInstance().getReference("image/$fileName")
-            ref.putFile(profileImageUri!!).addOnSuccessListener {
+            Log.d("imageChange", "imagechange")
+            ref.putFile(imageUri!!).addOnSuccessListener {
                 ref.downloadUrl.addOnSuccessListener {
-                profileImage = it.toString()
-                val user = com.example.firebasetestapp.dataClass.User(uid!!, profileName, profileImage)
-                db.collection("User").document("$uid")
-                    .set(user).addOnSuccessListener {
-                        Toast.makeText(applicationContext, "プロフィールを変更しました", Toast.LENGTH_LONG)
-                        LatestMessage_Activity.start(this)
-                    }
-                    .addOnFailureListener{
-                        Log.d("profile_change", "saveProfile_Fail_B : $it")
-                    } }
+                    profileImage = it.toString()
+                    Log.d("imageChange", "成功 : $profileImage")
+                    profileChange()
+                }.addOnCanceledListener {
+                    Log.d("imageChange", "失敗")
+                    showToast(R.string.error)
+                }
+            }
+        } else profileChange()
+    }
 
-            }.addOnFailureListener{
-                Log.d("profile_change", "saveProfile_Fail_A : $it")
+    private fun profileChange(){
+
+        val changeName = edit_profile_change_username_textView.text.toString()
+        if (changeName.isNotEmpty()) {
+            profileName = changeName
+        }
+        db.collection("Users").document(fromId!!)
+            .set(com.example.firebasetestapp.dataClass.User().apply {
+                uid = fromId ?: ""
+                userName = profileName
+                userImage = profileImage
+            }).addOnSuccessListener {
+
+                showToast(R.string.profile_setting_text)
+                HomeFragment_Activity.start(this)
+            }
+            .addOnFailureListener {
+
+                showToast(R.string.error)
+            }
+    }
+
+
+    private var progressDialog: MaterialDialog? = null
+
+    private fun showProgress() {
+        hideProgress()
+        progressDialog = this.let {
+            MaterialDialog(it).apply {
+                cancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                show()
             }
         }
-        val user = com.example.firebasetestapp.dataClass.User(uid!!, profileName, profileImage)
-        db.collection("User").document("$uid")
-            .set(user).addOnSuccessListener {
-                Toast.makeText(applicationContext, "プロフィールを変更しました", Toast.LENGTH_LONG)
-                LatestMessage_Activity.start(this)
-            }
-            .addOnFailureListener{
-                Log.d("profile_change", "saveProfile_Fail_B : $it")
-            }
+    }
 
+    private fun hideProgress() {
+        progressDialog?.dismiss()
+        progressDialog = null
+    }
 
+    private fun showToast(textId: Int) {
+        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
     }
 
     companion object{

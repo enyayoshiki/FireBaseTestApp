@@ -16,6 +16,21 @@
         />
 
     <TextView
+        android:id="@+id/oneResult_otherMessage_inChatRoom_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="30"
+        android:padding="4dp"
+        android:text="@string/logout_text"
+        android:textSize="12sp"
+        android:background="@drawable/rounded_message"
+        android:textColor="#353535"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/oneResult_otherName_inChatRoom_textView"
+        app:layout_constraintStart_toEndOf="@id/oneResult_otherImage_inChatRoom_imageView" />
+
+    <TextView
         android:id="@+id/oneResult_otherName_inChatRoom_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,18 +52,5 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/oneResult_otherMessage_inChatRoom_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLength="30"
-        android:padding="4dp"
-        android:text="@string/logout_text"
-        android:textSize="12sp"
-        android:background="@drawable/rounded_message"
-        android:textColor="#353535"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/oneResult_otherName_inChatRoom_textView"
-        app:layout_constraintStart_toEndOf="@id/oneResult_otherImage_inChatRoom_imageView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

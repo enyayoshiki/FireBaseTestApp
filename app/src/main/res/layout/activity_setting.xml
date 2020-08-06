@@ -16,49 +16,74 @@
         android:textStyle="bold"
         android:textColor="@color/white_80"
         android:background="@drawable/rounded_edittext_black"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/account_setting_textView"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/account_setting_textView"/>
 
     <TextView
         android:id="@+id/account_setting_textView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center"
         android:text="@string/account_setting_text"
         android:textStyle="bold"
         android:textColor="@color/white_80"
         android:background="@drawable/rounded_edittext_black"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/profile_setting_textView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_setting_textView"
+        app:layout_constraintBottom_toTopOf="@id/password_setting_textView"/>
 
     <TextView
         android:id="@+id/password_setting_textView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_edittext_black"
         android:gravity="center"
+        android:layout_margin="10dp"
         android:text="@string/password_setting_text"
         android:textColor="@color/white_80"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/profile_setting_textView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_setting_textView" />
-    <TextView
+        app:layout_constraintTop_toBottomOf="@id/account_setting_textView"
+        app:layout_constraintBottom_toTopOf="@id/logOut_textView"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/logOut_textView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="@string/logout_text"
         android:background="#034C01"
-        android:textColor="@color/white_80"
-        android:textSize="30dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/logOut_textView.text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logout_text"
+            android:textColor="@color/white_80"
+            android:textSize="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="@string/logout_text"
+            android:background="@drawable/outline_white_drawable"
+            android:src="@drawable/ic_logout"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/logOut_textView.text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

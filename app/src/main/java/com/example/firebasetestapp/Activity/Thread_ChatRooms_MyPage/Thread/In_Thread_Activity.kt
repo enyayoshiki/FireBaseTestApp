@@ -51,7 +51,7 @@ class In_Thread_Activity : AppCompatActivity() {
     }
 
     private fun initData() {
-
+        showProgress()
         db.collection("MessageToThread").whereEqualTo("threadId", roomId).orderBy("createdAt", Query.Direction.ASCENDING).get()
             .addOnSuccessListener {
                 Log.d("inThread", "initData成功")
@@ -63,6 +63,7 @@ class In_Thread_Activity : AppCompatActivity() {
             .addOnFailureListener {
                 Log.d("inThread", "initData失敗")
             }
+        hideProgress()
     }
 
     private fun initRecyclerView() {
@@ -92,7 +93,6 @@ class In_Thread_Activity : AppCompatActivity() {
                             edit_message_toThread_editView.text.clear()
                             showToast(R.string.success_sendmessage_to_thread_text)
                             initData()
-                            hideProgress()
                         }
                 }
         }else showToast(R.string.please_input_text)

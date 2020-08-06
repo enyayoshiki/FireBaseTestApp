@@ -8,10 +8,7 @@ import com.example.firebasetestapp.R
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
-import com.example.firebasetestapp.Activity.ChatLog_Activity
-import com.example.firebasetestapp.Activity.In_ChatRoom_Activity
 import com.example.firebasetestapp.Activity.Login_Resister_PassChange.Login_Activity
-import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_setting.*
 

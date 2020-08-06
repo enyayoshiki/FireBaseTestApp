@@ -13,6 +13,22 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:id="@+id/oneResult_mineMessage_inChatRoom_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="30"
+        android:padding="4dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="12sp"
+        android:gravity="start"
+        android:background="@drawable/round_message_mine"
+        android:textColor="#353535"
+        app:layout_constraintEnd_toStartOf="@id/oneResult_mineImage_inChatRoom_imageView"
+        app:layout_constraintTop_toBottomOf="@id/oneResult_mineName_inChatRoom_textView"
+        />
+
+    <TextView
         android:id="@+id/oneResult_mineName_inChatRoom_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,19 +49,5 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/oneResult_mineMessage_inChatRoom_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLength="30"
-        android:padding="4dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="2dp"
-        android:textSize="12sp"
-        android:gravity="start"
-        android:background="@drawable/round_message_mine"
-        android:textColor="#353535"
-        app:layout_constraintEnd_toStartOf="@id/oneResult_mineImage_inChatRoom_imageView"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

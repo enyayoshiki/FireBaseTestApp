@@ -67,11 +67,11 @@ class Resister_Activity : AppCompatActivity() {
         }
     }
 
-    var userName = ""
+    var resistUserName = ""
 
     private fun resisterImage() {
-        userName = editName_resister.text.toString()
-        if (selectImageUri == null || userName.isEmpty()) return
+        resistUserName = editName_resister.text.toString()
+        if (selectImageUri == null || resistUserName.isEmpty()) return
 
         val fileName = UUID.randomUUID().toString()
         Log.d("resister", "$fileName")
@@ -89,10 +89,14 @@ class Resister_Activity : AppCompatActivity() {
     }
 
     private fun saveUserDatatoFireStore(saveImageUrl: String) {
-        val uid = FirebaseAuth.getInstance().uid ?: ""
+        val userId = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
-        val user = User(uid, userName, saveImageUrl)
-        db.collection("Users").document("$uid").set(user)
+        db.collection("Users").document(userId)
+            .set(User().apply {
+                uid = userId
+                userName = resistUserName
+                userImage = saveImageUrl
+            })
             .addOnSuccessListener {
                 Log.d("resister", "saveUserDatatoFireStore")
                 showToast(R.string.success)

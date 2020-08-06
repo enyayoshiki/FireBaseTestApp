@@ -1,4 +1,4 @@
-package com.example.firebasetestapp.Activity
+package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
@@ -7,22 +7,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
-import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRooms_Fragment
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
 import com.example.firebasetestapp.CustomAdapter.InChatRoomRecyclerViewAdapter
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
 import com.example.firebasetestapp.dataClass.InChatRoom
+import com.example.firebasetestapp.dataClass.WhereFrom
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_in__chat_room_.*
-import kotlinx.android.synthetic.main.chat_room.*
 
 class In_ChatRoom_Activity : AppCompatActivity() {
 
     private val customAdapter by lazy { InChatRoomRecyclerViewAdapter(this) }
-    private var progressDialog: MaterialDialog? = null
     private val db = FirebaseFirestore.getInstance()
     private var otherId: String = ""
     private var otherName : String = ""
@@ -31,7 +29,6 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     private var fromId : String = ""
     private var myName : String = ""
     private var myImage : String = ""
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +40,8 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        Log.d("wherefrom", "wherefrom : ${WhereFrom().whereFrom}")
+
         initLayout()
         initData()
     }
@@ -57,10 +56,11 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     }
 
     private fun initData() {
+        showProgress()
         initOtherData()
-        otherId = intent.getStringExtra(In_Thread_Activity.OTHER_ID) ?: ""
         myDataSet()
         getRoomId()
+        hideProgress()
     }
 
     private fun initRecyclerView() {
@@ -88,7 +88,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     }
 
     private fun getMessage(){
-        showProgress()
+
         db.collection("InChatRoom").whereEqualTo("inChatRoomId", chatRoomId).orderBy("createdAt", Query.Direction.ASCENDING).get()
             .addOnSuccessListener {
 
@@ -100,12 +100,12 @@ class In_ChatRoom_Activity : AppCompatActivity() {
             .addOnFailureListener {
                 Log.d("inChatRoom", "getMessage失敗")
             }
-        hideProgress()
+
         showToast(R.string.get_message_text)
     }
 
     private fun sendMessageInChatRoom() {
-        showProgress()
+       showProgress()
         val sendMessageinChat = edit_message_inChatRoom_editView.text.toString()
 
         if (sendMessageinChat.isEmpty()) {
@@ -177,6 +177,8 @@ class In_ChatRoom_Activity : AppCompatActivity() {
                 showToast(R.string.error)
             }
     }
+
+    private var progressDialog: MaterialDialog? = null
 
     private fun showProgress() {
         hideProgress()

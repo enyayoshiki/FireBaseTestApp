@@ -16,9 +16,9 @@ class SplashActivity : AppCompatActivity() {
 
         if (auth.currentUser == null) {
             Login_Activity.start(this)
+        }else {
+            HomeFragment_Activity.start(this)
         }
-        HomeFragment_Activity.start(this)
-
         finish()
     }
 

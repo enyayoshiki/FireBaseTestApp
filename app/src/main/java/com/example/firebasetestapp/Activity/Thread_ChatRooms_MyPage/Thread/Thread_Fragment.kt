@@ -78,11 +78,9 @@ class Thread_Fragment: Fragment() {
                     return@addOnCompleteListener
                 it.result?.toObjects(ThreadData::class.java)?.also { thread ->
                     customAdapter.refresh(thread)
-                    mainThead_recyclerView_fragment.scrollToPosition(customAdapter.itemCount - 1)
-                    in_thread_recyclerView
                 }
-                hideProgress()
             }
+        hideProgress()
     }
 
         private fun initRecyclerView() {

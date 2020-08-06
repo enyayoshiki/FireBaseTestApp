@@ -69,16 +69,15 @@ class Login_Activity : AppCompatActivity() {
                     showToast(R.string.success)
 
                    HomeFragment_Activity.start(this)
-                    hideProgress()
+
                 } else Toast.makeText(
                     this,
                     R.string.error, Toast.LENGTH_SHORT
                 ).show()
-                hideProgress()
+
             }.addOnFailureListener {
                 Log.d("error", "$it")
                 Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
-                hideProgress()
             }
     }
 

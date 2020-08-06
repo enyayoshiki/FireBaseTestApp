@@ -1,23 +1,23 @@
-package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage
+package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.CustomAdapter.ChatRoomsRecyclerViewAdapter
-import com.example.firebasetestapp.CustomAdapter.InChatRoomRecyclerViewAdapter
-import com.example.firebasetestapp.CustomAdapter.MainThreadRecyclerViewAdapter
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
+import com.example.firebasetestapp.dataClass.ThreadData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_chatrooms_fragment.*
-import kotlinx.android.synthetic.main.activity_in__chat_room_.*
 import kotlinx.android.synthetic.main.mainthread_fragment.*
 
 class ChatRooms_Fragment : Fragment() {
@@ -47,7 +47,7 @@ class ChatRooms_Fragment : Fragment() {
 
     private fun initLayout(){
         excute_research_others_imageView.setOnClickListener{
-            reserchOthers()
+            reserchOthers(FirebaseAuth.getInstance().uid)
         }
         to_friendData_imageView.setOnClickListener{
 
@@ -72,10 +72,29 @@ class ChatRooms_Fragment : Fragment() {
     }
 
 
-    private fun reserchOthers(){
-        val researchName = edit_research_others_editView.text.toString()
-        //dbによる名前検索をいれる
+    private fun reserchOthers(fromId : String?) {
+        showProgress()
+        val researchWord = edit_research_others_editView.text.toString()
+
+        if (researchWord.isNotEmpty()) {
+            db.collection("ChatRooms").whereArrayContains("userList", fromId!!).get()
+                .addOnCompleteListener {
+                    if (!it.isSuccessful) return@addOnCompleteListener
+
+                    val chatRoomsData = it.result?.toObjects(ChatRooms::class.java)
+                    val fetchData = chatRoomsData?.filter {
+                        it.userNameMap.filterValues { researchWord in it }.isNotEmpty()
+                    }?.toMutableList()
+                    edit_research_others_editView.text.clear()
+                    if (fetchData != null) {
+                        customAdapter.refresh(fetchData)
+                    }else showToast(R.string.please_input_text)
+                }
+        }
+        hideProgress()
     }
+
+
 
     private fun chatRoomsShow(fromId : String?) {
         showProgress()
@@ -93,8 +112,8 @@ class ChatRooms_Fragment : Fragment() {
                             DocumentChange.Type.MODIFIED -> customAdapter.refresh(chatRooms)
                         }
                     }
-                    hideProgress()
                 }
+        hideProgress()
         }
 
     private fun showProgress() {
@@ -112,6 +131,10 @@ class ChatRooms_Fragment : Fragment() {
     private fun hideProgress() {
         progressDialog?.dismiss()
         progressDialog = null
+    }
+
+    private fun showToast(textId: Int) {
+        Toast.makeText(context, textId, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

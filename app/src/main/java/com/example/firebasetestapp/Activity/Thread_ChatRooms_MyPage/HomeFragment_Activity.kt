@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main_thread_.*
@@ -16,6 +18,8 @@ class HomeFragment_Activity : AppCompatActivity() {
 //        ChatRoom_Fragment(),
 //        MyPage_Fragment()
 //    )
+    private var progressDialog: MaterialDialog? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,7 @@ class HomeFragment_Activity : AppCompatActivity() {
     // Fragmentの設定と、タブの設定
     private fun setTabLayout() {
 //        fragmentを設置
+        showProgress()
         val adapter = TagAdapter_HomeFragment(supportFragmentManager, this)
         in_thread_recyclerView.adapter = adapter
 //        ここで細かいタブ設定(getTabView)
@@ -35,6 +40,24 @@ class HomeFragment_Activity : AppCompatActivity() {
             val tab: TabLayout.Tab = mainThread_Tablayout.getTabAt(i)!!
             tab.customView = adapter.getTabView(mainThread_Tablayout, i)
         }
+        hideProgress()
+    }
+
+    private fun showProgress() {
+        hideProgress()
+        progressDialog = this.let {
+            MaterialDialog(it).apply {
+                cancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                show()
+            }
+        }
+
+    }
+
+    private fun hideProgress() {
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
     companion object {
