@@ -84,7 +84,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         if (otherImage.isEmpty())
             otherImage = intent.getStringExtra(ChatRooms_Fragment.OTHER_IMAGE)!!
 
-        chatRoomName_inChatRoom_textView.text = otherName
+        userName_inChatRoom_textView.text = otherName
     }
 
     private fun getMessage(){

@@ -34,15 +34,11 @@ class MyPage_Fragment : Fragment() {
 
     private fun initLayout(){
         profile_setting_textView.setOnClickListener{
-            val intent = Intent(it.context, profileChange_Activity::class.java)
-            context?.startActivity(intent)
-        }
-        account_setting_textView.setOnClickListener{
-            val intent = Intent(it.context, accountChange_Activity::class.java)
+            val intent = Intent(it.context, ProfileChange_Activity::class.java)
             context?.startActivity(intent)
         }
         password_setting_textView.setOnClickListener{
-            val intent = Intent(it.context, passwordChange_Activity::class.java)
+            val intent = Intent(it.context, PasswordChange_myPage_Activity::class.java)
             context?.startActivity(intent)
         }
         logOut_textView.setOnClickListener{

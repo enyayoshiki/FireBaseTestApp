@@ -60,4 +60,6 @@
     <string name="logout_text">ログアウト</string>
     <string name="get_message_text"> メッセージ取得</string>
     <string name="default_notification_channel_id" translatable="false">my_app_fcm_default_channel</string>
+    <string name="choice_add_friend_text">フレンドに追加するユーザーを選択してください</string>
+    <string name="coice_add_member_text">チャットに招待するメンバーを選んでください</string>
 </resources>

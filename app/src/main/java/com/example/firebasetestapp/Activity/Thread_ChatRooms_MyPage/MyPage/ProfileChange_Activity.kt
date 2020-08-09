@@ -12,18 +12,16 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
-import com.example.firebasetestapp.Activity.LatestMessage_Activity
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.profile_setting.*
 import java.util.*
 
-class profileChange_Activity : AppCompatActivity() {
+class ProfileChange_Activity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private var fromId : String? = ""
@@ -173,7 +171,7 @@ class profileChange_Activity : AppCompatActivity() {
         private const val REQUEST_CODE_START_CAMERA = 1001
 
         fun start(activity: Activity) {
-            val intent = Intent(activity, profileChange_Activity::class.java)
+            val intent = Intent(activity, ProfileChange_Activity::class.java)
             activity.startActivity(intent)
         }
     }

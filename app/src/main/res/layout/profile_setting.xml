@@ -6,16 +6,44 @@
     android:background="#CCE8F8D8"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menuView"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/white_80"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/loginTextView"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="@string/profile_setting_text"
+            android:textSize="25sp"
+            android:background="#BC8FFB"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
     <TextView
         android:id="@+id/profile_userimage_settintg_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/userimage_profile_setting_text"
         android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/menuView"
         app:layout_constraintBottom_toTopOf="@+id/profile_Image_setting_ImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_Image_setting_ImageView"
@@ -25,7 +53,7 @@
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuView"
         app:layout_constraintBottom_toBottomOf="@id/line_view_image"/>
 
     <ImageView
@@ -130,6 +158,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_profilechange_button"
+        android:background="@drawable/rounded_excute"
+        android:textColor="@color/white_80"
+        android:textSize="20dp"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

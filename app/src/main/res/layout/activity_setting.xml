@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Thread_ChatRooms_MyPage.MyPage.setting_Activity">
+    tools:context=".Activity.Thread_ChatRooms_MyPage.MyPage.Setting_Activity">
 
     <TextView
         android:id="@+id/profile_setting_textView"
@@ -20,22 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/account_setting_textView"/>
-
-    <TextView
-        android:id="@+id/account_setting_textView"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:text="@string/account_setting_text"
-        android:textStyle="bold"
-        android:textColor="@color/white_80"
-        android:background="@drawable/rounded_edittext_black"
-        android:layout_margin="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_setting_textView"
         app:layout_constraintBottom_toTopOf="@id/password_setting_textView"/>
+
 
     <TextView
         android:id="@+id/password_setting_textView"
@@ -49,7 +35,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_setting_textView"
+        app:layout_constraintTop_toBottomOf="@id/profile_setting_textView"
         app:layout_constraintBottom_toTopOf="@id/logOut_textView"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout

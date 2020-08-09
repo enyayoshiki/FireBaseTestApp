@@ -5,8 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
-
     <application
         android:name=".FirebaseTestApplication"
         android:icon="@mipmap/ic_launcher"
@@ -15,28 +13,36 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/default_notification_channel_id"/>
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-             See README(https://goo.gl/l4GJaQ) for more. -->
+            android:value="@string/default_notification_channel_id" />
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher_foreground" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-        <activity android:name=".Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity"></activity>
+
+        <activity android:name=".Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity" />
         <activity android:name=".Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity" />
         <activity android:name=".Activity.Thread_ChatRooms_MyPage.MyPage.MyPage_Fragment" />
         <activity android:name=".Activity.Thread_ChatRooms_MyPage.ChatRoom.ChatRooms_Fragment" />
         <activity android:name=".Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity" />
         <activity android:name=".Activity.Login_Resister_PassChange.ChangePassword_Activity" />
         <activity android:name=".Activity.Login_Resister_PassChange.Resister_Activity" />
-        <activity android:name=".Activity.Thread_ChatRooms_MyPage.MyPage.setting_Activity" />
-        <activity android:name=".Activity.Thread_ChatRooms_MyPage.MyPage.profileChange_Activity" />
+        <activity android:name=".Activity.Thread_ChatRooms_MyPage.MyPage.Setting_Activity" />
+        <activity android:name=".Activity.Thread_ChatRooms_MyPage.MyPage.ProfileChange_Activity" />
+        <activity android:name=".Activity.Thread_ChatRooms_MyPage.ChatRoom.MenuFragment.MenuFragment_InChatRoom" />
+        <activity android:name=".Activity.Thread_ChatRooms_MyPage.MyPage.PasswordChange_myPage_Activity"/>
         <activity android:name=".Activity.ChatLog_Activity" />
         <activity android:name=".Activity.LatestMessage_Activity" />
         <activity android:name=".Activity.SelectUser_Activity" />
@@ -47,7 +53,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 

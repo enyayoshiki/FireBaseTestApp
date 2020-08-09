@@ -60,21 +60,38 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/chatRoomName_inChatRoom_textView"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#3B397A"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/in_chatRoom_recyclerView">
 
     <TextView
-        android:id="@+id/chatRoomName_inChatRoom_textView"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="#3B397A"
+        android:id="@+id/userName_inChatRoom_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/create_message_to_thread_hint"
         android:textColor="#F4F1F1"
-        android:gravity="start"
-        android:padding="8dp"
-        android:paddingStart="15dp"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/openMenu_inChatRoom_imageView"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/outline_white_drawable"
+        android:src="@drawable/ic_baseline_menu_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/in_chatRoom_recyclerView" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
