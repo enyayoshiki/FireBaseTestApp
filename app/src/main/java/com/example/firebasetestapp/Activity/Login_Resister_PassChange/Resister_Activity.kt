@@ -98,12 +98,12 @@ class Resister_Activity : AppCompatActivity() {
                 userImage = saveImageUrl
             })
             .addOnSuccessListener {
-                Log.d("resister", "saveUserDatatoFireStore")
+//                Log.d("resister", "saveUserDatatoFireStore")
                 showToast(R.string.success)
                HomeFragment_Activity.start(this)
             }
             .addOnFailureListener {
-                Log.d("resister", "$it")
+//                Log.d("resister", "$it")
                 Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
             }
     }

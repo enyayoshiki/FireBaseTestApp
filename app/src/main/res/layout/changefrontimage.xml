@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CCE8F8D8"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menuView"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/white_80"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="@string/changefrontimage_title"
+            android:textSize="25sp"
+            android:background="#BC8FFB"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/camera_changeFrontImage_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/camera_text"
+        android:textColor="@color/black_80"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@id/changeFrontImage_imageCamera_btn"
+        app:layout_constraintEnd_toEndOf="@id/changeFrontImage_imageCamera_btn"
+        app:layout_constraintTop_toBottomOf="@id/changeFrontImage_imageCamera_btn"/>
+
+
+    <ImageView
+        android:id="@+id/changeFrontImage_imageCamera_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circle_image_view"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/changeFrontImage_ImageView"
+        app:layout_constraintEnd_toStartOf="@+id/changeFrontImage_ImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/changeFrontImage_ImageView">
+
+    </ImageView>
+
+
+    <TextView
+        android:id="@+id/changeFrontImage_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/roomicon_text"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/menuView"
+        app:layout_constraintBottom_toTopOf="@+id/changeFrontImage_ImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/changeFrontImage_ImageView"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:background="@drawable/circle_view"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuView"
+        app:layout_constraintBottom_toTopOf="@id/changeFrontImage_excuteChange_btn"/>
+
+
+    <TextView
+        android:id="@+id/folder_setting_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/folder_text"
+        android:textSize="10sp"
+        android:textColor="@color/black_80"
+        android:layout_marginTop="5sp"
+        app:layout_constraintStart_toStartOf="@id/changeFrontImage_imageFolder_btn"
+        app:layout_constraintEnd_toEndOf="@id/changeFrontImage_imageFolder_btn"
+        app:layout_constraintTop_toBottomOf="@id/changeFrontImage_imageFolder_btn"/>
+
+    <ImageView
+        android:id="@+id/changeFrontImage_imageFolder_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="10dp"
+        android:background="@drawable/circle_image_view"
+        app:layout_constraintBottom_toBottomOf="@+id/changeFrontImage_ImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/changeFrontImage_ImageView"
+        app:layout_constraintTop_toTopOf="@+id/changeFrontImage_ImageView">
+
+    </ImageView>
+
+
+    <Button
+        android:id="@+id/changeFrontImage_excuteChange_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/excute_changefrontimage"
+        android:background="@drawable/rounded_excute"
+        android:textColor="@color/white_80"
+        android:textSize="20dp"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeFrontImage_ImageView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

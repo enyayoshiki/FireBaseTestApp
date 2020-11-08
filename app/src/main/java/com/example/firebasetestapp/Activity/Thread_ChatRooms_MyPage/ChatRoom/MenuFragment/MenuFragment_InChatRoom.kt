@@ -4,9 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import com.afollestad.materialdialogs.MaterialDialog
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
 import com.example.firebasetestapp.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main_thread_.*
@@ -15,30 +18,39 @@ import kotlinx.android.synthetic.main.activity_menu_fragment__in_chat_room.*
 class MenuFragment_InChatRoom : AppCompatActivity() {
 
     private var progressDialog: MaterialDialog? = null
+    private var roomId = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_fragment__in_chat_room)
         supportActionBar?.hide()
+
         setTabLayout()
+
     }
+
     // Fragmentの設定と、タブの設定
     private fun setTabLayout() {
+        roomId =intent.getStringExtra(In_ChatRoom_Activity.CHATROOMID) ?: ""
+        Log.d("addfriend", "menufragment : $roomId")
+
 //        fragmentを設置
         showProgress()
         val adapter =
-            TagAdapter_MenuFragment(
-                supportFragmentManager,
-                this
-            )
-        in_thread_recyclerView.adapter = adapter
+            TagAdapter_MenuFragment(supportFragmentManager, this, roomId)
+        menuFragment_recyclerView.adapter = adapter
+
+//        adapter.getRoomId(roomId)
+
 //        ここで細かいタブ設定(getTabView)
         menuFragment_tabLayout.setupWithViewPager(menuFragment_recyclerView)
         for (i in 0 until adapter.count) {
             val tab: TabLayout.Tab = menuFragment_tabLayout.getTabAt(i)!!
             tab.customView = adapter.getTabView(menuFragment_tabLayout, i)
         }
+
+
         hideProgress()
     }
 
@@ -51,7 +63,6 @@ class MenuFragment_InChatRoom : AppCompatActivity() {
                 show()
             }
         }
-
     }
 
     private fun hideProgress() {
@@ -60,9 +71,15 @@ class MenuFragment_InChatRoom : AppCompatActivity() {
     }
 
     companion object {
+
+        private var CHATROOMID = "CHATROOMID"
+
         fun start(activity: Activity) {
-            val intent = Intent(activity, HomeFragment_Activity::class.java)
+            val intent = Intent(activity, MenuFragment_InChatRoom::class.java)
             activity.startActivity(intent)
+        }
+        fun backActivity(activity: Activity){
+            activity.finish()
         }
     }
 }

@@ -1,5 +1,5 @@
 package com.example.firebasetestapp.dataClass
 
-class UserFriendList {
-    var userFriendList : MutableList<User> = mutableListOf<User>()
+data class UserFriendList(val userId : String , val userName : String, val userImage : String) {
+
 }

@@ -87,7 +87,7 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:background="@drawable/outline_white_drawable"
-        android:src="@drawable/ic_baseline_menu_24"
+        android:src="@drawable/ic_friend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

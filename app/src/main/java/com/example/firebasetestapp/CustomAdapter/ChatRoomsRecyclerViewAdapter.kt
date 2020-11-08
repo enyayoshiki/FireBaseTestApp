@@ -1,7 +1,6 @@
 package com.example.firebasetestapp.CustomAdapter
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,11 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity
-import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.MyPage.ChangeChatRoomsFrontImage
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
-import com.example.firebasetestapp.dataClass.WhereFrom
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 
@@ -31,59 +30,117 @@ class ChatRoomsRecyclerViewAdapter (private val context: Context) :
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return items.size
+    override fun getItemViewType(position: Int): Int {
+        return if (items.isEmpty()) EMPTYHOLDER else MAINHOLDER
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        ChatRoomsItemViewHolder(
-            LayoutInflater.from(context)
-                .inflate(R.layout.one_result_chatrooms_fragment, parent, false) as ViewGroup
-        )
+    override fun getItemCount(): Int {
+        return if (items.isEmpty()) 1 else items.size
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder{
+        return when (viewType) {
+            MAINHOLDER -> ChatRoomsItemViewHolder(
+                LayoutInflater.from(context)
+                    .inflate(R.layout.one_result_chatrooms_fragment, parent, false) as ViewGroup
+            )
+            else -> EmptyChatRoomsItemViewHolder(
+                LayoutInflater.from(context)
+                    .inflate(R.layout.emptyholder, parent, false) as ViewGroup
+            )
+        }
+    }
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ChatRoomsItemViewHolder)
-            onBindViewHolder(holder, position)
+        return when(holder){
+            is ChatRoomsItemViewHolder -> onBindViewHolder(holder, position)
+            is EmptyChatRoomsItemViewHolder -> onBindViewHolderEmpty(holder, position)
+            else -> return
+        }
+
     }
 
     private fun onBindViewHolder(holder: ChatRoomsItemViewHolder, position: Int) {
         val data = items[position]
+        var frontImageChange: Boolean = (data.frontImage == R.drawable.sample_frontimage.toString())
         holder.apply {
-            val otherImage = data.userImageMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString().removePrefix("[").removeSuffix("]")
-            Log.d("chatrooms", "image : $otherImage")
-            Picasso.get().load(otherImage).into(holder.otherImageView as ImageView)
 
-            val otherName = data.userNameMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString().removePrefix("[").removeSuffix("]")
-            Log.d("chatrooms", "name : $otherName")
+            val otherName =
+                data.userNameMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString()
+                    .removePrefix("[").removeSuffix("]")
             otherNameView?.text = otherName
 
             latestMessageView?.text = data.latestMessage
 
-            holder.rootView?.setOnClickListener {
-                val otherId = data.userList.filterNot { it == FirebaseAuth.getInstance().uid }.toString().removePrefix("[").removeSuffix("]")
-                Log.d("chatrooms", "id : $otherId")
-                Log.d("chatrooms", "fromid : ${data.userList.filter { it == otherId }}}")
-                rootView?.setOnClickListener {  //ToDo チャットルームの中へ移動
-                    WhereFrom().whereFrom = "1"
-                    val intent = Intent(context, In_ChatRoom_Activity::class.java)
-                    intent.apply {
-                        putExtra(In_Thread_Activity.OTHER_ID, otherId)
-                        putExtra(In_Thread_Activity.OTHER_NAME, otherName)
-                        putExtra(In_Thread_Activity.OTHER_IMAGE, otherImage)
-                    }
-                    context.startActivity(intent)
+            rootView?.apply {
+                setOnClickListener {
+                    In_ChatRoom_Activity.startFromChatRooms(
+                        context,
+                        data.roomId,
+                        "CHATROOMS",
+                        otherName
+                    )
+                }
+                setOnLongClickListener {
+                    changeFrontImage(otherName, data.roomId, data.frontImage)
+                    return@setOnLongClickListener it.isLongClickable
+                }
+            }
+
+            when(data.memberSize){
+                2 ->
+                    if (frontImageChange){
+                    val otherImage =
+                        data.userImageMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString()
+                            .removePrefix("[").removeSuffix("]")
+                    Picasso.get().load(otherImage).into(otherImageView as ImageView)
+                } else{
+                    Picasso.get().load(data.frontImage).into(otherImageView as ImageView)
+                }
+                else ->
+                    if (frontImageChange){
+                    Picasso.get().load(data.frontImage.toInt()).into(otherImageView as ImageView)
+                } else{
+                        if (data.frontImage.isEmpty()) return
+                    Picasso.get().load(data.frontImage).into(otherImageView as ImageView)
                 }
             }
         }
     }
 
+    private fun onBindViewHolderEmpty(holder: EmptyChatRoomsItemViewHolder, position: Int){
+        holder.emptyText?.setText(R.string.empty_chatrooms)
+    }
+
+    private fun changeFrontImage(name: String, roomId: String, roomImage: String){
+        context?.also {
+            MaterialDialog(it).show {
+                title(null, "ChatRoom名 : ${name}\nこのルームのアイコンを変更しますか？")
+                positiveButton(R.string.positivebtn_materialdialog){
+                    ChangeChatRoomsFrontImage.start(context, roomId, roomImage)
+                }
+                negativeButton(R.string.negativebtn_materialdialog){
+                    return@negativeButton
+                }
+            }
+        }
+    }
+
+    companion object{
+        const val EMPTYHOLDER = 0
+        const val MAINHOLDER = 1
+    }
 
     class ChatRoomsItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
         val rootView: ConstraintLayout? = view.findViewById(R.id.oneResult_chatRooms_rootView)
         val otherImageView: ImageView? = view.findViewById(R.id.user_image_oneResult_chatRooms_imageView)
         val otherNameView: TextView? = view.findViewById(R.id.user_name_oneResult_chatRooms_textView)
         val latestMessageView: TextView? = view.findViewById(R.id.latestMessage_oneResult_textView)
-
     }
+
+    class EmptyChatRoomsItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
+        val emptyText: TextView? = view.findViewById(R.id.empty_text)
+    }
+
 }

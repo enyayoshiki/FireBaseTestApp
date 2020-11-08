@@ -1,6 +1,7 @@
 package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.MyPage
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -12,63 +13,64 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
-import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
-import com.google.firebase.auth.FirebaseAuth
+import com.example.firebasetestapp.dataClass.ChatRooms
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.changefrontimage.*
 import kotlinx.android.synthetic.main.profile_setting.*
 import java.util.*
 
-class ProfileChange_Activity : AppCompatActivity() {
+class ChangeChatRoomsFrontImage: AppCompatActivity()  {
 
     private val db = FirebaseFirestore.getInstance()
-    private var fromId : String? = ""
-    private var profileName = ""
-    private var profileImage = ""
+    private var profileImage : String = ""
     private var imageUri : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.profile_setting)
+        setContentView(R.layout.changefrontimage)
         supportActionBar?.hide()
-        Log.d("profile_change", "onCreate")
 
-        initialinze()
+        initialize()
     }
-    private fun initialinze(){
-        showProgress()
-
-        fromId = FirebaseAuth.getInstance().uid
+    private fun initialize(){
+        initData()
         initlayout()
+    }
+
+    private fun initData(){
 
     }
     private fun initlayout() {
-        val cameraBtn = findViewById<ImageView>(R.id.profile_image_setting_imageCamera_button)
-        cameraBtn.setImageResource(R.drawable.ic_camera_image)
-        val folderBtn = findViewById<ImageView>(R.id.profile_image_setting_imageFolder_button)
-        folderBtn.setImageResource(R.drawable.ic_folder_image)
+        changeFrontImage_imageCamera_btn.setImageResource(R.drawable.ic_camera_image)
+        changeFrontImage_imageFolder_btn.setImageResource(R.drawable.ic_folder_image)
 
-        db.collection("Users").document("${FirebaseAuth.getInstance().uid}").get()
-            .addOnSuccessListener {
-                profileName = it["userName"].toString()
-                profileImage = it["userImage"].toString()
+        profileImage = intent.getStringExtra(ROOMIMAGE) ?: ""
+        Log.d("frontimage", "frontImage: $profileImage")
+        if (profileImage == R.drawable.sample_frontimage.toString()) {
+//            profile_Image_setting_ImageView.setImageResource(profileImage.toInt()) as ImageView
+            Picasso.get().load(profileImage.toInt()).into(changeFrontImage_ImageView)
+        }
+        else{
+            Picasso.get().load(profileImage).into(changeFrontImage_ImageView)
+        }
 
-                Picasso.get().load(profileImage).into(profile_Image_setting_ImageView)
-                profile_user_name_now_settintg_textView.text = profileName
-            }
+        initClick()
 
-        profile_image_setting_imageFolder_button.setOnClickListener{
+    }
+
+    private fun initClick(){
+        changeFrontImage_imageFolder_btn.setOnClickListener{
             uploadImageFromFolder()
         }
-        profile_image_setting_imageCamera_button.setOnClickListener{
+        changeFrontImage_imageCamera_btn.setOnClickListener{
             uploadImageFromCamera()
         }
-        save_profile_change_Btn.setOnClickListener {
-            excuteProfileChange()
+        changeFrontImage_excuteChange_btn.setOnClickListener {
+            saveFirebaseStorage()
         }
-        hideProgress()
     }
 
     private fun uploadImageFromFolder(){
@@ -88,62 +90,52 @@ class ProfileChange_Activity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_CHOOSE_IMAGE) {
             imageUri = data.data
-            Picasso.get().load(imageUri).into(profile_Image_setting_ImageView)
+            Picasso.get().load(imageUri).into(changeFrontImage_ImageView)
 
         } else if (requestCode == REQUEST_CODE_START_CAMERA) {
             (data.extras?.get("data") as? Bitmap)?.also {
-                profile_Image_setting_ImageView.setImageBitmap(it)
+                changeFrontImage_ImageView.setImageBitmap(it)
             }
             imageUri = data.data
         }
     }
 
-    private fun excuteProfileChange() {
-        imageChangeCheck()
-    }
-
-    private fun imageChangeCheck() {
-        showProgress()
+    private fun saveFirebaseStorage() {
         val fileName = UUID.randomUUID().toString()
-        Log.d("imageChange", "スタート$fileName")
         if (imageUri !== null) {
             val ref = FirebaseStorage.getInstance().getReference("image/$fileName")
-            Log.d("imageChange", "imagechange")
             ref.putFile(imageUri!!).addOnSuccessListener {
                 ref.downloadUrl.addOnSuccessListener {
                     profileImage = it.toString()
-                    Log.d("imageChange", "成功 : $profileImage")
-                    profileChange()
+                    frontImageChange()
                 }.addOnCanceledListener {
-                    Log.d("imageChange", "失敗")
                     showToast(R.string.error)
                 }
             }
-        } else profileChange()
+        } else frontImageChange()
     }
 
-    private fun profileChange(){
 
-        val changeName = edit_profile_change_username_textView.text.toString()
-        if (changeName.isNotEmpty()) {
-            profileName = changeName
-        }
-        db.collection("Users").document(fromId!!)
-            .set(com.example.firebasetestapp.dataClass.User().apply {
-                uid = fromId ?: ""
-                userName = profileName
-                userImage = profileImage
-            }).addOnSuccessListener {
-
-                showToast(R.string.profile_setting_text)
-                HomeFragment_Activity.start(this)
-            }
-            .addOnFailureListener {
-
-                showToast(R.string.error)
-            }
+    private fun frontImageChange(){
+        showProgress()
+        val roomId = intent.getStringExtra(ROOMID)
+        db.collection("ChatRooms").document(roomId!!)
+            .update(mapOf(
+            "frontImage" to profileImage
+            )
+        )
+        showToast(R.string.success)
+        hideProgress()
+        finish()
+//            .set(ChatRooms().apply {
+//                frontImage = profileImage
+//            }).addOnSuccessListener {
+//
+//            }
+//            .addOnFailureListener {
+//                showToast(R.string.error)
+//            }
     }
-
 
     private var progressDialog: MaterialDialog? = null
 
@@ -170,9 +162,13 @@ class ProfileChange_Activity : AppCompatActivity() {
     companion object{
         private const val REQUEST_CODE_CHOOSE_IMAGE = 1000
         private const val REQUEST_CODE_START_CAMERA = 1001
-
-        fun start(activity: Activity) {
-            val intent = Intent(activity, ProfileChange_Activity::class.java)
+        const val ROOMIMAGE = "ROOMIMAGE"
+        const val ROOMID = "ROOMID"
+        fun start(activity: Context,roomId: String, roomImage: String) {
+            val intent = Intent(activity, ChangeChatRoomsFrontImage::class.java).apply {
+                putExtra(ROOMID, roomId)
+                putExtra(ROOMIMAGE, roomImage)
+            }
             activity.startActivity(intent)
         }
     }

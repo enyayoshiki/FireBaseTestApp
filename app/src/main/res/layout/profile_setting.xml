@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,6 +30,30 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/camera_setting_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/camera_text"
+        android:textColor="@color/black_80"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@id/profile_image_setting_imageCamera_button"
+        app:layout_constraintEnd_toEndOf="@id/profile_image_setting_imageCamera_button"
+        app:layout_constraintTop_toBottomOf="@id/profile_image_setting_imageCamera_button"/>
+
+
+    <ImageView
+        android:id="@+id/profile_image_setting_imageCamera_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circle_image_view"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/profile_Image_setting_ImageView"
+        app:layout_constraintEnd_toStartOf="@+id/profile_Image_setting_ImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profile_Image_setting_ImageView">
+
+    </ImageView>
 
 
 
@@ -56,10 +81,24 @@
         app:layout_constraintTop_toBottomOf="@id/menuView"
         app:layout_constraintBottom_toBottomOf="@id/line_view_image"/>
 
+
+    <TextView
+        android:id="@+id/folder_setting_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/folder_text"
+        android:textSize="10sp"
+        android:textColor="@color/black_80"
+        android:layout_marginTop="5sp"
+        app:layout_constraintStart_toStartOf="@id/profile_image_setting_imageFolder_button"
+        app:layout_constraintEnd_toEndOf="@id/profile_image_setting_imageFolder_button"
+        app:layout_constraintTop_toBottomOf="@id/profile_image_setting_imageFolder_button"/>
+
     <ImageView
         android:id="@+id/profile_image_setting_imageFolder_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="10dp"
         android:background="@drawable/circle_image_view"
         app:layout_constraintBottom_toBottomOf="@+id/profile_Image_setting_ImageView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,17 +107,6 @@
 
     </ImageView>
 
-    <ImageView
-        android:id="@+id/profile_image_setting_imageCamera_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@drawable/circle_image_view"
-        app:layout_constraintBottom_toBottomOf="@id/profile_Image_setting_ImageView"
-        app:layout_constraintEnd_toStartOf="@+id/profile_Image_setting_ImageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profile_Image_setting_ImageView">
-
-    </ImageView>
 
     <View
         android:id="@+id/line_view_image"

@@ -31,11 +31,16 @@ class InChatRoomRecyclerViewAdapter (private val context: Context) :
         notifyDataSetChanged()
     }
 
+
+
     override fun getItemCount(): Int {
-        return items.size
+        return if(items.isEmpty()) 1 else items.size
     }
 
     override fun getItemViewType(position: Int): Int {
+        if (items.isEmpty())
+            return EMPTYHOLDER
+
         return if (items[position].sendUserId == FirebaseAuth.getInstance().uid){
             MyMessageViewType
         }else
@@ -44,83 +49,74 @@ class InChatRoomRecyclerViewAdapter (private val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
-            MyMessageViewType -> myMessageItemViewHolder(LayoutInflater.from(context)
+            MyMessageViewType -> MyMessageItemViewHolder(LayoutInflater.from(context)
                 .inflate(R.layout.one_result_in_chatroom_mine, parent, false) as ViewGroup)
-            else -> otherMessageItemViewHolder(LayoutInflater.from(context)
+
+            OtherMessageViewType -> OtherMessageItemViewHolder(LayoutInflater.from(context)
                 .inflate(R.layout.one_result_in_chatroom_other, parent, false) as ViewGroup)
+
+            else -> EmptyInChatRoomItemViewHolder(LayoutInflater.from(context)
+                .inflate(R.layout.emptyholder, parent, false) as ViewGroup )
+
         }
     }
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is myMessageItemViewHolder -> onBindViewHolderMine(holder, position)
-            is otherMessageItemViewHolder -> onBindViewHolderOther(holder , position)
+            is MyMessageItemViewHolder -> onBindViewHolderMine(holder, position)
+            is OtherMessageItemViewHolder -> onBindViewHolderOther(holder , position)
+            is EmptyInChatRoomItemViewHolder -> onBindViewHolderEmpty(holder, position)
             else -> return
         }
     }
 
-    private fun onBindViewHolderMine(holder: myMessageItemViewHolder, position: Int) {
+    private fun onBindViewHolderMine(holder: MyMessageItemViewHolder, position: Int) {
         val data = items[position]
         holder.apply {
             message?.text = data.sendMessage
             createdAtThread?.text = DateFormat.format("yyyy/MM/dd hh:mm:ss", data.createdAt)
+            sendUserName?.text = data.sendUserName
             Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
 //                checkSendMessageDialog()
         }
     }
 
-    private fun onBindViewHolderOther(holder: otherMessageItemViewHolder, position: Int) {
+    private fun onBindViewHolderOther(holder: OtherMessageItemViewHolder, position: Int) {
         val data = items[position]
         holder.apply {
             message?.text = data.sendMessage
             createdAtThread?.text = DateFormat.format("yyyy/MM/dd hh:mm:ss", data.createdAt)
+            sendUserName?.text = data.sendUserName
             Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
-//                checkSendMessageDialog()
         }
     }
 
-//    private fun showSendUserInfo(userName: String, userId: String) {
-////        context?.also {
-////            MaterialAlertDialogBuilder(context)
-////                .setTitle("User名 : $userName")
-////                .setMessage(R.string.sendmessage_materialdialog)
-////                .setPositiveButton(R.string.positivebtn_materialdialog) { _, _ ->
-////                    val intent = Intent()
-////                }
-////                .setNegativeButton(R.string.negativebtn_materialdialog) { _, _ ->
-////                    return@setNegativeButton
-////                }
-////        }
-//        context?.also {
-//            MaterialDialog(it).show {
-//                title(null, "User名 : ${userName}\nこの人とチャットしますか？")
-//                positiveButton(R.string.positivebtn_materialdialog){
-//                    val intent = Intent()
-//                }
-//                negativeButton(R.string.negativebtn_materialdialog){
-//                    return@negativeButton
-//                }
-//            }
-//        }
-//    }
+    private fun onBindViewHolderEmpty(holder: EmptyInChatRoomItemViewHolder, position: Int){
+        holder.emptyText?.setText(R.string.empty_inchatroom)
+    }
 
-    companion object{
+    companion object {
         const val MyMessageViewType = 100
         const val OtherMessageViewType = 200
+        const val EMPTYHOLDER = 0
     }
 
 
-    class myMessageItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
+    class MyMessageItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
         val message: TextView? = view.findViewById(R.id.oneResult_mineMessage_inChatRoom_textView)
         val createdAtThread: TextView? = view.findViewById(R.id.oneResult_mineCreatedAt_inChatRoom_textView)
+        val sendUserName : TextView? = view.findViewById(R.id.oneResult_mineName_inChatRoom_textView)
         val sendUserImage: CircleImageView? = view.findViewById(R.id.oneResult_mineImage_inChatRoom_imageView)
     }
 
-    class otherMessageItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
+    class OtherMessageItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
         val message: TextView? = view.findViewById(R.id.oneResult_otherMessage_inChatRoom_textView)
         val createdAtThread: TextView? = view.findViewById(R.id.oneResult_otherCreatedAt_inChatRoom_textView)
+        val sendUserName : TextView? = view.findViewById(R.id.oneResult_otherName_inChatRoom_textView)
         val sendUserImage: CircleImageView? = view.findViewById(R.id.oneResult_otherImage_inChatRoom_imageView)
     }
-
+    class EmptyInChatRoomItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
+        val emptyText: TextView? = view.findViewById(R.id.empty_text)
+    }
 }

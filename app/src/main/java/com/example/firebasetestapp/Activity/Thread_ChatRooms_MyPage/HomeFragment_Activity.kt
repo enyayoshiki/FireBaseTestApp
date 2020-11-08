@@ -2,6 +2,7 @@
 package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -61,9 +62,9 @@ class HomeFragment_Activity : AppCompatActivity() {
     }
 
     companion object {
-        fun start(activity: Activity) {
-            val intent = Intent(activity, HomeFragment_Activity::class.java)
-            activity.startActivity(intent)
+        fun start(context: Context) {
+            val intent = Intent(context, HomeFragment_Activity::class.java)
+            context.startActivity(intent)
         }
     }
 }

@@ -8,4 +8,5 @@ class User() {
     var uid: String = ""
     var userName: String = ""
     var userImage: String? = ""
+    var fcmToken: String? = ""
 }

@@ -9,9 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_change_password_.*
-import kotlinx.android.synthetic.main.activity_change_password_.changePassword_1_View
-import kotlinx.android.synthetic.main.activity_change_password_.changePassword_2_View
 import kotlinx.android.synthetic.main.activity_change_password_.excute_changePass_Btn
 import kotlinx.android.synthetic.main.activity_profilechange_password_.*
 
@@ -29,17 +26,15 @@ class PasswordChange_myPage_Activity : AppCompatActivity()  {
         excute_changePass_Btn.setOnClickListener {
 
             val email = edit_mailadress_changePass_editView.text ?: ""
-            val passA = changePassword_1_View.text ?: ""
-            val passB = changePassword_2_View.text ?: ""
-            if (passA == passB && email.isNotEmpty()) {
-                changeRegister(email.toString(), passA.toString())
+            if (email.isNotEmpty()){
+                changeRegister(email.toString())
             } else
-                showToast(R.string.password_check_text)
+                showToast(R.string.warn_mail)
             return@setOnClickListener
         }
     }
 
-    private fun changeRegister(email: String, pass: String) {
+    private fun changeRegister(email: String) {
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener {
                 if (it.isSuccessful) {

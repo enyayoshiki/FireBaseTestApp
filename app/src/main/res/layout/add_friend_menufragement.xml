@@ -14,15 +14,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addFriend_menuFragment_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/white_80"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/choice_add_friend_textView"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/choice_add_friend_textView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/excute_addFriend_menuFragment_btn"

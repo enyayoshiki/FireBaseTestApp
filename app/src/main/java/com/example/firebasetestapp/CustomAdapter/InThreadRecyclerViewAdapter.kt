@@ -32,20 +32,37 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return items.size
+    override fun getItemViewType(position: Int): Int {
+        return if (items.isEmpty()) EMPTYHOLDER else MAINHOLDER
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        InThreadItemViewHolder(
-            LayoutInflater.from(context)
-                .inflate(R.layout.one_result_in_thread_activity, parent, false) as ViewGroup
-        )
+    override fun getItemCount(): Int {
+        return if(items.isEmpty()) 1 else items.size
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder{
+        when(viewType){
+            EMPTYHOLDER ->
+                return EmptyInThreadItemViewHolder(
+                    LayoutInflater.from(context)
+                        .inflate(R.layout.emptyholder, parent, false) as ViewGroup
+                )
+
+            else ->
+                return InThreadItemViewHolder(
+                    LayoutInflater.from(context)
+                        .inflate(R.layout.one_result_in_thread_activity, parent, false) as ViewGroup
+                )
+        }
+    }
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is InThreadItemViewHolder)
-            onBindViewHolder(holder, position)
+        when (holder) {
+            is EmptyInThreadItemViewHolder -> onBindViewHolder(holder, position)
+            is InThreadItemViewHolder -> onBindViewHolder(holder, position)
+            else -> return
+        }
     }
 
     private fun onBindViewHolder(holder: InThreadItemViewHolder, position: Int) {
@@ -57,36 +74,22 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
             Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
             rootView?.setOnClickListener {
                 if (data.sendUserId != FirebaseAuth.getInstance().uid)
-                showSendUserInfo(data.sendUserName, data.sendUserId, data.sendUserImage)
+                showSendUserInfo(data.sendUserName, data.sendUserId)
                 else return@setOnClickListener
             }
-//                checkSendMessageDialog()
         }
     }
 
-    private fun showSendUserInfo(userName: String, userId: String, userImage : String) {
-//        context?.also {
-//            MaterialAlertDialogBuilder(context)
-//                .setTitle("User名 : $userName")
-//                .setMessage(R.string.sendmessage_materialdialog)
-//                .setPositiveButton(R.string.positivebtn_materialdialog) { _, _ ->
-//                    val intent = Intent()
-//                }
-//                .setNegativeButton(R.string.negativebtn_materialdialog) { _, _ ->
-//                    return@setNegativeButton
-//                }
-//        }
+    private fun onBindViewHolder(holder: EmptyInThreadItemViewHolder, position: Int){
+        holder.emptyText?.setText(R.string.empty_inthread)
+    }
+
+    private fun showSendUserInfo(userName: String, userId: String) {
         context?.also {
             MaterialDialog(it).show {
                 title(null, "User名 : ${userName}\nこの人とチャットしますか？")
                 positiveButton(R.string.positivebtn_materialdialog){
-                    val intent = Intent(it.context, In_ChatRoom_Activity::class.java)
-                    intent.apply {
-                        putExtra(In_Thread_Activity.OTHER_ID, userId)
-                        putExtra(In_Thread_Activity.OTHER_NAME, userName)
-                        putExtra(In_Thread_Activity.OTHER_IMAGE, userImage)
-                    }
-                    it.context.startActivity(intent)
+                    In_ChatRoom_Activity.startFromThread(context, userId, "THREAD")
                 }
                 negativeButton(R.string.negativebtn_materialdialog){
                     return@negativeButton
@@ -95,6 +98,10 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
         }
     }
 
+    companion object{
+        const val EMPTYHOLDER = 0
+        const val MAINHOLDER = 1
+    }
 
     class InThreadItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
         val rootView: ConstraintLayout? = view.findViewById(R.id.oneResult_inThread_rootView)
@@ -102,5 +109,8 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
         val message: TextView? = view.findViewById(R.id.oneResult_message_inThread_textView)
         val createdAtThread: TextView? = view.findViewById(R.id.oneResult_createdAt_inThread_textView)
         val sendUserImage: CircleImageView? = view.findViewById(R.id.oneResult_userImage_inThread_imageView)
+    }
+    class EmptyInThreadItemViewHolder(view: ViewGroup) : RecyclerView.ViewHolder(view) {
+        val emptyText: TextView? = view.findViewById(R.id.empty_text)
     }
 }

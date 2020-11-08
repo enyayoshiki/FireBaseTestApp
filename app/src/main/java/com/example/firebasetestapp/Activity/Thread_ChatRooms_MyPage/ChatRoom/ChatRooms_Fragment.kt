@@ -46,12 +46,13 @@ class ChatRooms_Fragment : Fragment() {
     }
 
     private fun initLayout(){
+        title_chatRooms_textView.text = getString(R.string.chatroom_tab_text)
+
         excute_research_others_imageView.setOnClickListener{
             reserchOthers(FirebaseAuth.getInstance().uid)
         }
         to_friendData_imageView.setOnClickListener{
-
-//      startActivity() フレンド画面へ移動
+            context?.let { context -> AllFriend.start(context) }
         }
     }
 
@@ -138,12 +139,9 @@ class ChatRooms_Fragment : Fragment() {
     }
 
     companion object {
-        val OTHER_ID = "OTHER_ID"
-        val OTHER_NAME = "OTHER_NAME"
-        val OTHER_IMAGE = "OTHER_IMAGE"
 
         fun newInstance(position: Int): ChatRooms_Fragment {
             return ChatRooms_Fragment()
         }
-        }
     }
+}

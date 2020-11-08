@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
 import com.example.firebasetestapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_change_password_.*
@@ -20,19 +21,17 @@ class ChangePassword_Activity : AppCompatActivity() {
         supportActionBar?.hide()
 
         val email = editMail_changePassword_View.text.toString()
-        val passA = changePassword_1_View.text.toString()
-        val passB = changePassword_2_View.text.toString()
 
         excute_changePass_Btn.setOnClickListener {
-            if (passA == passB) {
-                changeRegister(email, passA)
+            if (email.isEmpty()) {
+                changeRegister(email)
             } else
-                showToast(R.string.password_check_text)
+                showToast(R.string.warn_mail)
             return@setOnClickListener
         }
     }
 
-    private fun changeRegister(email: String, pass: String) {
+    private fun changeRegister(email: String) {
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener {
                 if (it.isSuccessful) {

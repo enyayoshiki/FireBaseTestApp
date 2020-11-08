@@ -1,17 +1,23 @@
 package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
+import com.example.firebasetestapp.Activity.Login_Resister_PassChange.Login_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.CustomAdapter.InThreadRecyclerViewAdapter
 import com.example.firebasetestapp.R
+import com.example.firebasetestapp.dataClass.InChatRoom
 import com.example.firebasetestapp.dataClass.MessageToThread
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_in__chat_room_.*
@@ -29,8 +35,8 @@ class In_Thread_Activity : AppCompatActivity() {
         setContentView(R.layout.activity_in_thread_)
         supportActionBar?.hide()
 
-        roomId = intent.getStringExtra(Thread_Fragment.THREAD_ID)
-
+        roomId = intent.getStringExtra(THREAD_ID) ?: ""
+        Log.d("inThread", roomId)
         initialize()
         //        setTabLayout()
     }
@@ -41,7 +47,7 @@ class In_Thread_Activity : AppCompatActivity() {
     }
 
     private fun initLayout() {
-        threadName_inThread_textView.text = intent.getStringExtra(Thread_Fragment.THREAD_NAME)
+        threadName_inThread_textView.text = intent.getStringExtra(THREAD_NAME) ?: ""
 
         initRecyclerView()
 
@@ -51,19 +57,27 @@ class In_Thread_Activity : AppCompatActivity() {
     }
 
     private fun initData() {
-        showProgress()
-        db.collection("MessageToThread").whereEqualTo("threadId", roomId).orderBy("createdAt", Query.Direction.ASCENDING).get()
-            .addOnSuccessListener {
-                Log.d("inThread", "initData成功")
-                val message = it.toObjects(MessageToThread::class.java)
-                Log.d("inThread", "$message")
-                customAdapter.refresh(message)
-                in_thread_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
+        db.collection("MessageToThread").whereEqualTo("threadId", roomId).orderBy("createdAt", Query.Direction.ASCENDING)
+            .addSnapshotListener{snapshots, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+                for (dc in snapshots!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED ->
+                            customAdapter.refresh(snapshots.toObjects(MessageToThread::class.java))
+
+
+                        DocumentChange.Type.MODIFIED ->
+                            customAdapter.refresh(snapshots.toObjects(MessageToThread::class.java))
+
+                        DocumentChange.Type.REMOVED ->
+                            customAdapter.refresh(snapshots.toObjects(MessageToThread::class.java))
+                    }
+                    in_thread_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
+                }
             }
-            .addOnFailureListener {
-                Log.d("inThread", "initData失敗")
-            }
-        hideProgress()
+        showToast(R.string.get_message_text)
     }
 
     private fun initRecyclerView() {
@@ -93,27 +107,17 @@ class In_Thread_Activity : AppCompatActivity() {
                             edit_message_toThread_editView.text.clear()
                             showToast(R.string.success_sendmessage_to_thread_text)
                             initData()
+                            in_thread_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
                         }
                 }
         }else showToast(R.string.please_input_text)
+        hideProgress()
     }
 
     private fun showToast(textId: Int) {
         Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
     }
 
-
-//    private fun setTabLayout() {
-////        fragmentを設置
-//        val adapter = TagAdapter_HomeFragment(supportFragmentManager, this)
-//        in_thread_recyclerView.adapter = adapter
-////        ここで細かいタブ設定(getTabView)
-//        mainThread_Tablayout.setupWithViewPager(in_thread_recyclerView)
-//        for (i in 0 until adapter.count) {
-//            val tab: TabLayout.Tab = mainThread_Tablayout.getTabAt(i)!!
-//            tab.customView = adapter.getTabView(mainThread_Tablayout, i)
-//        }
-//    }
 
     private fun showProgress() {
         hideProgress()
@@ -133,12 +137,15 @@ class In_Thread_Activity : AppCompatActivity() {
     }
 
     companion object {
-        val OTHER_ID = "OTHER_ID"
-        val OTHER_NAME = "OTHER_NAME"
-        val OTHER_IMAGE = "OTHER_IMAGE"
+        const val THREAD_ID = "THREAD_ID"
+        const val THREAD_NAME = "THREAD_NAME"
 
-        fun start(activity: Activity, roomId: String) {
+        fun start(activity: Context, threadId: String, threadName: String) {
             val intent = Intent(activity, In_Thread_Activity::class.java)
+            intent.apply {
+                putExtra(THREAD_ID, threadId)
+                putExtra(THREAD_NAME, threadName)
+            }
             activity.startActivity(intent)
         }
     }

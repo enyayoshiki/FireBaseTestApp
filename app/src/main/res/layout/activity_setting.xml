@@ -4,8 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity.Thread_ChatRooms_MyPage.MyPage.Setting_Activity">
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title_myPage_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#730C31"
+        android:text="@string/create_message_to_thread_hint"
+        android:textColor="#F4F1F1"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <TextView
         android:id="@+id/profile_setting_textView"

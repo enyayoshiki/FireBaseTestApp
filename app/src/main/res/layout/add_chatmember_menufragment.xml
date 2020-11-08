@@ -9,16 +9,17 @@
         android:id="@+id/choice_add_member_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/choice_add_friend_text"
+        android:text="@string/coice_add_member_text"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/addFriend_menuFragment_recyclerView"
+        android:id="@+id/addChatMember_menuFragment_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/choice_add_member_textView"
@@ -26,7 +27,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/excute_addFriend_menuFragment_btn"
+        android:id="@+id/excute_addChatMember_menuFragment_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@drawable/circle_view"

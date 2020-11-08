@@ -7,6 +7,22 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/title_mainThread_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#730C31"
+        android:text="@string/create_message_to_thread_hint"
+        android:textColor="#F4F1F1"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/research_thread_constraint"/>
+
+
+    <TextView
         android:id="@+id/chat_message_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +31,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/rounded_edittext"
         android:padding="10dp"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/research_thread_constraint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -27,7 +44,7 @@
         android:layout_height="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_mainThread_textView"
         android:background="@color/black_80"
         >
 

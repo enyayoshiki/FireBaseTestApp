@@ -33,6 +33,8 @@ class MyPage_Fragment : Fragment() {
     }
 
     private fun initLayout(){
+        title_myPage_textView.text = getString(R.string.mypage_tab_text)
+
         profile_setting_textView.setOnClickListener{
             val intent = Intent(it.context, ProfileChange_Activity::class.java)
             context?.startActivity(intent)

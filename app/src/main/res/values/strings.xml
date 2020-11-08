@@ -16,7 +16,7 @@
     <string name="hint_pass">パスワードを入力してください(6文字以上)</string>
     <string name="hint_change_pass">新しいパスワードを入力してください(6文字以上)</string>
     <string name="once_edit_text">※確認のため、もう一度入力してください</string>
-    <string name="announce_text">メールアドレス宛に、パスワード変更メールが届きます。\nメール内URLから、指定したパスワードを入力してください。\nサイト内で正しく入力したらパスワード変更が完了します。</string>
+    <string name="announce_text">メールアドレス宛に、パスワード変更メールが届きます。\nメール内URLから、設定したいパスワードを入力してください。\nサイト内で実行ボタンを押すと、パスワード変更が完了します。</string>
     <string name="excute_login">ログイン</string>
     <string name="excute_register">登録</string>
     <string name="excute_change">登録変更</string>
@@ -45,6 +45,11 @@
     <string name="excute_changepassword_text">変更実行</string>
     <string name="reserch_hint">検索したい掲示板名を入力してください(50字以内)</string>
     <string name="create_thread_hint">作りたい掲示板名を入力してください(50字以内)</string>
+    <string name="empty_thread">掲示板はありません</string>
+    <string name="empty_inthread">メッセージはありません</string>
+    <string name="empty_chatrooms">チャットルームはありません</string>
+    <string name="empty_inchatroom">メッセージはありません</string>
+    <string name="empty_friend">フレンドは登録されておりません</string>
     <string name="success_createthread_text">掲示板を作成しました</string>
     <string name="please_input_text">文字を入力してください</string>
     <string name="allthread_text">掲示板一覧を新着で表示します</string>
@@ -60,6 +65,18 @@
     <string name="logout_text">ログアウト</string>
     <string name="get_message_text"> メッセージ取得</string>
     <string name="default_notification_channel_id" translatable="false">my_app_fcm_default_channel</string>
+    <string name="default_notification_channel_name" translatable="false">my_app_fcm_default_name</string>
     <string name="choice_add_friend_text">フレンドに追加するユーザーを選択してください</string>
     <string name="coice_add_member_text">チャットに招待するメンバーを選んでください</string>
+    <string name="check_addmember_text">選択したメンバーをチャットに招待しますか？</string>
+    <string name="friend_function">フレンド機能</string>
+    <string name="done_addfriend">登録済</string>
+    <string name="excute_addfriend_materialdialog">選択した相手をフレンド登録しますか？</string>
+    <string name="camera_text">カメラで撮影</string>
+    <string name="folder_text">画像フォルダから選択</string>
+    <string name="changefrontimage_title">ルームアイコン変更</string>
+    <string name="roomicon_text">ルームアイコン</string>
+    <string name="excute_changefrontimage">アイコン変更</string>
+    <string name="researchfriend_hint">検索したいフレンド名を入力してください</string>
+    <string name="allfriend_title">フレンド一覧</string>
 </resources>

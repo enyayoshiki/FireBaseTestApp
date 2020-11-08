@@ -11,10 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.CustomAdapter.MainThreadRecyclerViewAdapter
 import com.example.firebasetestapp.R
+import com.example.firebasetestapp.dataClass.InChatRoom
 import com.example.firebasetestapp.dataClass.ThreadData
+import com.example.firebasetestapp.extention.Visible
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_chatrooms_fragment.*
+import kotlinx.android.synthetic.main.activity_in__chat_room_.*
 import kotlinx.android.synthetic.main.activity_in_thread_.*
 import kotlinx.android.synthetic.main.activity_in_thread_.in_thread_recyclerView
 import kotlinx.android.synthetic.main.activity_main_thread_.*
@@ -47,6 +51,8 @@ class Thread_Fragment: Fragment() {
     }
 
     private fun initLayout() {
+        title_mainThread_textView.text = getString(R.string.thead_tab_text)
+
         excute_research_thread_imageView.setOnClickListener {
             Log.d("thread", "research Thread")
             researchThread()
@@ -72,12 +78,21 @@ class Thread_Fragment: Fragment() {
         FirebaseFirestore.getInstance()
             .collection("rooms")
             .orderBy("createdAt", Query.Direction.DESCENDING)
-            .get()
-            .addOnCompleteListener {
-                if (!it.isSuccessful)
-                    return@addOnCompleteListener
-                it.result?.toObjects(ThreadData::class.java)?.also { thread ->
-                    customAdapter.refresh(thread)
+            .addSnapshotListener{ snapshots, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+                for (dc in snapshots!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED ->
+                            customAdapter.refresh(snapshots.toObjects(ThreadData::class.java))
+
+                        DocumentChange.Type.MODIFIED ->
+                            customAdapter.refresh(snapshots.toObjects(ThreadData::class.java))
+
+                        DocumentChange.Type.REMOVED ->
+                            customAdapter.refresh(snapshots.toObjects(ThreadData::class.java))
+                    }
                 }
             }
         hideProgress()
@@ -91,7 +106,6 @@ class Thread_Fragment: Fragment() {
                 adapter = customAdapter
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
-//            addOnScrollListener(scrollListener)
             }
         }
 
@@ -106,16 +120,13 @@ class Thread_Fragment: Fragment() {
                 .addOnCompleteListener {
                     if (!it.isSuccessful) return@addOnCompleteListener
 
-
                     val allThreadData = it.result?.toObjects(ThreadData::class.java)
-                    val fetchData =
-                        allThreadData?.filter { it.name.contains(researchWord) }?.toMutableList()
+                    val fetchData = allThreadData?.filter { it.name.contains(researchWord) }?.toMutableList()
+
                     research_thread_editView.text.clear()
-//                    allThreadData?.forEach {
-//                        it.name.contains(researchWord)
-//                        val threadData =mutableListOf<ThreadData>()
-//                        threadData.add(it)
+
                     if (fetchData != null) {
+
                         customAdapter.refresh(fetchData)
                     }
                 }
@@ -159,8 +170,6 @@ class Thread_Fragment: Fragment() {
 
 
     companion object {
-        const val THREAD_ID = "THREAD_ID"
-        const val THREAD_NAME = "THREAD_NAME"
             fun newInstance(position: Int): Thread_Fragment {
                 return Thread_Fragment()
             }
