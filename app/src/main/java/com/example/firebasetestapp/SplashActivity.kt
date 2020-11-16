@@ -7,10 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.Activity.Login_Resister_PassChange.Login_Activity
+import com.example.firebasetestapp.dataClass.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 
 class SplashActivity : AppCompatActivity() {
@@ -18,18 +21,52 @@ class SplashActivity : AppCompatActivity() {
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
     private val runnable = Runnable {
-
-        if (auth.currentUser == null) {
+        val user = auth.currentUser
+        if (user == null) {
             Login_Activity.start(this)
         }else {
-            FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener { task ->
-                    // Get new Instance ID token
-                    val token = task.result?.token
-                }
-            HomeFragment_Activity.start(this)
+//            FirebaseInstanceId.getInstance().instanceId
+//                .addOnCompleteListener { task ->
+//                    // Get new Instance ID token
+//                    val token = task.result?.token
+//                }
+//            HomeFragment_Activity.start(this)
+            getUserData(user.uid)
         }
         finish()
+    }
+
+    private fun getUserData(uid: String) {
+        FirebaseFirestore.getInstance().collection("Users")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result?.toObjects(User::class.java)?.firstOrNull { it.uid == uid }?.also {
+                        updateFcmToken(it)
+                    } ?: run {
+                        HomeFragment_Activity.start(this)
+                    }
+                } else {
+                    HomeFragment_Activity.start(this)
+                }
+            }
+    }
+
+    private fun updateFcmToken(user: User) {
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+            val newFcmToken = if (task.isSuccessful) task.result?.token ?: "" else ""
+            FirebaseFirestore.getInstance().collection("Users").document(user.uid)
+                .set(user.apply {
+                    fcmToken = newFcmToken
+                })
+                .addOnSuccessListener {
+//                    showToast(R.string.success)
+                    HomeFragment_Activity.start(this)
+                }
+                .addOnFailureListener {
+                    HomeFragment_Activity.start(this)
+                }
+        }
     }
 
 

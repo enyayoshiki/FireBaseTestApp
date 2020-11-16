@@ -6,11 +6,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.text.SimpleDateFormat
