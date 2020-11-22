@@ -12,6 +12,7 @@ import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_resister_.*
@@ -71,7 +72,10 @@ class Resister_Activity : AppCompatActivity() {
 
     private fun resisterImage() {
         resistUserName = editName_resister.text.toString()
-        if (selectImageUri == null || resistUserName.isEmpty()) return
+        if (selectImageUri == null || resistUserName.isEmpty()){
+            saveUserDatatoFireStore("")
+            return
+        }
 
         val fileName = UUID.randomUUID().toString()
         Log.d("resister", "$fileName")
@@ -89,24 +93,27 @@ class Resister_Activity : AppCompatActivity() {
     }
 
     private fun saveUserDatatoFireStore(saveImageUrl: String) {
-        val userId = FirebaseAuth.getInstance().uid ?: ""
-        val db = FirebaseFirestore.getInstance()
-        db.collection("Users").document(userId)
-            .set(User().apply {
-                uid = userId
-                userName = resistUserName
-                userImage = saveImageUrl
-            })
-            .addOnSuccessListener {
-//                Log.d("resister", "saveUserDatatoFireStore")
-                showToast(R.string.success)
-               HomeFragment_Activity.start(this)
-            }
-            .addOnFailureListener {
-//                Log.d("resister", "$it")
-                Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
-            }
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+            val newFcmToken = if (task.isSuccessful) task.result?.token ?: "" else ""
+            val userId = FirebaseAuth.getInstance().uid ?: ""
+            val db = FirebaseFirestore.getInstance()
+            db.collection("Users").document(userId)
+                .set(User().apply {
+                    uid = userId
+                    userName = resistUserName
+                    userImage = saveImageUrl
+                    fcmToken = newFcmToken
+                })
+                .addOnSuccessListener {
+                    showToast(R.string.success)
+                    HomeFragment_Activity.start(this)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
+
     private fun showToast(textId: Int) {
         Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
     }

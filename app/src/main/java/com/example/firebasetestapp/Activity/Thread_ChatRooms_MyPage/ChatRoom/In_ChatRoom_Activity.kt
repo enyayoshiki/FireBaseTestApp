@@ -15,6 +15,7 @@ import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
 import com.example.firebasetestapp.dataClass.InChatRoom
 import com.example.firebasetestapp.dataClass.User
+import com.example.firebasetestapp.extention.sendPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_in__chat_room_.*
@@ -31,6 +32,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     private var fromId : String = ""
     private var myName : String = ""
     private var myImage : String = ""
+    private var fcmTkList = mutableListOf<String?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +97,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
                 User?.forEach {
                     otherName = it.userName
                     otherImage = it.userImage ?: ""
+                    fcmTkList.add(it.fcmToken)
                     getRoomId()
                 }
                 userName_inChatRoom_textView.text = otherName
@@ -173,6 +176,9 @@ class In_ChatRoom_Activity : AppCompatActivity() {
                 edit_message_inChatRoom_editView.text.clear()
                 showToast(R.string.success_sendmessage_to_thread_text)
                 getMessage()
+                for (i in fcmTkList){
+                    sendPush(i, message, chatRoomId )
+                }
             }
         hideProgress()
     }
@@ -215,25 +221,6 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         }
         hideProgress()
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private var progressDialog: MaterialDialog? = null

@@ -10,7 +10,11 @@ import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
+import com.example.firebasetestapp.dataClass.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_resister_login.*
 
 class Login_Activity : AppCompatActivity() {
@@ -65,10 +69,12 @@ class Login_Activity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener {
 
-                if (it.isSuccessful) {
-                    showToast(R.string.success)
+               val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-                   HomeFragment_Activity.start(this)
+                if (it.isSuccessful && uid != null){
+                    showToast(R.string.success)
+                    getUserData(uid)
+                    HomeFragment_Activity.start(this)
 
                 } else Toast.makeText(
                     this,
@@ -80,6 +86,48 @@ class Login_Activity : AppCompatActivity() {
                 Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun getUserData(uid: String){
+        FirebaseFirestore.getInstance().collection("Users")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful){
+                    task.result?.toObjects(User::class.java)?.firstOrNull { it.uid == uid }?.also {
+                        updateFcmToken(it)
+                        }?: run  {
+                        HomeFragment_Activity.start(this)
+                    }
+                }  else {
+                    Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    private fun updateFcmToken(user: User){
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+            val newFcmToken = if (task.isSuccessful) task.result?.token ?: "" else ""
+            FirebaseFirestore.getInstance().collection("Users").document(user.uid)
+                .set(user.apply {
+                    fcmToken = newFcmToken
+                })
+                .addOnSuccessListener {
+                    showToast(R.string.success)
+                    HomeFragment_Activity.start(this)
+                }
+                .addOnFailureListener{
+                    Toast.makeText(this, "$it",Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     private fun showProgress() {
         hideProgress()

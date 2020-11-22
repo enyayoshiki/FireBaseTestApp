@@ -4,7 +4,7 @@ import android.net.Uri
 import com.google.firebase.storage.UploadTask
 
 
-class User() {
+class User {
     var uid: String = ""
     var userName: String = ""
     var userImage: String? = ""
