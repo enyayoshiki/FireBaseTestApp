@@ -68,8 +68,9 @@ class MyFireBaseMessageCloudService: FirebaseMessagingService(){
             tempId = roomNotifyId.toInt()
         } catch (e: Exception) {
             Log.w("FCM_Custom", "showNotificationFromData title:$title body:$body")
-            showFcmNotification(title, body, null)
+//            showFcmNotification(title, body, null)
         }
+        showFcmNotification(title, body, null)
     }
 
 

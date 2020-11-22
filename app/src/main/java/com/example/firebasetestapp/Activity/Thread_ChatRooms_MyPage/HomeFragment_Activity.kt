@@ -6,18 +6,22 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.R
-import com.example.firebasetestapp.extention.Visible
-import com.example.firebasetestapp.extention.sendPush
+import com.example.firebasetestapp.dataClass.FcmRequest
+import com.example.firebasetestapp.helper.FcmSendHelper
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main_thread_.*
 import okhttp3.*
 import java.io.IOException
 
 class HomeFragment_Activity : AppCompatActivity() {
+
+    private var handler = Handler()
 
     //    private val fragmentList = arrayListOf(
 //        Thread_Fragment(),
@@ -34,7 +38,7 @@ class HomeFragment_Activity : AppCompatActivity() {
         supportActionBar?.hide()
         setTabLayout()
         sendPushButton.setOnClickListener {
-            sendPushA(TARGET_FCM_TOKEN)
+            sendPushA()
         }
 
 
@@ -75,35 +79,21 @@ class HomeFragment_Activity : AppCompatActivity() {
     }
 
 
-    private fun sendPushA(fcmToken: String = TARGET_FCM_TOKEN) {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url("https://fcm.googleapis.com/fcm/send")
-            .addHeader(
-                "Authorization",
-                "key=AAAAYoCkPaY:APA91bFAxP61YE38Sc33dA8uVCzmU0FtIKzNdTjk5LUXkhPkQneTFGjKHpcqlQyaXHPfFkcE7SVVNo0pDZms4fmfIT7reBFopEnPimgvz4229howecP8kmDj2pMfE4UMXXIh0x3XUN-O"
-            )
-            .post(
-                RequestBody.create(
-                    MediaType.parse("application/json"),
-                    "{\"to\":\"$fcmToken\",\"data\":{\"name\":\"123546\",\"message\":\"123456\"}}"
-                )
-            )
-            .build()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("FCM_Custom", "失敗")
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                Log.e("FCM_Custom", "成功")
-            }
+    private fun sendPushA() {
+        FcmSendHelper.sendPushAll(FcmRequest.Data().apply {
+            this.title = "AllDevicesTitle"
+            this.message = "AllDevicesMessage"
+        }, { // 成功したとき
+            handler.post { Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show() }
+        }, { // 失敗したとき
+            handler.post { Toast.makeText(this, "失敗", Toast.LENGTH_SHORT).show() }
         })
     }
 
     companion object {
         private const val TARGET_FCM_TOKEN =
-            "cbePfwA1QpCiu18BhAXCP_:APA91bGULitYN9iZAhC2BEyh59iMUFDNjc9ZNm214GXct-w5L1T-6TYlBicKBuWzJEa671nVrYr3fZJOXMp848nKeKtNUwGBIxVCdzsHhWiThgUeHEgc0RwvFKpUMKg3W5l3001EXsTT"
+            "dG0RiRWNQxiqlqhwriZeWP:APA91bG-qh9TolH3GXBNoI-ggYFxPlIgdD-7zoWKiKAR4i6cDyCH9-A77BFpbNckpNmI9jDy5uXDjg6kixZmNwrSmcsx6B-AQm0ZCse6ppqT_iMuSSjTpJzAbRNc3ESZFvj0n7jmIi8G"
+//            "cbePfwA1QpCiu18BhAXCP_:APA91bGULitYN9iZAhC2BEyh59iMUFDNjc9ZNm214GXct-w5L1T-6TYlBicKBuWzJEa671nVrYr3fZJOXMp848nKeKtNUwGBIxVCdzsHhWiThgUeHEgc0RwvFKpUMKg3W5l3001EXsTT"
 
 
         fun start(context: Context) {
