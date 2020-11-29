@@ -72,7 +72,7 @@ class AllFriendRecyclerViewAdapter(private val context: Context) :
             Picasso.get().load(data.friendImage).into(friendsImage as ImageView)
 
             toChatRoom?.setOnClickListener {
-                In_ChatRoom_Activity.startFromAllFriend(context, data.friendId, "ALLFRIEND")
+                In_ChatRoom_Activity.startChatRooms(context, "", data.friendId, data.friendName, data.friendImage)
 
             }
 

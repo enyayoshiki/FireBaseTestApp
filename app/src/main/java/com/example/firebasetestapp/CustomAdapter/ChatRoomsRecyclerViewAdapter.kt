@@ -13,6 +13,7 @@ import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.In_
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.MyPage.ChangeChatRoomsFrontImage
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
+import com.example.firebasetestapp.dataClass.User
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 
@@ -65,7 +66,6 @@ class ChatRoomsRecyclerViewAdapter (private val context: Context) :
         val data = items[position]
         var frontImageChange: Boolean = (data.frontImage == R.drawable.sample_frontimage.toString())
         holder.apply {
-
             val otherName =
                 data.userNameMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString()
                     .removePrefix("[").removeSuffix("]")
@@ -75,12 +75,7 @@ class ChatRoomsRecyclerViewAdapter (private val context: Context) :
 
             rootView?.apply {
                 setOnClickListener {
-                    In_ChatRoom_Activity.startFromChatRooms(
-                        context,
-                        data.roomId,
-                        "CHATROOMS",
-                        otherName
-                    )
+                    In_ChatRoom_Activity.startChatRooms(context, data.roomId, "", otherName, "")
                 }
                 setOnLongClickListener {
                     changeFrontImage(otherName, data.roomId, data.frontImage)
@@ -88,24 +83,24 @@ class ChatRoomsRecyclerViewAdapter (private val context: Context) :
                 }
             }
 
-            when(data.memberSize){
-                2 ->
-                    if (frontImageChange){
-                    val otherImage =
-                        data.userImageMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString()
-                            .removePrefix("[").removeSuffix("]")
-                    Picasso.get().load(otherImage).into(otherImageView as ImageView)
-                } else{
-                    Picasso.get().load(data.frontImage).into(otherImageView as ImageView)
-                }
-                else ->
-                    if (frontImageChange){
-                    Picasso.get().load(data.frontImage.toInt()).into(otherImageView as ImageView)
-                } else{
-                        if (data.frontImage.isEmpty()) return
-                    Picasso.get().load(data.frontImage).into(otherImageView as ImageView)
-                }
-            }
+//            when(data.memberSize){
+//                2 ->
+//                    if (frontImageChange){
+//                    val otherImage =
+//                        data.userImageMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString()
+//                            .removePrefix("[").removeSuffix("]")
+////                    Picasso.get().load(otherImage).into(otherImageView)
+//                } else{
+////                    Picasso.get().load(data.frontImage).into(otherImageView)
+//                }
+//                else ->
+//                    if (frontImageChange){
+////                    Picasso.get().load(data.frontImage.toInt()).into(otherImageView)
+//                } else{
+//                        if (data.frontImage.isEmpty()) return
+////                    Picasso.get().load(data.frontImage).into(otherImageView)
+//                }
+//            }
         }
     }
 

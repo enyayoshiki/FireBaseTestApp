@@ -1,7 +1,6 @@
 package com.example.firebasetestapp.CustomAdapter
 
 import android.content.Context
-import android.content.SearchRecentSuggestionsProvider
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -40,15 +39,14 @@ class AddChatMemberRecyclerViewAdapter(private val context: Context) :
         notifyDataSetChanged()
     }
 
-    fun getChatRoomsData(
+    fun String?.getChatRoomsData(
         size: Int,
-        roomId: String?,
         userList: MutableList<String>,
         nameMap: MutableMap<String, String>,
         imageMap: MutableMap<String, String>
     ) {
         addSize = size
-        getRoomId = roomId
+        getRoomId = this
         chatRoomsUserList = userList
         chatRoomsNameMap = nameMap
         chatRoomsImageMap = imageMap
@@ -72,17 +70,17 @@ class AddChatMemberRecyclerViewAdapter(private val context: Context) :
 
             chatRoomsImageMap.put(addFriendId, addMemberList[i].friendImage)
 
-            getRoomId?.let {
-                db.collection("ChatRooms").document(it).set(ChatRooms().apply {
-                    memberSize = addSize
-                    latestMessage = ""
-                    roomId = it
-                    userList = chatRoomsUserList
-                    userNameMap = chatRoomsNameMap
-                    userImageMap = chatRoomsImageMap
-                    frontImage = R.drawable.sample_frontimage.toString()
-                })
-            }
+//            getRoomId?.let {
+//                db.collection("ChatRooms").document(it).set(ChatRooms().apply {
+//                    memberSize = addSize
+//                    latestMessage = ""
+//                    roomId = it
+//                    userList = chatRoomsUserList
+//                    userNameMap = chatRoomsNameMap
+//                    userImageMap = chatRoomsImageMap
+//                    frontImage = R.drawable.sample_frontimage.toString()
+//                })
+//            }
         }
     }
 

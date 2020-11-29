@@ -1,11 +1,10 @@
 package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import android.view.LayoutInflater
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
@@ -13,26 +12,31 @@ import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.Men
 import com.example.firebasetestapp.CustomAdapter.InChatRoomRecyclerViewAdapter
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
+import com.example.firebasetestapp.dataClass.FcmRequest
 import com.example.firebasetestapp.dataClass.InChatRoom
 import com.example.firebasetestapp.dataClass.User
 import com.example.firebasetestapp.extention.sendPush
+import com.example.firebasetestapp.helper.FcmSendHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_in__chat_room_.*
+import kotlinx.android.synthetic.main.one_result_in_chatroom_other.*
+import timber.log.Timber
 
 class In_ChatRoom_Activity : AppCompatActivity() {
 
     private val customAdapter by lazy { InChatRoomRecyclerViewAdapter(this) }
     private val db = FirebaseFirestore.getInstance()
-    private var whereFrom: String = ""
     private var otherId: String = ""
-    private var otherName : String = ""
-    private var otherImage : String = ""
-    private var chatRoomId : String = ""
-    private var fromId : String = ""
-    private var myName : String = ""
-    private var myImage : String = ""
+    private var otherName: String = ""
+    private var otherImage: String = ""
+    private var chatRoomId: String = ""
+    private var fromId: String = ""
+    private var myName: String = ""
+    private var myImage: String = ""
     private var fcmTkList = mutableListOf<String?>()
+    private var handler = Handler()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,26 +52,37 @@ class In_ChatRoom_Activity : AppCompatActivity() {
     }
 
     private fun initLayout() {
+        otherName = intent.getStringExtra(OTHERNAME) ?: ""
+        userName_inChatRoom_textView.text = otherName
+
         initClick()
         initRecyclerView()
     }
 
     private fun initData() {
-        initOtherData()
-        initMyDataSet()
+        fromId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        otherId = intent.getStringExtra(OTHERID) ?: ""
+        chatRoomId = intent.getStringExtra(CHATROOMID) ?: ""
+        otherImage = intent.getStringExtra(OTHERIMAGE) ?: ""
+
+
+        getMyData()
+        if (otherId.isEmpty()) getOtherData() else getFcmTkList(mutableListOf(otherId))
+        if (chatRoomId.isEmpty()) getChatRoomId() else getMessage()
+
     }
 
-    private fun initClick(){
+    private fun initClick() {
 
-            excute_chat_inChatRoom_imageView.setOnClickListener {
-                creatChatRooms()
+        excute_chat_inChatRoom_imageView.setOnClickListener {
+            val message = edit_message_inChatRoom_editView.text.toString()
+            if (message.isNotEmpty()) {
+                if (chatRoomId.isEmpty()) creatChatRooms(message) else sendMessageInChatRoom(message)
+            } else showToast(R.string.please_input_text)
         }
 
-        openMenu_inChatRoom_imageView.setOnClickListener{
-            val intent = Intent(this, MenuFragment_InChatRoom::class.java)
-            intent.putExtra(CHATROOMID, chatRoomId)
-
-            startActivity(intent)
+        openMenu_inChatRoom_imageView.setOnClickListener {
+            MenuFragment_InChatRoom.startFriendMenu(this, chatRoomId, otherId)
         }
     }
 
@@ -78,89 +93,100 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         }
     }
 
-    private fun initOtherData(){
-        whereFrom = intent.getStringExtra(WHEREFROM) ?: ""
-        when(whereFrom){
-            "THREAD" -> getData()
-            "CHATROOMS" -> getDataFromChatRooms()
-            "ALLFRIEND" -> getData()
-            else -> return
-        }
-    }
-
-    private fun getData(){
-        otherId = intent.getStringExtra(OTHERID) ?: ""
-
-        db.collection("Users").whereEqualTo("uid", otherId).get()
-            .addOnCompleteListener{
-                val User = it.result?.toObjects(User::class.java)
-                User?.forEach {
-                    otherName = it.userName
-                    otherImage = it.userImage ?: ""
-                    fcmTkList.add(it.fcmToken)
-                    getRoomId()
+    private fun getChatRoomId() {
+        db.collection("ChatRooms").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val chatRooms = task.result?.toObjects(ChatRooms::class.java)
+                chatRooms?.forEach {
+                    if (it.userList.size == 2 && it.userIdList.containsAll(listOf(fromId, otherId))) {
+                        chatRoomId = it.roomId
+                        getMessage()
+                    } else return@forEach
                 }
-                userName_inChatRoom_textView.text = otherName
+            } else {
+                return@addOnCompleteListener
             }
+        }
     }
 
-    private fun getDataFromChatRooms(){
-        chatRoomId = intent.getStringExtra(CHATROOMID) ?: ""
-        userName_inChatRoom_textView.text = intent.getStringExtra(OTHERNAME) ?: ""
-        getMessage()
-    }
-
-    private fun initMyDataSet(){
-        fromId = FirebaseAuth.getInstance().uid ?: ""
+    private fun getMyData() {
         db.collection("Users").document(fromId).get()
-            .addOnSuccessListener {
-                myName = it["userName"].toString()
-                myImage = it["userImage"].toString()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val user = task.result
+                    if (user != null) {
+                        myImage = user.data?.get("userImage").toString()
+                        myName = user.data?.get("userName").toString()
+                    }
+                }
             }
     }
 
-    private fun getRoomId() {
-                db.collection("ChatRooms").whereArrayContains("userList", fromId).get()
-                    .addOnCompleteListener { it ->
-                        val chatRoomsResult = it.result?.toObjects(ChatRooms::class.java)
-                        chatRoomsResult!!.forEach {
-                            if (it.userList.contains(otherId) && it.memberSize == 2) {
-                                chatRoomId = it.roomId
-                                getMessage()
-                            }
-                        }
+    private fun getOtherData(){
+        db.collection("ChatRooms").document(chatRoomId).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful){
+                    val result = task.result
+                    val idList = result?.get("userIdSet") as MutableList<String>
+                    val otherIdList: MutableList<String> = idList.filterNot { it.contains(fromId) } as MutableList<String>
+                    val otherNameMap = result?.get("userNameSet") as MutableMap<String, String>
+                    otherName = otherNameMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString()
+                        .removePrefix("[").removeSuffix("]")
+                    oneResult_otherName_inChatRoom_textView.text = otherName
+
+                    getFcmTkList(otherIdList)
+                }
+            }
+    }
+
+    private fun getFcmTkList(otherIdList: MutableList<String>) {
+
+        otherIdList.forEach {
+
+        db.collection("Users").document(it).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        fcmTkList.add(task.result?.get("fcmToken").toString())
+                        Timber.i(fcmTkList.toString())
                     }
-                    .addOnFailureListener {
-                        Log.d("inChatRoom", "getroomId error")
-                        return@addOnFailureListener
-                    }
+                }
+//        }
+//        var otherIdList: MutableSet<String> = mutableSetOf()
+//            db.collection("ChatRooms").document(chatRoomId).get()
+//            .addOnCompleteListener{ task ->
+//                if (task.isSuccessful){
+//                    otherIdList = task.result?.get("userIdset") as MutableSet<String>
+//                }
+//            }
+//        fcmTkList = db.collection("ChatRooms").document(otherId)
         }
 
+    }
 
 
     private fun getMessage() {
-            db.collection("InChatRoom").whereEqualTo("inChatRoomId", chatRoomId)
-                .orderBy("createdAt", Query.Direction.ASCENDING)
-                .addSnapshotListener { snapshots, e ->
-                    if (e != null) {
-                        return@addSnapshotListener
-                    }
-                    for (dc in snapshots!!.documentChanges) {
-                        when (dc.type) {
-                            DocumentChange.Type.ADDED ->
-                                customAdapter.refresh(snapshots.toObjects(InChatRoom::class.java))
-
-                            DocumentChange.Type.MODIFIED ->
-                                customAdapter.refresh(snapshots.toObjects(InChatRoom::class.java))
-
-                            DocumentChange.Type.REMOVED ->
-                                customAdapter.refresh(snapshots.toObjects(InChatRoom::class.java))
-                        }
-                        in_chatRoom_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
-                    }
+        db.collection("InChatRoom").whereEqualTo("inChatRoomId", chatRoomId)
+            .orderBy("createdAt", Query.Direction.ASCENDING)
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    return@addSnapshotListener
                 }
-            showToast(R.string.get_message_text)
-        }
+                for (dc in snapshots!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED ->
+                            customAdapter.refresh(snapshots.toObjects(InChatRoom::class.java))
+
+                        DocumentChange.Type.MODIFIED ->
+                            customAdapter.refresh(snapshots.toObjects(InChatRoom::class.java))
+
+                        DocumentChange.Type.REMOVED ->
+                            customAdapter.refresh(snapshots.toObjects(InChatRoom::class.java))
+                    }
+                    in_chatRoom_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
+                }
+            }
+        showToast(R.string.get_message_text)
+    }
 
     private fun sendMessageInChatRoom(message: String) {
         showProgress()
@@ -175,52 +201,55 @@ class In_ChatRoom_Activity : AppCompatActivity() {
             .addOnCompleteListener {
                 edit_message_inChatRoom_editView.text.clear()
                 showToast(R.string.success_sendmessage_to_thread_text)
-                getMessage()
-                for (i in fcmTkList){
-                    sendPush(i, message, chatRoomId )
-                }
+
+                getToken()
+
             }
         hideProgress()
     }
 
 
-    private fun creatChatRooms() {
+    private fun creatChatRooms(message: String) {
         showProgress()
-        val sendMessageInChat = edit_message_inChatRoom_editView.text.toString()
 
-        if (sendMessageInChat.isEmpty()) {
-            hideProgress()
-            return showToast(R.string.please_input_text)
-        }
-        if (chatRoomId.isNotEmpty()) {
-            db.collection("ChatRooms").document(chatRoomId)
-                .update(mapOf(
-                    "latestMessage" to sendMessageInChat)
-                )
-            sendMessageInChatRoom(sendMessageInChat)
-        }
-         else {
-            chatRoomId = System.currentTimeMillis().toString()
-            db.collection("ChatRooms").document(chatRoomId).set(ChatRooms().apply {
-                memberSize = 2
-                latestMessage = sendMessageInChat
-                roomId = chatRoomId
-                userList = mutableListOf(otherId, fromId)
-                userNameMap = mutableMapOf(otherId to otherName, fromId to myName)
-                userImageMap = mutableMapOf(otherId to otherImage, fromId to myImage)
-                frontImage = R.drawable.sample_frontimage.toString()
+        chatRoomId = System.currentTimeMillis().toString()
+        db.collection("ChatRooms").document(chatRoomId).set(ChatRooms().apply {
+            userNameList = mutableListOf(myName, otherName)
+            userIdList = mutableListOf(fromId, otherId)
+            latestMessage = message
+            roomId = chatRoomId
+            userList = mutableListOf(User(fromId, myName, myImage,""),User(otherId, otherName, otherImage, ""))
+            userNameMap = mutableMapOf(fromId to myName, otherId to otherName)
 
-                sendMessageInChatRoom(sendMessageInChat)
-            })
-                .addOnSuccessListener {
-                    showToast(R.string.success)
-                }
-                .addOnFailureListener {
-                    showToast(R.string.error)
-                }
-        }
+        })
+            .addOnSuccessListener {
+                showToast(R.string.success)
+                sendMessageInChatRoom(message)
+            }
+            .addOnFailureListener {
+                showToast(R.string.error)
+            }
         hideProgress()
     }
+
+    private fun getToken(){
+
+        fcmTkList.forEach{
+            if (it == null) return
+            FcmSendHelper.sendPush(FcmRequest().apply {
+                this.to = it
+                FcmRequest.Data().apply {
+                    this.title = "FireBaseTestApp"
+                    this.message = message
+                }
+            }, { // 成功したとき
+                handler.post { Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show() }
+            }, { // 失敗したとき
+                handler.post { Toast.makeText(this, "失敗", Toast.LENGTH_SHORT).show() }
+            })
+        }
+    }
+
 
 
     private var progressDialog: MaterialDialog? = null
@@ -230,7 +259,9 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         progressDialog = this.let {
             MaterialDialog(it).apply {
                 cancelable(false)
-                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                setContentView(
+                    LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false)
+                )
                 show()
             }
         }
@@ -245,34 +276,97 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
     }
 
-    companion object{
+    companion object {
         const val CHATROOMID = "CHATROOMID"
         const val OTHERID = "OTHERID"
         const val OTHERNAME = "OTHERNAME"
-        const val WHEREFROM = "WHEREFROM"
+        const val OTHERIMAGE = "OTHERIMAGE"
 
-        fun  startFromThread(activity: Context, otherId : String, whereFrom: String){
-            val intent = Intent(activity, In_ChatRoom_Activity::class.java)
-            intent.putExtra(OTHERID, otherId)
-            intent.putExtra(WHEREFROM, whereFrom)
-            activity.startActivity(intent)
-        }
 
-        fun startFromChatRooms(activity: Context, roomId : String, whereFrom: String, otherName: String){
+        fun startChatRooms(activity: Context, roomId: String, otherId: String, otherName: String, otherImage: String) {
             val intent = Intent(activity, In_ChatRoom_Activity::class.java)
             intent.putExtra(CHATROOMID, roomId)
-            intent.putExtra(WHEREFROM, whereFrom)
+            intent.putExtra(OTHERID, otherId)
             intent.putExtra(OTHERNAME, otherName)
+            intent.putExtra(OTHERIMAGE, otherImage)
             activity.startActivity(intent)
         }
 
-        fun  startFromAllFriend(activity: Context, otherId : String, whereFrom: String){
-            val intent = Intent(activity, In_ChatRoom_Activity::class.java)
-            intent.putExtra(OTHERID, otherId)
-            intent.putExtra(WHEREFROM, whereFrom)
-            activity.startActivity(intent)
-        }
     }
+
+
+//    private fun initOtherData(){
+//        whereFrom = intent.getStringExtra(WHEREFROM) ?: ""
+//        when(whereFrom){
+//            "THREAD" -> getData()
+//            "CHATROOMS" -> getDataFromChatRooms()
+//            "ALLFRIEND" -> getData()
+//            else -> return
+//        }
+//    }
+
+//    private fun getRoomData(){
+//
+//        db.collection("Users").whereEqualTo("uid", otherId).get()
+//            .addOnCompleteListener{
+//                val User = it.result?.toObjects(User::class.java)
+//                User?.forEach {
+//                    otherName = it.userName
+//                    otherImage = it.userImage ?: ""
+//                    fcmTkList.add(it.fcmToken)
+//                    getRoomId()
+//                }
+//                userName_inChatRoom_textView.text = otherName
+//            }
+//    }
+
+//    private fun getDataFromChatRooms(){
+//        chatRoomId = intent.getStringExtra(CHATROOMID) ?: ""
+//        userName_inChatRoom_textView.text = intent.getStringExtra(OTHERNAME) ?: ""
+//        getMessage()
+//    }
+
+//    private fun initMyDataSet(){
+//        fromId = FirebaseAuth.getInstance().uid ?: ""
+//        db.collection("Users").document(fromId).get()
+//            .addOnSuccessListener {
+//                myName = it["userName"].toString()
+//                myImage = it["userImage"].toString()
+//            }
+//    }
+
+//    private fun getRoomId() {
+//                db.collection("ChatRooms").whereArrayContains("userList", fromId).get()
+//                    .addOnCompleteListener { it ->
+//                        val chatRoomsResult = it.result?.toObjects(ChatRooms::class.java)
+//                        chatRoomsResult!!.forEach {
+//                            if (it.userList.contains(otherId) && it.memberSize == 2) {
+//                                chatRoomId = it.roomId
+//                                getMessage()
+//                            }
+//                        }
+//                    }
+//                    .addOnFailureListener {
+//                        Log.d("inChatRoom", "getroomId error")
+//                        return@addOnFailureListener
+//                    }
+//        }
+
+//    private fun getOtherData(){
+//        db.collection("Users").document(otherId).get()
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful){
+//                    val other = task.result
+//                    if (other != null){
+//                        otherImage = other.data?.get("myImage").toString()
+//                        otherName = other.data?.get("myName").toString()
+//                    }
+//                } else return@addOnCompleteListener
+//            }
+//    }
+
+
+
 }
 
 

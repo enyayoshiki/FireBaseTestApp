@@ -77,7 +77,7 @@ class InChatRoomRecyclerViewAdapter (private val context: Context) :
             message?.text = data.sendMessage
             createdAtThread?.text = DateFormat.format("yyyy/MM/dd hh:mm:ss", data.createdAt)
             sendUserName?.text = data.sendUserName
-            Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
+            if (data.sendUserImage.isNotEmpty()) Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView) else return
 //                checkSendMessageDialog()
         }
     }
@@ -88,7 +88,9 @@ class InChatRoomRecyclerViewAdapter (private val context: Context) :
             message?.text = data.sendMessage
             createdAtThread?.text = DateFormat.format("yyyy/MM/dd hh:mm:ss", data.createdAt)
             sendUserName?.text = data.sendUserName
-            Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
+            if (data.sendUserImage.isNotEmpty()) Picasso.get().load(data.sendUserImage).into(sendUserImage) else return
+
+//            Picasso.get().load(data.sendUserImage).into(sendUserImage)
         }
     }
 

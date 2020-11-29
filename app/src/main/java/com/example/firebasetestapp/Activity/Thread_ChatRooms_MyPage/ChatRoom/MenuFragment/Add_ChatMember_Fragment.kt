@@ -66,16 +66,17 @@ class Add_ChatMember_Fragment: Fragment() {
         arguments?.let {
             roomId = it.getString(In_ChatRoom_Activity.CHATROOMID)
         }
+
         Log.d("addmember", "roomid :  $roomId ")
 
-        db.collection("ChatRooms").whereEqualTo("roomId", roomId ).get()
-            .addOnCompleteListener { task ->
-                val result = task.result
-                result?.toObjects(ChatRooms::class.java)?.forEach {
-                    customAdapter.getChatRoomsData(
-                        it.memberSize, roomId, it.userList, it.userNameMap, it.userImageMap)
-                }
-            }
+//        db.collection("ChatRooms").whereEqualTo("roomId", roomId ).get()
+//            .addOnCompleteListener { task ->
+//                val result = task.result
+//                result?.toObjects(ChatRooms::class.java)?.forEach {
+//                    customAdapter.getChatRoomsData(
+//                        it.memberSize, roomId, it.userList, it.userNameMap, it.userImageMap)
+//                }
+//            }
     }
 
     private fun initClick() {

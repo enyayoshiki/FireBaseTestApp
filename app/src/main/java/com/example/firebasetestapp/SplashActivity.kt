@@ -30,7 +30,6 @@ class SplashActivity : AppCompatActivity() {
                 .addOnCompleteListener{ task ->
                     val token = task.result?.token ?: ""
                 }
-            HomeFragment_Activity.start(this)
             getUserData(user.uid)
         }
     }

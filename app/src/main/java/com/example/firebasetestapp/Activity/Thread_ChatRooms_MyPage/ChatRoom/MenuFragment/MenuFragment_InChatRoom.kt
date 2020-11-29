@@ -1,6 +1,7 @@
 package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.MenuFragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -32,7 +33,7 @@ class MenuFragment_InChatRoom : AppCompatActivity() {
 
     // Fragmentの設定と、タブの設定
     private fun setTabLayout() {
-        roomId =intent.getStringExtra(In_ChatRoom_Activity.CHATROOMID) ?: ""
+        roomId =intent.getStringExtra(CHATROOMID) ?: ""
         Log.d("addfriend", "menufragment : $roomId")
 
 //        fragmentを設置
@@ -72,12 +73,16 @@ class MenuFragment_InChatRoom : AppCompatActivity() {
 
     companion object {
 
-        private var CHATROOMID = "CHATROOMID"
+        const val CHATROOMID = "CHATROOMID"
+        const val OTHERID = "OTHERID"
 
-        fun start(activity: Activity) {
+        fun startFriendMenu(activity: Context, chatroomId: String, otherId: String) {
             val intent = Intent(activity, MenuFragment_InChatRoom::class.java)
+            intent.putExtra(CHATROOMID, chatroomId)
+            intent.putExtra(OTHERID, otherId)
             activity.startActivity(intent)
         }
+
         fun backActivity(activity: Activity){
             activity.finish()
         }

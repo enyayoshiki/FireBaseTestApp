@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity
 import com.example.firebasetestapp.R
 import com.google.android.material.tabs.TabLayout
+import timber.log.Timber
 
 class TagAdapter_MenuFragment  (fm: FragmentManager, private val context: Context, private var roomId : String) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)  {
@@ -25,7 +26,7 @@ class TagAdapter_MenuFragment  (fm: FragmentManager, private val context: Contex
 
     override fun getItem(position: Int): Fragment {
 
-        Log.d("addfriend", "tagadapter : $roomId")
+        Timber.i("roomID: "+roomId)
 
         return when(position){
             0 -> Add_Friend_Fragment.newInstance(position, roomId)

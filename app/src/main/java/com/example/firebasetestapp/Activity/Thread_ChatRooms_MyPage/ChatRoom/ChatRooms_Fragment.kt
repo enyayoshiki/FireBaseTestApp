@@ -47,10 +47,13 @@ class ChatRooms_Fragment : Fragment() {
 
     private fun initLayout(){
         title_chatRooms_textView.text = getString(R.string.chatroom_tab_text)
+        val researchWord = edit_research_others_editView.text.toString()
 
         excute_research_others_imageView.setOnClickListener{
-            reserchOthers(FirebaseAuth.getInstance().uid)
+            if (researchWord.isEmpty()) return@setOnClickListener
+            reserchOthers(FirebaseAuth.getInstance().uid, researchWord)
         }
+
         to_friendData_imageView.setOnClickListener{
             context?.let { context -> AllFriend.start(context) }
         }
@@ -73,26 +76,39 @@ class ChatRooms_Fragment : Fragment() {
     }
 
 
-    private fun reserchOthers(fromId : String?) {
+    private fun reserchOthers(fromId : String?, researchWord: String) {
         showProgress()
-        val researchWord = edit_research_others_editView.text.toString()
+        val fetchData: MutableList<ChatRooms> = mutableListOf()
 
         if (researchWord.isNotEmpty()) {
-            db.collection("ChatRooms").whereArrayContains("userList", fromId!!).get()
-                .addOnCompleteListener {
-                    if (!it.isSuccessful) return@addOnCompleteListener
+            db.collection("ChatRooms").whereArrayContains("userIdList", fromId!!).get()
+                .addOnCompleteListener { task ->
+                    if (!task.isSuccessful) return@addOnCompleteListener
 
-                    val chatRoomsData = it.result?.toObjects(ChatRooms::class.java)
-                    val fetchData = chatRoomsData?.filter {
-                        it.userNameMap.filterValues { researchWord in it }.isNotEmpty()
-                    }?.toMutableList()
+                    val chatRoomsData = task.result?.toObjects(ChatRooms::class.java)
+                    chatRoomsData?.forEach {
+                        if (it.userNameList.contains(researchWord)) {
+                            fetchData.add(it)
+                        } else return@forEach
+                    }
                     edit_research_others_editView.text.clear()
-                    if (fetchData != null) {
-                        customAdapter.refresh(fetchData)
-                    }else showToast(R.string.please_input_text)
+                    customAdapter.refresh(fetchData)
+
+//                    for ((index, elem) in chatRoomsData.withIndex()){
+//                        val otherName = elem.userList[index].userName
+//                        if (otherName.contains())
+//                    }
+//                    val fetchData = chatRoomsData?.forEach {
+//                        otherName = it.userList[].userName
+//                        it.userNameMap.filterValues { researchWord in it }.isNotEmpty()
+//                    }?.toMutableList()
+//                    if (fetchData != null) {
+//                        customAdapter.refresh(fetchData)
+//                    }else showToast(R.string.please_input_text)
+//                }
                 }
+            hideProgress()
         }
-        hideProgress()
     }
 
 
@@ -107,10 +123,11 @@ class ChatRooms_Fragment : Fragment() {
                         return@addSnapshotListener
                     }
                     val chatRooms = snapshot.toObjects(ChatRooms::class.java)
-                    for (dc in snapshot!!.documentChanges){
+                    for (dc in snapshot.documentChanges){
                         when (dc.type) {
                             DocumentChange.Type.ADDED -> customAdapter.refresh(chatRooms)
                             DocumentChange.Type.MODIFIED -> customAdapter.refresh(chatRooms)
+                            else -> return@addSnapshotListener
                         }
                     }
                 }

@@ -47,9 +47,9 @@ class MainThreadRecyclerViewAdapter (private val context: Context) :
                 )
 
             else ->
-            return MainThreadItemViewHolder(
-                LayoutInflater.from(context)
-                    .inflate(R.layout.one_result_mainthread, parent, false) as ViewGroup
+                return MainThreadItemViewHolder(
+                    LayoutInflater.from(context)
+                        .inflate(R.layout.one_result_mainthread, parent, false) as ViewGroup
             )
         }
     }

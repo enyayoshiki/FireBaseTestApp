@@ -74,7 +74,7 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
             Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
             rootView?.setOnClickListener {
                 if (data.sendUserId != FirebaseAuth.getInstance().uid)
-                showSendUserInfo(data.sendUserName, data.sendUserId)
+                showSendUserInfo(data.sendUserName, data.sendUserId, data.sendUserImage)
                 else return@setOnClickListener
             }
         }
@@ -84,12 +84,12 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
         holder.emptyText?.setText(R.string.empty_inthread)
     }
 
-    private fun showSendUserInfo(userName: String, userId: String) {
+    private fun showSendUserInfo(userName: String, userId: String, userImage: String) {
         context?.also {
             MaterialDialog(it).show {
                 title(null, "User名 : ${userName}\nこの人とチャットしますか？")
                 positiveButton(R.string.positivebtn_materialdialog){
-                    In_ChatRoom_Activity.startFromThread(context, userId, "THREAD")
+                    In_ChatRoom_Activity.startChatRooms(context, "", userId, userName, userImage)
                 }
                 negativeButton(R.string.negativebtn_materialdialog){
                     return@negativeButton
