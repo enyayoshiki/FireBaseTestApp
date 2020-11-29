@@ -71,7 +71,10 @@ class InThreadRecyclerViewAdapter (private val context: Context) :
             sendUserName?.text = data.sendUserName
             message?.text = data.message
             createdAtThread?.text = DateFormat.format("yyyy/MM/dd hh:mm:ss", data.createdAt)
-            Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
+            if (data.sendUserImage.isNotEmpty())
+                Picasso.get().load(data.sendUserImage).into(sendUserImage as ImageView)
+            else
+                holder.sendUserImage?.setImageDrawable(null)
             rootView?.setOnClickListener {
                 if (data.sendUserId != FirebaseAuth.getInstance().uid)
                 showSendUserInfo(data.sendUserName, data.sendUserId, data.sendUserImage)
