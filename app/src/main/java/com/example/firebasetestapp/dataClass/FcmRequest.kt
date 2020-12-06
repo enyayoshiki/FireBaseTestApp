@@ -8,5 +8,6 @@ class FcmRequest {
     class Data {
         var title: String = ""
         var message: String = ""
+        var roomId: String = ""
     }
 }

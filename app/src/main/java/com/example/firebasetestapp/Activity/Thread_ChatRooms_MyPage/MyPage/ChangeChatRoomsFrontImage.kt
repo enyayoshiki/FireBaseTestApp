@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -109,7 +110,7 @@ class ChangeChatRoomsFrontImage: AppCompatActivity()  {
                     profileImage = it.toString()
                     frontImageChange()
                 }.addOnCanceledListener {
-                    showToast(R.string.error)
+                    showToast(this, R.string.error)
                 }
             }
         } else frontImageChange()
@@ -124,7 +125,7 @@ class ChangeChatRoomsFrontImage: AppCompatActivity()  {
             "frontImage" to profileImage
             )
         )
-        showToast(R.string.success)
+        showToast(this, R.string.success)
         hideProgress()
         finish()
 //            .set(ChatRooms().apply {
@@ -155,9 +156,7 @@ class ChangeChatRoomsFrontImage: AppCompatActivity()  {
         progressDialog = null
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
     companion object{
         private const val REQUEST_CODE_CHOOSE_IMAGE = 1000

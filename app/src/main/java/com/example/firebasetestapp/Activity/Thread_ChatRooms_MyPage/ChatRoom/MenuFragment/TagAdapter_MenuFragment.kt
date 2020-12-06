@@ -19,10 +19,6 @@ class TagAdapter_MenuFragment  (fm: FragmentManager, private val context: Contex
     private val pageTitle = arrayOf("フレンド申請", "フレンド招待")
     private val pageImage = arrayOf(R.drawable.ic_add_firend, R.drawable.ic_add_chatmember)
 
-//    fun getRoomId(getroomId : String){
-//        roomId = getroomId
-//        Log.d("addfriend", "tagadapter getroomid : $roomId")
-//    }
 
     override fun getItem(position: Int): Fragment {
 

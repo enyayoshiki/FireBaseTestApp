@@ -83,8 +83,6 @@ class MenuFragment_InChatRoom : AppCompatActivity() {
             activity.startActivity(intent)
         }
 
-        fun backActivity(activity: Activity){
-            activity.finish()
         }
     }
-}
+

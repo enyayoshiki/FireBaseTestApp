@@ -8,5 +8,6 @@ data class User (
     var uid: String = "",
     var userName: String = "",
     var userImage: String? = "",
-    var fcmToken: String? = ""
+    var fcmToken: String? = "",
+    var friendList: MutableList<String> = mutableListOf()
 )

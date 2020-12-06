@@ -1,19 +1,15 @@
 package com.example.firebasetestapp.CustomAdapter
 
 import android.content.Context
-import android.graphics.Insets.add
-import android.text.format.DateFormat
-import android.util.Log
+import android.text.style.TtsSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.MenuFragment.Add_Friend_Fragment
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.*
 import com.example.firebasetestapp.extention.Visible
@@ -21,18 +17,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.add_friend_menufragement.*
+import timber.log.Timber
 
 class AddFriendRecyclerViewAdapter (private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = mutableListOf<UserFriendList>()
+    private var myData: User = User()
+    private val items = mutableListOf<String>()
     private val db = FirebaseFirestore.getInstance()
-    private val fromId = FirebaseAuth.getInstance().uid ?: ""
-    private val addFriendList = mutableListOf<UserFriendList>()
+    private var addFriendList = mutableListOf<String>()
 
 
-    fun refresh(list: MutableList<UserFriendList>) {
+
+
+    fun refresh(list: List<String>) {
 
         items.apply {
             clear()
@@ -41,24 +39,25 @@ class AddFriendRecyclerViewAdapter (private val context: Context) :
         notifyDataSetChanged()
     }
 
-    fun addFriend(){
-//        Log.d("addfriend", "addfriend infunction: ")
+    fun getMyData(){
+        db.collection("Users").document(FirebaseAuth.getInstance().uid ?: "").get()
+            .addOnCompleteListener{ task ->
+                if (task.isSuccessful){
+                    myData = task.result?.toObject(User::class.java) ?: return@addOnCompleteListener
+                    addFriendList = myData.friendList
+                }
+            }
+    }
+
+    fun addFriend() {
 
         if (addFriendList.isEmpty()) return
-//        Log.d("addfriend", "addfriend infunction: $addFriendList")
 
-        for (i in addFriendList){
-//            Log.d("addfriend", "addfriend : $addFriendList")
-            db.collection("Friends")
-                .add(Friends().apply {
-                    myId = fromId
-                    friendId = i.userId
-                    friendName = i.userName
-                    friendImage = i.userImage
-                })
+        FirebaseAuth.getInstance().uid?.let {
+            db.collection("Users").document(it).update("friendList", addFriendList)
         }
-
     }
+
 
     override fun getItemViewType(position: Int): Int {
         return if (items.isEmpty()) EMPTYHOLDER else MAINHOLDER
@@ -95,34 +94,57 @@ class AddFriendRecyclerViewAdapter (private val context: Context) :
         val data = items[position]
 
         holder.apply {
-            userName?.text = data.userName
-            Picasso.get().load(data.userImage).into(userImage as ImageView)
-
-            db.collection("Friends")
-                .whereEqualTo("myId", fromId)
-                .whereEqualTo("friendId", data.userId)
-                .get()
-                .addOnCompleteListener {
-//                Log.d("addfriend", "addfriend doneResist success:")
-                    val result = it.result?.toObjects(Friends::class.java)
-                    result?.forEach {
-//                    Log.d("addfriend", "addfriend doneResist success: ${it.friendName}")
-                    checkBox?.Visible(!true)
-                    doneText?.Visible(true)
+            db.collection("Users").document(data).get()
+                .addOnCompleteListener{ task ->
+                    if (task.isSuccessful){
+                        val result = task.result?.toObject(User::class.java)
+                        userName?.text = result?.userName
+                        val friendList = result?.friendList ?: mutableListOf()
+                        addFriendList.contains(data).let {
+                            checkBox?.Visible(!it)
+                            doneText?.Visible(it)
+                        }
+                        val friendImage= result?.userImage ?: ""
+                        if (friendImage.isEmpty()) return@addOnCompleteListener else Picasso.get().load(friendImage).into(userImage)
+                    } else return@addOnCompleteListener
                 }
-
             checkBox?.setOnClickListener {
                 if (checkBox.isChecked) {
                     addFriendList.add(data)
-//                    Log.d("addfriend", "addfriend addData ischeck: $addFriendList")
                 } else {
                     addFriendList.remove(data)
-//                    Log.d("addfriend", "addfriend addData false: $addFriendList")
                 }
             }
         }
+
     }
-}
+
+//        holder.apply {
+//            userName?.text = data.userName
+//            val otherImage = data.userImage ?: ""
+//            if (otherImage.isEmpty()) return else Picasso.get().load(data.userImage).into(userImage as ImageView)
+//
+//            checkBox?.Visible(!myData.friendList.contains(data.uid))
+//            doneText?.Visible(myData.friendList.contains(data.uid))
+//
+//
+//
+//
+////            db.collection("Friends")
+////                .whereEqualTo("myId", fromId)
+////                .whereEqualTo("friendId", data.userId)
+////                .get()
+////                .addOnCompleteListener {
+//////                Log.d("addfriend", "addfriend doneResist success:")
+////                    val result = it.result?.toObjects(Friends::class.java)
+////                    result?.forEach {
+//////                    Log.d("addfriend", "addfriend doneResist success: ${it.friendName}")
+////                    checkBox?.Visible(!true)
+////                    doneText?.Visible(true)
+////                }
+//
+
+
     private fun onBindViewHolderEmpty(holder: EmptyAddFriendItemViewHolder, position: Int) {
         holder.emptyText?.setText(R.string.empty_friend)
     }

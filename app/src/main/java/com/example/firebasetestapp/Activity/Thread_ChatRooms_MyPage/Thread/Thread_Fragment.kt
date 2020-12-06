@@ -14,6 +14,7 @@ import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.InChatRoom
 import com.example.firebasetestapp.dataClass.ThreadData
 import com.example.firebasetestapp.extention.Visible
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -54,19 +55,17 @@ class Thread_Fragment: Fragment() {
         title_mainThread_textView.text = getString(R.string.thead_tab_text)
 
         excute_research_thread_imageView.setOnClickListener {
-            Log.d("thread", "research Thread")
             researchThread()
         }
 
 
         excute_creat_thread_imageView.setOnClickListener {
-            Log.d("thread", "create Thread")
             creatThread()
 
         }
 
         all_threadData_ImageView.setOnClickListener{
-            showToast(R.string.allthread_text)
+            context?.let { context -> showToast(context, R.string.allthread_text) }
             research_thread_editView.text.clear()
             create_thread_editView.text.clear()
             initData()
@@ -130,7 +129,7 @@ class Thread_Fragment: Fragment() {
                         customAdapter.refresh(fetchData)
                     }
                 }
-        }else showToast(R.string.please_input_text)
+        }else context?.let { showToast(it, R.string.please_input_text) }
     }
 
         private fun creatThread() {
@@ -141,10 +140,10 @@ class Thread_Fragment: Fragment() {
                 })
                     .addOnCompleteListener {
                         create_thread_editView.text.clear()
-                        showToast(R.string.success_createthread_text)
+                        context?.let { context -> showToast(context, R.string.success_createthread_text) }
                         initData()
                     }
-            }else showToast(R.string.please_input_text)
+            }else context?.let { showToast(it,R.string.please_input_text) }
         }
 
     private fun showProgress() {
@@ -164,9 +163,6 @@ class Thread_Fragment: Fragment() {
         progressDialog = null
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(context, textId, Toast.LENGTH_SHORT).show()
-    }
 
 
     companion object {

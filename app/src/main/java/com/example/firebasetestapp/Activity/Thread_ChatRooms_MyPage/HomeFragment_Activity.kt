@@ -13,8 +13,11 @@ import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.FcmRequest
+import com.example.firebasetestapp.dataClass.User
 import com.example.firebasetestapp.helper.FcmSendHelper
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main_thread_.*
 import okhttp3.*
 import java.io.IOException
@@ -22,6 +25,8 @@ import java.io.IOException
 class HomeFragment_Activity : AppCompatActivity() {
 
     private var handler = Handler()
+    private val db = FirebaseFirestore.getInstance()
+
 
     //    private val fragmentList = arrayListOf(
 //        Thread_Fragment(),
@@ -38,9 +43,20 @@ class HomeFragment_Activity : AppCompatActivity() {
         supportActionBar?.hide()
         setTabLayout()
         sendPushButton.setOnClickListener {
-            sendPushA()
+            FcmSendHelper.sendPush(FcmRequest().apply {
+                this.to = "cFaWJHIBS6KPTQjuEbFPfp:APA91bFrWujzk7fh98oTvfAMpNtxWH7cPPL2AUinLngd2r_NN0hHTxTYYE84v4EESD2BM0LfD6U_KbySXnx4aMXYeomBlVc14hZPqXno4wRb0k8t16_T0Ky5w-ZnSzDGLxRdz25Jq2b-"
+//                this.to = "fMrqcDtwTbyuV6QFgC_BtD:APA91bHyszZKqQHP4pGedK4EJFjD5jb-86gg6BqT6igws8OrMb-6-KsA0jSCtOBiqr341i9tr_dRSVleynaIa3aPWneW0W3sDSIpyxxwe7A5ExUo5dUk51Mo8_YiFPJ_H0fiDTwAj5IQ"
+                data.apply {
+                    this.title = "タイトル"
+                    this.message = "メッセージ"
+                    this.roomId = ""
+                }
+            }, { // 成功したとき
+                handler.post { Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show() }
+            }, { // 失敗したとき
+                handler.post { Toast.makeText(this, "失敗", Toast.LENGTH_SHORT).show() }
+            })
         }
-
 
     }
 

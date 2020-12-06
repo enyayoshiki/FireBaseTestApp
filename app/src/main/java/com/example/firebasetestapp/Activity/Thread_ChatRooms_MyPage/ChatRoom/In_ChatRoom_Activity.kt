@@ -1,5 +1,6 @@
 package com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,7 @@ import com.example.firebasetestapp.dataClass.ChatRooms
 import com.example.firebasetestapp.dataClass.FcmRequest
 import com.example.firebasetestapp.dataClass.InChatRoom
 import com.example.firebasetestapp.dataClass.User
-import com.example.firebasetestapp.extention.sendPush
+import com.example.firebasetestapp.extention.showToast
 import com.example.firebasetestapp.helper.FcmSendHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -78,7 +79,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
             val message = edit_message_inChatRoom_editView.text.toString()
             if (message.isNotEmpty()) {
                 if (chatRoomId.isEmpty()) creatChatRooms(message) else sendMessageInChatRoom(message)
-            } else showToast(R.string.please_input_text)
+            } else showToast(this, R.string.please_input_text)
         }
 
         openMenu_inChatRoom_imageView.setOnClickListener {
@@ -126,41 +127,29 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         db.collection("ChatRooms").document(chatRoomId).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful){
-                    val result = task.result
-                    val idList = result?.get("userIdSet") as MutableList<String>
-                    val otherIdList: MutableList<String> = idList.filterNot { it.contains(fromId) } as MutableList<String>
-                    val otherNameMap = result?.get("userNameSet") as MutableMap<String, String>
-                    otherName = otherNameMap.filterNot { it.key == FirebaseAuth.getInstance().uid }.values.toString()
+                    val result = task.result?.toObject(ChatRooms::class.java)
+                    val idList = result?.userIdList
+                    val otherIdList = idList?.filterNot { it.contains(fromId) }
+                    Timber.i("otherIdList"+otherIdList)
+                    val otherNameMap = result?.userNameMap
+                    otherName= otherNameMap?.filterNot { it.key == FirebaseAuth.getInstance().uid }?.values.toString()
                         .removePrefix("[").removeSuffix("]")
-                    oneResult_otherName_inChatRoom_textView.text = otherName
-
                     getFcmTkList(otherIdList)
                 }
             }
     }
 
-    private fun getFcmTkList(otherIdList: MutableList<String>) {
+    private fun getFcmTkList(otherIdList: List<String>?) {
 
-        otherIdList.forEach {
+        otherIdList?.forEach {
 
         db.collection("Users").document(it).get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         fcmTkList.add(task.result?.get("fcmToken").toString())
-                        Timber.i(fcmTkList.toString())
                     }
                 }
-//        }
-//        var otherIdList: MutableSet<String> = mutableSetOf()
-//            db.collection("ChatRooms").document(chatRoomId).get()
-//            .addOnCompleteListener{ task ->
-//                if (task.isSuccessful){
-//                    otherIdList = task.result?.get("userIdset") as MutableSet<String>
-//                }
-//            }
-//        fcmTkList = db.collection("ChatRooms").document(otherId)
         }
-
     }
 
 
@@ -185,7 +174,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
                     in_chatRoom_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
                 }
             }
-        showToast(R.string.get_message_text)
+        showToast(this, R.string.get_message_text)
     }
 
     private fun sendMessageInChatRoom(message: String) {
@@ -200,9 +189,9 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         })
             .addOnCompleteListener {
                 edit_message_inChatRoom_editView.text.clear()
-                showToast(R.string.success_sendmessage_to_thread_text)
+                showToast(this, R.string.success_sendmessage_to_thread_text)
 
-                getToken()
+                sendPushMessage(message)
 
             }
         hideProgress()
@@ -223,24 +212,26 @@ class In_ChatRoom_Activity : AppCompatActivity() {
 
         })
             .addOnSuccessListener {
-                showToast(R.string.success)
+                showToast(this, R.string.success)
                 sendMessageInChatRoom(message)
             }
             .addOnFailureListener {
-                showToast(R.string.error)
+                showToast(this, R.string.error)
             }
         hideProgress()
     }
 
-    private fun getToken(){
+    private fun sendPushMessage(message: String){
 
         fcmTkList.forEach{
+            Timber.i("sendId : "+it)
             if (it == null) return
             FcmSendHelper.sendPush(FcmRequest().apply {
                 this.to = it
-                FcmRequest.Data().apply {
-                    this.title = "FireBaseTestApp"
+                data.apply {
+                    this.title = "${myName}からメッセージ"
                     this.message = message
+                    this.roomId = chatRoomId
                 }
             }, { // 成功したとき
                 handler.post { Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show() }
@@ -272,9 +263,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         progressDialog = null
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
     companion object {
         const val CHATROOMID = "CHATROOMID"
@@ -291,7 +280,6 @@ class In_ChatRoom_Activity : AppCompatActivity() {
             intent.putExtra(OTHERIMAGE, otherImage)
             activity.startActivity(intent)
         }
-
     }
 
 

@@ -1,6 +1,6 @@
 package com.example.firebasetestapp.dataClass
 
-import com.google.firebase.auth.FirebaseAuth
+
 import java.util.*
 class ChatRooms {
     var userNameList: MutableList<String> = mutableListOf()

@@ -10,31 +10,34 @@ import android.util.Log
 import android.widget.Toast
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.Activity.Login_Resister_PassChange.Login_Activity
+import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity
 import com.example.firebasetestapp.dataClass.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
+import timber.log.Timber
 
 class SplashActivity : AppCompatActivity() {
     private val handler = Handler()
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private var roomId: String = ""
 
     private val runnable = Runnable {
 
         val user = auth.currentUser
-        if (user == null) {
+        roomId = intent.getStringExtra("moveToRoom") ?: ""
+        Timber.i("roomID : ${roomId}")
+        if (user == null){
             Login_Activity.start(this)
+        } else if (roomId.isNotEmpty()) {
+            getUserData(user.uid, roomId)
         } else {
-            FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener{ task ->
-                    val token = task.result?.token ?: ""
-                }
-            getUserData(user.uid)
+            HomeFragment_Activity.start(this)
         }
     }
 
-    private fun getUserData(uid : String) {
+    private fun getUserData(uid : String, roomId: String) {
         FirebaseFirestore.getInstance().collection("Users")
             .get()
             .addOnCompleteListener { task ->
@@ -58,11 +61,12 @@ class SplashActivity : AppCompatActivity() {
                     fcmToken = newFcmToken
                 })
                 .addOnSuccessListener {
-                    Toast.makeText(this, R.string.success, Toast.LENGTH_SHORT).show()
-                    HomeFragment_Activity.start(this)
+                    if (roomId.isEmpty()) HomeFragment_Activity.start(this)
+                    else In_ChatRoom_Activity.startChatRooms(this,roomId, "", "", "")
                 }
                 .addOnFailureListener{
-                    HomeFragment_Activity.start(this)
+                    if (roomId.isEmpty()) HomeFragment_Activity.start(this)
+                    else In_ChatRoom_Activity.startChatRooms(this,roomId, "", "", "")
                 }
         }
     }

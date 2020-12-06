@@ -23,13 +23,16 @@ import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.ChatRooms
 import com.example.firebasetestapp.dataClass.User
 import com.example.firebasetestapp.dataClass.UserFriendList
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chatrooms_fragment.*
 import kotlinx.android.synthetic.main.activity_in__chat_room_.*
 import kotlinx.android.synthetic.main.add_friend_menufragement.*
+import kotlinx.android.synthetic.main.one_result_in_chatroom_other.*
 import timber.log.Timber
 import java.text.FieldPosition
+import kotlin.concurrent.timerTask
 
 //private const val CHATROOMID = "roomId"
 
@@ -55,6 +58,7 @@ class Add_Friend_Fragment: Fragment() {
     }
 
     private fun initialize() {
+
         initLayout()
         initData()
     }
@@ -91,20 +95,25 @@ class Add_Friend_Fragment: Fragment() {
         arguments?.let {
             roomId = it.getString(CHATROOMID) ?: ""
         }
-//        Log.d("addfriend", "roomId : $roomId")
+        Timber.i(roomId)
     }
 
     private fun getFriendData() {
-        val friendList = mutableListOf<UserFriendList>()
+        // 先にAddFriendRecyclerViewAdapterへデータを取得させておく
+        customAdapter.getMyData()
 
         db.collection("ChatRooms").document(roomId).get()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-//                    Log.d("addfriend", "friendData : success")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
 
-                    val result = it.result
-                    val userList : MutableList<User> = result?.get("userList") as MutableList<User>
-                    Timber.i("userList: "+userList)
+                    val result = task.result
+                    val userIdList = result?.get("userIdList") as MutableList<String>
+                    val otherIdList = userIdList.filterNot { it == FirebaseAuth.getInstance().uid }
+                    customAdapter.refresh(otherIdList)
+//                    val userList  = result?.get("userList") as MutableList<User>
+//                    val otherData = userList.filterNot { it.uid == FirebaseAuth.getInstance().uid }
+//                    Timber.i("otherData: "+otherData)
+
 //                    val allUserData = result?.toObjects(ChatRooms::class.java)
 //                    allUserData?.forEach { data ->
 //                            val userId = data.userList[i]
@@ -119,8 +128,7 @@ class Add_Friend_Fragment: Fragment() {
                         } else return@addOnCompleteListener
             }
 //                Log.d("addfriend", "friendlist : $friendList")
-                customAdapter.refresh(friendList)
-            }
+    }
 
 
     private fun excuteAddFriend() {
@@ -129,7 +137,8 @@ class Add_Friend_Fragment: Fragment() {
                 title(R.string.excute_addfriend_materialdialog )
                 positiveButton(R.string.positivebtn_materialdialog){
                     customAdapter.addFriend()
-                    showToast(R.string.success)
+                    showToast(context, R.string.success)
+                    activity?.finish()
                 }
                 negativeButton(R.string.negativebtn_materialdialog){
                     return@negativeButton
@@ -139,9 +148,7 @@ class Add_Friend_Fragment: Fragment() {
 
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(context, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
     companion object {
         fun newInstance(position: Int, roomId: String) =

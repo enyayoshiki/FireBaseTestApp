@@ -115,7 +115,7 @@ class ChatRooms_Fragment : Fragment() {
 
     private fun chatRoomsShow(fromId : String?) {
         showProgress()
-            db.collection("ChatRooms").whereArrayContains("userList", fromId!!)
+            db.collection("ChatRooms").whereArrayContains("userIdList", fromId!!)
                 .addSnapshotListener { snapshot, e ->
                     if (e != null || snapshot == null) {
                         Log.d("chatRoomsShow", "chatRoomsShow失敗")
@@ -151,9 +151,7 @@ class ChatRooms_Fragment : Fragment() {
         progressDialog = null
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(context, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
     companion object {
 

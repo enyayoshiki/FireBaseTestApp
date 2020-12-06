@@ -83,6 +83,13 @@ class ChatRoomsRecyclerViewAdapter (private val context: Context) :
                 }
             }
 
+            var otherImage: String = ""
+            if (data.userList.size == 2 ) data.userList.forEach{
+                if (it.uid == FirebaseAuth.getInstance().uid) return@forEach else  otherImage = it.userImage ?: ""
+            } else return
+
+            if (otherImage.isEmpty())return else Picasso.get().load(otherImage).into(otherImageView)
+
 //            when(data.memberSize){
 //                2 ->
 //                    if (frontImageChange){

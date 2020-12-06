@@ -11,6 +11,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.User
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -72,7 +73,7 @@ class Login_Activity : AppCompatActivity() {
                val uid = FirebaseAuth.getInstance().currentUser?.uid
 
                 if (it.isSuccessful && uid != null){
-                    showToast(R.string.success)
+                    showToast(this, R.string.success)
                     getUserData(uid)
                     HomeFragment_Activity.start(this)
 
@@ -111,7 +112,7 @@ class Login_Activity : AppCompatActivity() {
                     fcmToken = newFcmToken
                 })
                 .addOnSuccessListener {
-                    showToast(R.string.success)
+                    showToast(this, R.string.success)
                     HomeFragment_Activity.start(this)
                 }
                 .addOnFailureListener{
@@ -119,14 +120,6 @@ class Login_Activity : AppCompatActivity() {
                 }
         }
     }
-
-
-
-
-
-
-
-
 
 
     private fun showProgress() {
@@ -144,10 +137,6 @@ class Login_Activity : AppCompatActivity() {
     private fun hideProgress() {
         progressDialog?.dismiss()
         progressDialog = null
-    }
-
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

@@ -11,6 +11,7 @@ import com.example.firebasetestapp.CustomAdapter.AllFriendRecyclerViewAdapter
 import com.example.firebasetestapp.CustomAdapter.InChatRoomRecyclerViewAdapter
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.Friends
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_all_friend.*
@@ -78,18 +79,16 @@ class AllFriend : AppCompatActivity() {
             if (researchFriend != null) {
                 customAdapter.refresh(researchFriend)
                 reserchName.clear()
-                showToast(R.string.success)
+                showToast(this, R.string.success)
             } else
                 reserchName.clear()
-                showToast(R.string.success)
+                showToast(this, R.string.success)
         }
         else
-            showToast(R.string.researchfriend_hint)
+            showToast(this,R.string.researchfriend_hint)
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
 
     companion object {

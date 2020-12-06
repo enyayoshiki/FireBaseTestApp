@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity
 import com.example.firebasetestapp.R
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_change_password_.*
 
@@ -26,7 +27,7 @@ class ChangePassword_Activity : AppCompatActivity() {
             if (email.isEmpty()) {
                 changeRegister(email)
             } else
-                showToast(R.string.warn_mail)
+                showToast(this, R.string.warn_mail)
             return@setOnClickListener
         }
     }
@@ -35,10 +36,10 @@ class ChangePassword_Activity : AppCompatActivity() {
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    showToast(R.string.success)
+                    showToast(this, R.string.success)
 
                   Login_Activity.start(this)
-                } else if (it.isCanceled) showToast(R.string.error)
+                } else if (it.isCanceled) showToast(this, R.string.error)
 
             }.addOnFailureListener {
                 Log.d("error", "$it")
@@ -50,9 +51,7 @@ class ChangePassword_Activity : AppCompatActivity() {
             }
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
-    }
+
     companion object {
 
         fun start(activity: Activity) {

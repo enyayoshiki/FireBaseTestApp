@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -116,7 +117,7 @@ class ProfileChange_Activity : AppCompatActivity() {
                     profileChange()
                 }.addOnCanceledListener {
                     Log.d("imageChange", "失敗")
-                    showToast(R.string.error)
+                    showToast(this, R.string.error)
                 }
             }
         } else profileChange()
@@ -135,12 +136,12 @@ class ProfileChange_Activity : AppCompatActivity() {
                 userImage = profileImage
             }).addOnSuccessListener {
 
-                showToast(R.string.profile_setting_text)
+                showToast(this, R.string.profile_setting_text)
                 HomeFragment_Activity.start(this)
             }
             .addOnFailureListener {
 
-                showToast(R.string.error)
+                showToast(this, R.string.error)
             }
     }
 
@@ -163,9 +164,7 @@ class ProfileChange_Activity : AppCompatActivity() {
         progressDialog = null
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
     companion object{
         private const val REQUEST_CODE_CHOOSE_IMAGE = 1000

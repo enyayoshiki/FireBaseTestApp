@@ -18,6 +18,7 @@ import com.example.firebasetestapp.SplashActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -59,7 +60,7 @@ class MyFireBaseMessageCloudService: FirebaseMessagingService(){
 
     private fun showNotificationFromData(remoteMessage: RemoteMessage) {
         val data = remoteMessage.data
-        val title = data["name"] ?: "たいとる"
+        val title = data["title"] ?: "たいとる"
         val body = data["message"] ?: "ぼでい"
         val roomId = data["roomId"] ?: ""
         val roomNotifyId = data["roomNotifyId"] ?: "0"
@@ -67,10 +68,8 @@ class MyFireBaseMessageCloudService: FirebaseMessagingService(){
         try {
             tempId = roomNotifyId.toInt()
         } catch (e: Exception) {
-            Log.w("FCM_Custom", "showNotificationFromData title:$title body:$body")
-//            showFcmNotification(title, body, null)
         }
-        showFcmNotification(title, body, null)
+        showFcmNotification(title, body, roomId)
     }
 
 
@@ -83,8 +82,9 @@ class MyFireBaseMessageCloudService: FirebaseMessagingService(){
          * @param contentId
          * @param imageUrl
          */
-        fun showFcmNotification(title: String, message: String, imageUrl: String?) {
-            val intent = Intent(applicationContext, SplashActivity::class.java).putExtra("moveToRoom", "roomId")
+        fun showFcmNotification(title: String, message: String, roomId: String?) {
+            Timber.i("title : ${title}, message : ${message}")
+            val intent = Intent(applicationContext, SplashActivity::class.java).putExtra("moveToRoom", roomId)
             val tempTitle = if (title.isNotEmpty()) title else applicationContext.getString(R.string.app_name)
 //        if (imageUrl == null)
             showNotification(message, intent, title = tempTitle)
@@ -108,7 +108,7 @@ class MyFireBaseMessageCloudService: FirebaseMessagingService(){
         content: String,
         intent: Intent = Intent(applicationContext, SplashActivity::class.java),
         largeIcon: Bitmap? = null,
-        title: String = applicationContext.getString(R.string.app_name)
+        title: String
     ) {
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -162,41 +162,3 @@ class MyFireBaseMessageCloudService: FirebaseMessagingService(){
 
 
 
-
-
-
-
-//        private fun showNotification(remoteMessage: RemoteMessage){
-//
-//        val dataBody = remoteMessage.notification?.body
-//        val dataTitle = remoteMessage.notification?.title
-//        val channelId = getString(R.string.default_notification_channel_id)
-//        val notificationBuilder = NotificationCompat.Builder(applicationContext, channelId).apply {
-//            setSmallIcon(R.drawable.sample_frontimage)
-//            setContentTitle(dataTitle)
-//            setContentText(dataBody)
-//            setAutoCancel(true)
-//            setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_VIBRATE or Notification.DEFAULT_LIGHTS)
-//
-//        }
-//
-//        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        // Since android Oreo notification channel is needed.
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channelName = getString(R.string.default_notification_channel_name)
-//            notificationManager.createNotificationChannel(
-//                NotificationChannel(channelId,
-//                channelName, NotificationManager.IMPORTANCE_LOW)
-//            )
-//        }
-//
-//        notificationManager.notify(createNotificationId(), notificationBuilder.build())
-//    }
-//
-//    /**
-//     * 通知IDを作成する
-//     */
-//    private fun createNotificationId() : Int{
-//        val now = Date()
-//        return Integer.parseInt(SimpleDateFormat("ddHHmmss", Locale.US).format(now))
-//    }

@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@id/done_oneResult_addFriend_textView"
         app:layout_constraintEnd_toEndOf="@id/done_oneResult_addFriend_textView"
         app:layout_constraintTop_toTopOf="parent"

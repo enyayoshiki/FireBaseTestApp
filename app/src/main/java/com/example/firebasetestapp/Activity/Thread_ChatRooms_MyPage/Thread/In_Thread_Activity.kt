@@ -16,6 +16,7 @@ import com.example.firebasetestapp.CustomAdapter.InThreadRecyclerViewAdapter
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.InChatRoom
 import com.example.firebasetestapp.dataClass.MessageToThread
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
@@ -77,7 +78,7 @@ class In_Thread_Activity : AppCompatActivity() {
                     in_thread_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
                 }
             }
-        showToast(R.string.get_message_text)
+        showToast(this,R.string.get_message_text)
     }
 
     private fun initRecyclerView() {
@@ -105,18 +106,16 @@ class In_Thread_Activity : AppCompatActivity() {
                     })
                         .addOnCompleteListener {
                             edit_message_toThread_editView.text.clear()
-                            showToast(R.string.success_sendmessage_to_thread_text)
+                            showToast(this,R.string.success_sendmessage_to_thread_text)
                             initData()
                             in_thread_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
                         }
                 }
-        }else showToast(R.string.please_input_text)
+        }else showToast(this,R.string.please_input_text)
         hideProgress()
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
 
     private fun showProgress() {

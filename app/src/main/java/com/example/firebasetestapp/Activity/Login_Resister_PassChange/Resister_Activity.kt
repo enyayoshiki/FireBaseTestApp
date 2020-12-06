@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.User
+import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -40,7 +41,7 @@ class Resister_Activity : AppCompatActivity() {
     private fun register(email: String, pass: String) {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener {
-                showToast(if (it.isSuccessful) R.string.success else R.string.error)
+                showToast(this, if (it.isSuccessful) R.string.success else R.string.error)
 
                 resisterImage()
 
@@ -61,8 +62,6 @@ class Resister_Activity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
             selectImageUri = data.data
-            Log.d("resister", "selectImageUri : $selectImageUri")
-            Log.d("resister", "selectImageUri.toString : ${selectImageUri.toString()}")
             Picasso.get().load(selectImageUri.toString()).into(myImageview)
             myImageviewBtn.alpha = 0f
         }
@@ -78,13 +77,8 @@ class Resister_Activity : AppCompatActivity() {
         }
 
         val fileName = UUID.randomUUID().toString()
-        Log.d("resister", "$fileName")
         val ref = FirebaseStorage.getInstance().getReference("image/$fileName")
         ref.putFile(selectImageUri!!).addOnSuccessListener {
-            Log.d("selectImage", "UploadTask : $it")
-            Log.d("selectImage", "filename : $fileName")
-            Log.d("selectImage", "selectImageUri : $selectImageUri")
-            Log.d("selectImage", "selectImage_to_String : ${selectImageUri.toString()}")
 
             ref.downloadUrl.addOnSuccessListener {
                 saveUserDatatoFireStore(it.toString())
@@ -105,7 +99,7 @@ class Resister_Activity : AppCompatActivity() {
                     fcmToken = newFcmToken
                 })
                 .addOnSuccessListener {
-                    showToast(R.string.success)
+                    showToast(this, R.string.success)
                     HomeFragment_Activity.start(this)
                 }
                 .addOnFailureListener {
@@ -114,9 +108,7 @@ class Resister_Activity : AppCompatActivity() {
         }
     }
 
-    private fun showToast(textId: Int) {
-        Toast.makeText(this, textId, Toast.LENGTH_SHORT).show()
-    }
+
 
     companion object {
         fun start(activity: Activity) {
