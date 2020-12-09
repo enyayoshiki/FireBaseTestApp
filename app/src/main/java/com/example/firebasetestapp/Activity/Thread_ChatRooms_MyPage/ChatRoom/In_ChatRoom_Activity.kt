@@ -177,6 +177,7 @@ class In_ChatRoom_Activity : AppCompatActivity() {
         showToast(this, R.string.get_message_text)
     }
 
+
     private fun sendMessageInChatRoom(message: String) {
         showProgress()
 

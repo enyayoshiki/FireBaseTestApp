@@ -47,12 +47,16 @@ class AddChatMemberRecyclerViewAdapter(private val context: Context) :
 
 
     fun addMember() {
-        db.collection("ChatRooms").document(roomDatainAdapter.roomId)
-            .set(roomDatainAdapter)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) showToast(context, R.string.success)
-                else showToast(context, R.string.error)
-            }
+        roomDatainAdapter.let {
+            db.collection("ChatRooms").document(roomDatainAdapter.roomId).update(
+                mapOf(
+                    "userList" to it.userList,
+                    "userIdList" to it.userIdList,
+                    "userNameList" to it.userNameList,
+                    "userNameMap" to it.userNameMap
+                )
+            )
+        }
     }
 
 
