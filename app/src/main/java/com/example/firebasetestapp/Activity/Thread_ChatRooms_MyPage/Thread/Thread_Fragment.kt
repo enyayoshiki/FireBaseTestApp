@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.mainthread_fragment.mainThead_recyclerView
 
 class Thread_Fragment: Fragment() {
 
-    private lateinit var customAdapter: MainThreadRecyclerViewAdapter
     private var progressDialog: MaterialDialog? = null
     private val db = FirebaseFirestore.getInstance()
 
@@ -97,7 +96,9 @@ class Thread_Fragment: Fragment() {
         hideProgress()
     }
 
-        private fun initRecyclerView() {
+    private lateinit var customAdapter: MainThreadRecyclerViewAdapter
+
+    private fun initRecyclerView() {
             activity?.also {
                 customAdapter = MainThreadRecyclerViewAdapter(it)
             }

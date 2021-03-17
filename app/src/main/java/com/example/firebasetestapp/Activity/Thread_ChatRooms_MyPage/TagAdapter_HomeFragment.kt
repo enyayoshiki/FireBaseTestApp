@@ -26,7 +26,7 @@ class TagAdapter_HomeFragment (fm: FragmentManager, private val context: Context
             else -> MyPage_Fragment.newInstance(position)
         }
         // 要求時 新しい Fragment を生成して返す
-        return Thread_Fragment.newInstance(position + 1)
+//        return Thread_Fragment.newInstance(position + 1)
     }
     // タブの名前
     override fun getPageTitle(position: Int): CharSequence? {

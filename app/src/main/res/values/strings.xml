@@ -79,6 +79,7 @@
     <string name="excute_changefrontimage">アイコン変更</string>
     <string name="researchfriend_hint">検索したいフレンド名を入力してください</string>
     <string name="allfriend_title">フレンド一覧</string>
+    <string name="title_splash">FireBaseTestApp</string>
 
     <string name="fcm_end_point">https://fcm.googleapis.com/fcm/send</string>
     <string name="fcm_server_key">AAAAYoCkPaY:APA91bFAxP61YE38Sc33dA8uVCzmU0FtIKzNdTjk5LUXkhPkQneTFGjKHpcqlQyaXHPfFkcE7SVVNo0pDZms4fmfIT7reBFopEnPimgvz4229howecP8kmDj2pMfE4UMXXIh0x3XUN-O</string>

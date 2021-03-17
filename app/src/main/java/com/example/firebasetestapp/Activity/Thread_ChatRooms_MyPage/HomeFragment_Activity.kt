@@ -42,21 +42,21 @@ class HomeFragment_Activity : AppCompatActivity() {
 //        mainThead_ViewPager.addOnPageChangeListener()
         supportActionBar?.hide()
         setTabLayout()
-        sendPushButton.setOnClickListener {
-            FcmSendHelper.sendPush(FcmRequest().apply {
-                this.to = "cFaWJHIBS6KPTQjuEbFPfp:APA91bFrWujzk7fh98oTvfAMpNtxWH7cPPL2AUinLngd2r_NN0hHTxTYYE84v4EESD2BM0LfD6U_KbySXnx4aMXYeomBlVc14hZPqXno4wRb0k8t16_T0Ky5w-ZnSzDGLxRdz25Jq2b-"
-//                this.to = "fMrqcDtwTbyuV6QFgC_BtD:APA91bHyszZKqQHP4pGedK4EJFjD5jb-86gg6BqT6igws8OrMb-6-KsA0jSCtOBiqr341i9tr_dRSVleynaIa3aPWneW0W3sDSIpyxxwe7A5ExUo5dUk51Mo8_YiFPJ_H0fiDTwAj5IQ"
-                data.apply {
-                    this.title = "タイトル"
-                    this.message = "メッセージ"
-                    this.roomId = ""
-                }
-            }, { // 成功したとき
-                handler.post { Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show() }
-            }, { // 失敗したとき
-                handler.post { Toast.makeText(this, "失敗", Toast.LENGTH_SHORT).show() }
-            })
-        }
+//        sendPushButton.setOnClickListener {
+//            FcmSendHelper.sendPush(FcmRequest().apply {
+//                this.to = "cFaWJHIBS6KPTQjuEbFPfp:APA91bFrWujzk7fh98oTvfAMpNtxWH7cPPL2AUinLngd2r_NN0hHTxTYYE84v4EESD2BM0LfD6U_KbySXnx4aMXYeomBlVc14hZPqXno4wRb0k8t16_T0Ky5w-ZnSzDGLxRdz25Jq2b-"
+////                this.to = "fMrqcDtwTbyuV6QFgC_BtD:APA91bHyszZKqQHP4pGedK4EJFjD5jb-86gg6BqT6igws8OrMb-6-KsA0jSCtOBiqr341i9tr_dRSVleynaIa3aPWneW0W3sDSIpyxxwe7A5ExUo5dUk51Mo8_YiFPJ_H0fiDTwAj5IQ"
+//                data.apply {
+//                    this.title = "タイトル"
+//                    this.message = "メッセージ"
+//                    this.roomId = ""
+//                }
+//            }, { // 成功したとき
+//                handler.post { Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show() }
+//            }, { // 失敗したとき
+//                handler.post { Toast.makeText(this, "失敗", Toast.LENGTH_SHORT).show() }
+//            })
+//        }
 
     }
 

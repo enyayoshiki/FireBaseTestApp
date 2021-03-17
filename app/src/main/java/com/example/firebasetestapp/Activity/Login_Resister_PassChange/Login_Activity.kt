@@ -2,11 +2,11 @@ package com.example.firebasetestapp.Activity.Login_Resister_PassChange
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
@@ -15,7 +15,6 @@ import com.example.firebasetestapp.extention.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_resister_login.*
 
 class Login_Activity : AppCompatActivity() {
