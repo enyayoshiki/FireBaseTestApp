@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.activity_resister_login.*
 class Login_Activity : AppCompatActivity() {
 
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private var progressDialog: MaterialDialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +65,7 @@ class Login_Activity : AppCompatActivity() {
 
     private fun login(email: String, pass: String) {
         showProgress()
+
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener {
 
@@ -74,7 +74,6 @@ class Login_Activity : AppCompatActivity() {
                 if (it.isSuccessful && uid != null){
                     showToast(this, R.string.success)
                     getUserData(uid)
-                    HomeFragment_Activity.start(this)
 
                 } else Toast.makeText(
                     this,
@@ -84,6 +83,7 @@ class Login_Activity : AppCompatActivity() {
             }.addOnFailureListener {
                 Log.d("error", "$it")
                 Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
+                hideProgress()
             }
     }
 
@@ -95,9 +95,13 @@ class Login_Activity : AppCompatActivity() {
                     task.result?.toObjects(User::class.java)?.firstOrNull { it.uid == uid }?.also {
                         updateFcmToken(it)
                         }?: run  {
+                        hideProgress()
+
                         HomeFragment_Activity.start(this)
                     }
                 }  else {
+                    hideProgress()
+
                     Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -120,7 +124,7 @@ class Login_Activity : AppCompatActivity() {
         }
     }
 
-
+    private var progressDialog: MaterialDialog? = null
     private fun showProgress() {
         hideProgress()
         progressDialog = this.let {

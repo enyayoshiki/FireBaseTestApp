@@ -174,7 +174,6 @@ class In_ChatRoom_Activity : AppCompatActivity() {
                     in_chatRoom_recyclerView.scrollToPosition(customAdapter.itemCount - 1)
                 }
             }
-        showToast(this, R.string.get_message_text)
     }
 
 
@@ -193,6 +192,8 @@ class In_ChatRoom_Activity : AppCompatActivity() {
                 showToast(this, R.string.success_sendmessage_to_thread_text)
 
                 sendPushMessage(message)
+
+                getMessage()
 
             }
         hideProgress()

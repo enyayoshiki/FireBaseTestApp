@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.firebasetestapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 
     <application
@@ -44,8 +46,6 @@
 
         <activity android:name=".Activity.Thread_ChatRooms_MyPage.ChatRoom.In_ChatRoom_Activity" />
         <activity android:name=".Activity.Thread_ChatRooms_MyPage.Thread.In_Thread_Activity" />
-        <activity android:name=".Activity.Thread_ChatRooms_MyPage.MyPage.MyPage_Fragment" />
-        <activity android:name=".Activity.Thread_ChatRooms_MyPage.ChatRoom.ChatRooms_Fragment" />
         <activity android:name=".Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity" />
         <activity android:name=".Activity.Login_Resister_PassChange.ChangePassword_Activity" />
         <activity android:name=".Activity.Login_Resister_PassChange.Resister_Activity" />

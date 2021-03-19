@@ -58,7 +58,6 @@
             android:padding="5dp"
             android:inputType="text"
             android:maxLength="50"
-            android:layout_marginStart="30dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/allFriendData_allFrined_imageView"
@@ -75,6 +74,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/edit_researchFriend_allFriend_editView"
+            app:layout_constraintEnd_toEndOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

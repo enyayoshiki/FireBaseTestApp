@@ -86,14 +86,12 @@ class HomeFragment_Activity : AppCompatActivity() {
                 show()
             }
         }
-
     }
 
     private fun hideProgress() {
         progressDialog?.dismiss()
         progressDialog = null
     }
-
 
     private fun sendPushA() {
         FcmSendHelper.sendPushAll(FcmRequest.Data().apply {
@@ -107,13 +105,14 @@ class HomeFragment_Activity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TARGET_FCM_TOKEN =
-            "dG0RiRWNQxiqlqhwriZeWP:APA91bG-qh9TolH3GXBNoI-ggYFxPlIgdD-7zoWKiKAR4i6cDyCH9-A77BFpbNckpNmI9jDy5uXDjg6kixZmNwrSmcsx6B-AQm0ZCse6ppqT_iMuSSjTpJzAbRNc3ESZFvj0n7jmIi8G"
-//            "cbePfwA1QpCiu18BhAXCP_:APA91bGULitYN9iZAhC2BEyh59iMUFDNjc9ZNm214GXct-w5L1T-6TYlBicKBuWzJEa671nVrYr3fZJOXMp848nKeKtNUwGBIxVCdzsHhWiThgUeHEgc0RwvFKpUMKg3W5l3001EXsTT"
+//        private const val TARGET_FCM_TOKEN =
+//            "dG0RiRWNQxiqlqhwriZeWP:APA91bG-qh9TolH3GXBNoI-ggYFxPlIgdD-7zoWKiKAR4i6cDyCH9-A77BFpbNckpNmI9jDy5uXDjg6kixZmNwrSmcsx6B-AQm0ZCse6ppqT_iMuSSjTpJzAbRNc3ESZFvj0n7jmIi8G"
+////            "cbePfwA1QpCiu18BhAXCP_:APA91bGULitYN9iZAhC2BEyh59iMUFDNjc9ZNm214GXct-w5L1T-6TYlBicKBuWzJEa671nVrYr3fZJOXMp848nKeKtNUwGBIxVCdzsHhWiThgUeHEgc0RwvFKpUMKg3W5l3001EXsTT"
 
 
         fun start(context: Context) {
             val intent = Intent(context, HomeFragment_Activity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
 

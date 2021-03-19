@@ -6,7 +6,9 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.firebasetestapp.Activity.Thread_ChatRooms_MyPage.HomeFragment_Activity
 import com.example.firebasetestapp.R
 import com.example.firebasetestapp.dataClass.User
@@ -31,17 +33,22 @@ class Resister_Activity : AppCompatActivity() {
         myImageviewBtn.setOnClickListener {
             selectImage()
         }
+
         excute_resister_Btn.setOnClickListener {
             val email = editMail_resiter_View.text.toString()
             val pass = editPass_resister.text.toString()
+
             register(email, pass)
+
         }
     }
 
     private fun register(email: String, pass: String) {
+
+        showProgress()
+
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener {
-                showToast(this, if (it.isSuccessful) R.string.success else R.string.error)
 
                 resisterImage()
 
@@ -56,7 +63,7 @@ class Resister_Activity : AppCompatActivity() {
         startActivityForResult(intent, 0)
     }
 
-    var selectImageUri: Uri? = null
+    var selectImageUri: Uri? =  null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -70,6 +77,7 @@ class Resister_Activity : AppCompatActivity() {
     var resistUserName = ""
 
     private fun resisterImage() {
+
         resistUserName = editName_resister.text.toString()
         if (selectImageUri == null || resistUserName.isEmpty()){
             saveUserDatatoFireStore("")
@@ -87,6 +95,7 @@ class Resister_Activity : AppCompatActivity() {
     }
 
     private fun saveUserDatatoFireStore(saveImageUrl: String) {
+
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
             val newFcmToken = if (task.isSuccessful) task.result?.token ?: "" else ""
             val userId = FirebaseAuth.getInstance().uid ?: ""
@@ -101,11 +110,32 @@ class Resister_Activity : AppCompatActivity() {
                 .addOnSuccessListener {
                     showToast(this, R.string.success)
                     HomeFragment_Activity.start(this)
+
+                    hideProgress()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
+                    hideProgress()
                 }
         }
+    }
+
+    private var progressDialog: MaterialDialog? = null
+    private fun showProgress() {
+        hideProgress()
+        progressDialog = this.let {
+            MaterialDialog(it).apply {
+                cancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null, false))
+                show()
+            }
+        }
+
+    }
+
+    private fun hideProgress() {
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
 
